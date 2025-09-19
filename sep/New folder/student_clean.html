@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Students Directory - TPC Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+
+<link href="student.css" rel="stylesheet"/></head>
+<body class="bg-gray-50">
+<!-- Navigation Header -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16 min-w-0">
+<!-- Logo Section -->
+<div class="flex items-center space-x-3 flex-shrink-0">
+<div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="hidden sm:block">
+<h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+<p class="text-xs text-gray-600 leading-tight">Training &amp; Placement Cell</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap" href="#home">Home</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap" href="#company-listing">Company Listing</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap" href="#opportunities">Opportunities</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap" href="#notices">Notices</a>
+<a class="text-blue-600 font-semibold text-sm lg:text-base whitespace-nowrap" href="#students">Students</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap" href="#schedule">Schedule</a>
+</div>
+</div>
+</div>
+</nav>
+<!-- Students Header -->
+<div class="gradient-bg py-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center text-white">
+<h1 class="text-4xl font-bold mb-4">Students Directory</h1>
+<p class="text-blue-100 text-lg">Browse students by entrance year and branch</p>
+</div>
+<!-- Year Selector -->
+<div class="mt-8 flex justify-center">
+<div class="year-selector rounded-xl p-2">
+<div class="flex space-x-2">
+<button class="year-btn px-6 py-2 rounded-lg font-medium transition-colors bg-white text-blue-600" data-year="2021" onclick="selectYear(2021)">2021</button>
+<button class="year-btn px-6 py-2 rounded-lg font-medium transition-colors text-white hover:bg-white hover:text-blue-600" data-year="2022" onclick="selectYear(2022)">2022</button>
+<button class="year-btn px-6 py-2 rounded-lg font-medium transition-colors text-white hover:bg-white hover:text-blue-600" data-year="2023" onclick="selectYear(2023)">2023</button>
+<button class="year-btn px-6 py-2 rounded-lg font-medium transition-colors text-white hover:bg-white hover:text-blue-600" data-year="2024" onclick="selectYear(2024)">2024</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Students Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Branch Tabs -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+<h2 class="text-2xl font-bold text-gray-900 mb-6">Select Branch - <span id="selectedYear">2021</span> Batch</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<button class="branch-tab active px-6 py-4 rounded-lg font-medium text-center" data-branch="CSE" onclick="selectBranch('CSE')">
+<div class="text-lg font-bold">CSE</div>
+<div class="text-sm opacity-80">Computer Science</div>
+<div class="text-xs mt-1" id="cse-count">45 Students</div>
+</button>
+<button class="branch-tab bg-gray-100 hover:bg-gray-200 px-6 py-4 rounded-lg font-medium text-center text-gray-700" data-branch="ECE" onclick="selectBranch('ECE')">
+<div class="text-lg font-bold">ECE</div>
+<div class="text-sm opacity-80">Electronics</div>
+<div class="text-xs mt-1" id="ece-count">38 Students</div>
+</button>
+<button class="branch-tab bg-gray-100 hover:bg-gray-200 px-6 py-4 rounded-lg font-medium text-center text-gray-700" data-branch="ME" onclick="selectBranch('ME')">
+<div class="text-lg font-bold">ME</div>
+<div class="text-sm opacity-80">Mechanical</div>
+<div class="text-xs mt-1" id="me-count">42 Students</div>
+</button>
+<button class="branch-tab bg-gray-100 hover:bg-gray-200 px-6 py-4 rounded-lg font-medium text-center text-gray-700" data-branch="CE" onclick="selectBranch('CE')">
+<div class="text-lg font-bold">CE</div>
+<div class="text-sm opacity-80">Civil</div>
+<div class="text-xs mt-1" id="ce-count">35 Students</div>
+</button>
+</div>
+</div>
+<!-- Search and Filter -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+<div class="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+<div class="flex-1 max-w-md">
+<div class="relative">
+<input class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" id="searchInput" onkeyup="searchStudents()" placeholder="Search students by name or enrollment..." type="text"/>
+<svg class="absolute left-3 top-3.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" id="sortBy" onchange="sortStudents()">
+<option value="name">Sort by Name</option>
+<option value="cpi">Sort by CPI</option>
+<option value="enrollment">Sort by Enrollment</option>
+</select>
+<div class="text-sm text-gray-600">
+<span id="studentCount">45</span> students found
+                    </div>
+</div>
+</div>
+</div>
+<!-- Students List -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="studentsList">
+<!-- Students will be populated here -->
+</div>
+</div>
+<!-- Student Detail Modal -->
+<div class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4" id="studentModal">
+<div class="bg-white rounded-xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+<div class="p-6">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center space-x-4">
+<div class="student-avatar w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold" id="modalAvatar">
+                            AS
+                        </div>
+<div>
+<h2 class="text-2xl font-bold text-gray-900" id="modalName">Student Name</h2>
+<p class="text-gray-600" id="modalEnrollment">Enrollment Number</p>
+<p class="text-blue-600 font-medium" id="modalBranch">Branch</p>
+</div>
+</div>
+<button class="text-gray-400 hover:text-gray-600 text-2xl font-bold" onclick="closeModal()">×</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Personal Information -->
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
+<div class="space-y-3">
+<div class="flex justify-between">
+<span class="text-gray-600">Email:</span>
+<span class="font-medium" id="modalEmail">email@example.com</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Phone:</span>
+<span class="font-medium" id="modalPhone">+91 9876543210</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Date of Birth:</span>
+<span class="font-medium" id="modalDOB">15/05/2003</span>
+</div>
+<div class="flex justify-between">
+<span class="text-gray-600">Current CPI:</span>
+<span class="font-bold text-blue-600" id="modalCPI">8.75</span>
+</div>
+</div>
+</div>
+<!-- Academic Performance -->
+<div>
+<h3 class="text-lg font-semibold text-gray-900 mb-4">Academic Performance</h3>
+<div class="space-y-2">
+<div class="grid grid-cols-4 gap-2 text-sm font-medium text-gray-600 border-b pb-2">
+<span>Semester</span>
+<span>SPI</span>
+<span>Credits</span>
+<span>Status</span>
+</div>
+<div class="space-y-2" id="modalSemesters">
+<!-- Semester data will be populated here -->
+</div>
+</div>
+</div>
+</div>
+<!-- Placement Information -->
+<div class="mt-8">
+<h3 class="text-lg font-semibold text-gray-900 mb-4">Placement Information</h3>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+<div class="bg-blue-50 p-4 rounded-lg">
+<div class="text-2xl font-bold text-blue-600" id="modalApplications">12</div>
+<div class="text-sm text-gray-600">Applications</div>
+</div>
+<div class="bg-green-50 p-4 rounded-lg">
+<div class="text-2xl font-bold text-green-600" id="modalInterviews">3</div>
+<div class="text-sm text-gray-600">Interviews</div>
+</div>
+<div class="bg-purple-50 p-4 rounded-lg">
+<div class="text-2xl font-bold text-purple-600" id="modalOffers">1</div>
+<div class="text-sm text-gray-600">Offers</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script>
+        // Sample student data
+        const studentsData = {
+            2021: {
+                CSE: [
+                    {
+                        name: "Arjun Sharma",
+                        enrollment: "2021CS001",
+                        email: "arjun.sharma@college.edu",
+                        phone: "+91 9876543210",
+                        dob: "15/05/2003",
+                        cpi: 8.75,
+                        semesters: [
+                            { sem: 1, spi: 8.5, credits: 24, status: "Completed" },
+                            { sem: 2, spi: 8.8, credits: 26, status: "Completed" },
+                            { sem: 3, spi: 8.9, credits: 25, status: "Completed" },
+                            { sem: 4, spi: 8.7, credits: 24, status: "Completed" },
+                            { sem: 5, spi: 8.6, credits: 26, status: "Completed" },
+                            { sem: 6, spi: 8.8, credits: 25, status: "Completed" },
+                            { sem: 7, spi: 8.9, credits: 24, status: "Ongoing" },
+                            { sem: 8, spi: 0, credits: 0, status: "Pending" }
+                        ],
+                        applications: 12,
+                        interviews: 3,
+                        offers: 1
+                    },
+                    {
+                        name: "Priya Patel",
+                        enrollment: "2021CS002",
+                        email: "priya.patel@college.edu",
+                        phone: "+91 9876543211",
+                        dob: "22/08/2003",
+                        cpi: 9.12,
+                        semesters: [
+                            { sem: 1, spi: 9.0, credits: 24, status: "Completed" },
+                            { sem: 2, spi: 9.2, credits: 26, status: "Completed" },
+                            { sem: 3, spi: 9.1, credits: 25, status: "Completed" },
+                            { sem: 4, spi: 9.0, credits: 24, status: "Completed" },
+                            { sem: 5, spi: 9.3, credits: 26, status: "Completed" },
+                            { sem: 6, spi: 9.1, credits: 25, status: "Completed" },
+                            { sem: 7, spi: 9.2, credits: 24, status: "Ongoing" },
+                            { sem: 8, spi: 0, credits: 0, status: "Pending" }
+                        ],
+                        applications: 8,
+                        interviews: 5,
+                        offers: 2
+                    },
+                    {
+                        name: "Rahul Kumar",
+                        enrollment: "2021CS003",
+                        email: "rahul.kumar@college.edu",
+                        phone: "+91 9876543212",
+                        dob: "10/12/2002",
+                        cpi: 7.85,
+                        semesters: [
+                            { sem: 1, spi: 7.5, credits: 24, status: "Completed" },
+                            { sem: 2, spi: 8.0, credits: 26, status: "Completed" },
+                            { sem: 3, spi: 7.8, credits: 25, status: "Completed" },
+                            { sem: 4, spi: 7.9, credits: 24, status: "Completed" },
+                            { sem: 5, spi: 8.1, credits: 26, status: "Completed" },
+                            { sem: 6, spi: 7.7, credits: 25, status: "Completed" },
+                            { sem: 7, spi: 8.0, credits: 24, status: "Ongoing" },
+                            { sem: 8, spi: 0, credits: 0, status: "Pending" }
+                        ],
+                        applications: 15,
+                        interviews: 2,
+                        offers: 0
+                    }
+                ],
+                ECE: [
+                    {
+                        name: "Sneha Gupta",
+                        enrollment: "2021EC001",
+                        email: "sneha.gupta@college.edu",
+                        phone: "+91 9876543213",
+                        dob: "05/03/2003",
+                        cpi: 8.45,
+                        semesters: [
+                            { sem: 1, spi: 8.2, credits: 24, status: "Completed" },
+                            { sem: 2, spi: 8.5, credits: 26, status: "Completed" },
+                            { sem: 3, spi: 8.6, credits: 25, status: "Completed" },
+                            { sem: 4, spi: 8.4, credits: 24, status: "Completed" },
+                            { sem: 5, spi: 8.3, credits: 26, status: "Completed" },
+                            { sem: 6, spi: 8.5, credits: 25, status: "Completed" },
+                            { sem: 7, spi: 8.6, credits: 24, status: "Ongoing" },
+                            { sem: 8, spi: 0, credits: 0, status: "Pending" }
+                        ],
+                        applications: 10,
+                        interviews: 4,
+                        offers: 1
+                    }
+                ]
+            },
+            2022: {
+                CSE: [
+                    {
+                        name: "Amit Singh",
+                        enrollment: "2022CS001",
+                        email: "amit.singh@college.edu",
+                        phone: "+91 9876543214",
+                        dob: "18/07/2004",
+                        cpi: 8.92,
+                        semesters: [
+                            { sem: 1, spi: 8.8, credits: 24, status: "Completed" },
+                            { sem: 2, spi: 9.0, credits: 26, status: "Completed" },
+                            { sem: 3, spi: 8.9, credits: 25, status: "Completed" },
+                            { sem: 4, spi: 9.1, credits: 24, status: "Completed" },
+                            { sem: 5, spi: 8.8, credits: 26, status: "Ongoing" },
+                            { sem: 6, spi: 0, credits: 0, status: "Pending" }
+                        ],
+                        applications: 6,
+                        interviews: 1,
+                        offers: 0
+                    }
+                ]
+            }
+        };
+
+        let currentYear = 2021;
+        let currentBranch = 'CSE';
+        let currentStudents = [];
+        let filteredStudents = [];
+
+        function selectYear(year) {
+            currentYear = year;
+            document.getElementById('selectedYear').textContent = year;
+            
+            // Update year buttons
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-blue-600');
+                btn.classList.add('text-white', 'hover:bg-white', 'hover:text-blue-600');
+            });
+            document.querySelector(`[data-year="${year}"]`).classList.add('bg-white', 'text-blue-600');
+            document.querySelector(`[data-year="${year}"]`).classList.remove('text-white', 'hover:bg-white', 'hover:text-blue-600');
+            
+            // Update branch counts
+            updateBranchCounts();
+            
+            // Reset to first available branch
+            const availableBranches = Object.keys(studentsData[year] || {});
+            if (availableBranches.length > 0) {
+                selectBranch(availableBranches[0]);
+            }
+        }
+
+        function updateBranchCounts() {
+            const yearData = studentsData[currentYear] || {};
+            document.getElementById('cse-count').textContent = `${(yearData.CSE || []).length} Students`;
+            document.getElementById('ece-count').textContent = `${(yearData.ECE || []).length} Students`;
+            document.getElementById('me-count').textContent = `${(yearData.ME || []).length} Students`;
+            document.getElementById('ce-count').textContent = `${(yearData.CE || []).length} Students`;
+        }
+
+        function selectBranch(branch) {
+            currentBranch = branch;
+            
+            // Update branch tabs
+            document.querySelectorAll('.branch-tab').forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+            });
+            document.querySelector(`[data-branch="${branch}"]`).classList.add('active');
+            document.querySelector(`[data-branch="${branch}"]`).classList.remove('bg-gray-100', 'hover:bg-gray-200', 'text-gray-700');
+            
+            // Load students
+            loadStudents();
+        }
+
+        function loadStudents() {
+            const yearData = studentsData[currentYear] || {};
+            currentStudents = yearData[currentBranch] || [];
+            filteredStudents = [...currentStudents];
+            
+            displayStudents();
+            updateStudentCount();
+        }
+
+        function displayStudents() {
+            const container = document.getElementById('studentsList');
+            
+            if (filteredStudents.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <div class="text-gray-400 text-6xl mb-4">👥</div>
+                        <h3 class="text-xl font-semibold text-gray-600 mb-2">No Students Found</h3>
+                        <p class="text-gray-500">No students available for ${currentBranch} - ${currentYear} batch</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = filteredStudents.map(student => `
+                <div class="student-card bg-white rounded-xl shadow-lg p-6 card-hover cursor-pointer" onclick="openStudentModal('${student.enrollment}')">
+                    <div class="flex items-start space-x-4">
+                        <div class="student-avatar w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-sm">
+                            ${getInitials(student.name)}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-lg font-semibold text-gray-900 truncate">${student.name}</h3>
+                            <p class="text-gray-600 text-sm">${student.enrollment}</p>
+                            <p class="text-blue-600 text-sm font-medium">${currentBranch} - ${currentYear}</p>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-2xl font-bold text-blue-600">${student.cpi}</div>
+                            <div class="text-xs text-gray-500">CPI</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 pt-4 border-t border-gray-100">
+                        <div class="flex items-center justify-between text-sm">
+                            <div class="flex items-center space-x-4">
+                                <span class="text-gray-600">📧 ${student.email}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <span class="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    ${student.applications} Applications
+                                </span>
+                                <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    ${student.offers} Offers
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').toUpperCase();
+        }
+
+        function searchStudents() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            filteredStudents = currentStudents.filter(student => 
+                student.name.toLowerCase().includes(query) || 
+                student.enrollment.toLowerCase().includes(query) ||
+                student.email.toLowerCase().includes(query)
+            );
+            displayStudents();
+            updateStudentCount();
+        }
+
+        function sortStudents() {
+            const sortBy = document.getElementById('sortBy').value;
+            
+            filteredStudents.sort((a, b) => {
+                switch(sortBy) {
+                    case 'name':
+                        return a.name.localeCompare(b.name);
+                    case 'cpi':
+                        return b.cpi - a.cpi;
+                    case 'enrollment':
+                        return a.enrollment.localeCompare(b.enrollment);
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayStudents();
+        }
+
+        function updateStudentCount() {
+            document.getElementById('studentCount').textContent = filteredStudents.length;
+        }
+
+        function openStudentModal(enrollment) {
+            const student = currentStudents.find(s => s.enrollment === enrollment);
+            if (!student) return;
+            
+            // Populate modal data
+            document.getElementById('modalAvatar').textContent = getInitials(student.name);
+            document.getElementById('modalName').textContent = student.name;
+            document.getElementById('modalEnrollment').textContent = student.enrollment;
+            document.getElementById('modalBranch').textContent = `${currentBranch} - ${currentYear}`;
+            document.getElementById('modalEmail').textContent = student.email;
+            document.getElementById('modalPhone').textContent = student.phone;
+            document.getElementById('modalDOB').textContent = student.dob;
+            document.getElementById('modalCPI').textContent = student.cpi;
+            document.getElementById('modalApplications').textContent = student.applications;
+            document.getElementById('modalInterviews').textContent = student.interviews;
+            document.getElementById('modalOffers').textContent = student.offers;
+            
+            // Populate semester data
+            const semestersContainer = document.getElementById('modalSemesters');
+            semestersContainer.innerHTML = student.semesters.map(sem => `
+                <div class="grid grid-cols-4 gap-2 text-sm py-2 border-b border-gray-100">
+                    <span class="font-medium">Sem ${sem.sem}</span>
+                    <span class="spi-badge ${getSPIColor(sem.spi)} px-2 py-1 rounded text-xs font-bold">${sem.spi || 'N/A'}</span>
+                    <span class="text-gray-600">${sem.credits}</span>
+                    <span class="text-xs ${getStatusColor(sem.status)} font-medium">${sem.status}</span>
+                </div>
+            `).join('');
+            
+            // Show modal
+            document.getElementById('studentModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function getSPIColor(spi) {
+            if (spi >= 9) return 'bg-green-100 text-green-800';
+            if (spi >= 8) return 'bg-blue-100 text-blue-800';
+            if (spi >= 7) return 'bg-yellow-100 text-yellow-800';
+            if (spi > 0) return 'bg-red-100 text-red-800';
+            return 'bg-gray-100 text-gray-800';
+        }
+
+        function getStatusColor(status) {
+            switch(status) {
+                case 'Completed': return 'text-green-600';
+                case 'Ongoing': return 'text-blue-600';
+                case 'Pending': return 'text-gray-500';
+                default: return 'text-gray-500';
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('studentModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('studentModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize page
+        updateBranchCounts();
+        loadStudents();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9802528156918e81',t:'MTc1ODA0NjI0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

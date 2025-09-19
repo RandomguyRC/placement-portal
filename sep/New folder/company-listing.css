@@ -1,0 +1,24 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .status-open {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+        .status-closed {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+        .status-upcoming {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+        }
+    

@@ -1,0 +1,25 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .profile-avatar {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+        .edit-mode {
+            border-color: #3b82f6 !important;
+            background-color: #f8fafc;
+        }
+        .status-badge {
+            animation: pulse 2s infinite;
+        }
+    

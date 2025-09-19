@@ -1,0 +1,47 @@
+from OpenGL.GL import *
+from OpenGL.GLUT import *
+from OpenGL.GLU import *
+
+angle = 0
+
+def draw_cube():
+    glutWireCube(1.0)   # change to glutSolidCube(1.0) if you want solid
+
+def init():
+    glClearColor(0.1, 0.1, 0.1, 1.0)   # background color
+    glEnable(GL_DEPTH_TEST)
+
+    # Setup perspective projection
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    gluPerspective(45, 600/600, 0.1, 50.0)  # fov, aspect, near, far
+    glMatrixMode(GL_MODELVIEW)
+
+def display():
+    global angle
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glLoadIdentity()
+
+    # Move cube back into view
+    glTranslatef(0.0, 0.0, -6.0)
+
+    # Rotate about arbitrary axis (1,1,1)
+    glRotatef(angle, 1, 1, 1)
+
+    glColor3f(0, 1, 0)  # green cube
+    draw_cube()
+
+    glutSwapBuffers()
+    angle = 10  # continuous rotation
+
+def idle():
+    glutPostRedisplay()
+
+glutInit()
+glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
+glutInitWindowSize(600, 600)
+glutCreateWindow(b"Rotation about arbitrary line")
+init()
+glutDisplayFunc(display)
+glutIdleFunc(idle)
+glutMainLoop()

@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tokens - Digital Campus Placement Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .status-pending {
+            background-color: #fef3c7;
+            color: #92400e;
+        }
+        .status-approved {
+            background-color: #d1fae5;
+            color: #065f46;
+        }
+        .status-rejected {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .status-in-progress {
+            background-color: #dbeafe;
+            color: #1e40af;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 min-w-0">
+                <div class="flex items-center space-x-3 flex-shrink-0">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
+                    <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
+                    <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
+                    <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
+                    <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
+                    <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
+                    <a href="/profile" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Profile</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Header Section -->
+    <div class="gradient-bg text-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">My Support Tokens</h1>
+                <p class="text-xl text-blue-100 mb-6">Track and manage your support requests</p>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 inline-block">
+                    <p class="text-lg font-medium">Student ID: 23075063 | Total Tokens: 8</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Controls -->
+        <div class="mb-8 flex flex-wrap gap-4 items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="in-progress">In Progress</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                    <option value="all">All Categories</option>
+                    <option value="placement">Placement Query</option>
+                    <option value="technical">Technical Issue</option>
+                    <option value="document">Document Request</option>
+                    <option value="general">General Support</option>
+                </select>
+                <button onclick="createNewToken()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                    New Token
+                </button>
+            </div>
+            <div class="flex items-center space-x-6 text-sm">
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                    <span>Pending</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+                    <span>In Progress</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <span>Approved</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <div class="w-3 h-3 bg-red-500 rounded-full"></div>
+                    <span>Rejected</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tokens Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="tokensGrid">
+            <!-- Token 1 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="approved" data-category="placement" onclick="openTokenModal('TKN-2024-001')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-001</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-approved">Approved</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Placement Drive Registration</h3>
+                    <p class="text-gray-600 text-sm">Request for registration in upcoming TCS placement drive scheduled for December 2024.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Placement Query</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 10, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 12, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 2 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="in-progress" data-category="technical" onclick="openTokenModal('TKN-2024-002')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-002</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-in-progress">In Progress</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Portal Login Issue</h3>
+                    <p class="text-gray-600 text-sm">Unable to access student portal. Getting authentication error when trying to log in with credentials.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Technical Issue</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 11, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 13, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 3 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="pending" data-category="document" onclick="openTokenModal('TKN-2024-003')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-003</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-pending">Pending</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Transcript Request</h3>
+                    <p class="text-gray-600 text-sm">Need official transcript for job application. Require sealed envelope with university stamp.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Document Request</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 13, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 13, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 4 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="rejected" data-category="placement" onclick="openTokenModal('TKN-2024-004')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-004</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-rejected">Rejected</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Late Registration Request</h3>
+                    <p class="text-gray-600 text-sm">Request for late registration in Infosys placement drive after deadline.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Placement Query</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 8, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 9, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 5 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="approved" data-category="general" onclick="openTokenModal('TKN-2024-005')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-005</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-approved">Approved</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Resume Review Request</h3>
+                    <p class="text-gray-600 text-sm">Request for professional resume review and feedback from placement cell.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">General Support</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 5, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 7, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 6 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="pending" data-category="technical" onclick="openTokenModal('TKN-2024-006')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-006</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-pending">Pending</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Profile Update Issue</h3>
+                    <p class="text-gray-600 text-sm">Cannot update CGPA and project details in student profile. Save button not working.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Technical Issue</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 14, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 14, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 7 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="in-progress" data-category="document" onclick="openTokenModal('TKN-2024-007')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-007</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-in-progress">In Progress</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Bonafide Certificate</h3>
+                    <p class="text-gray-600 text-sm">Need bonafide certificate for bank loan application. Urgent requirement.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Document Request</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 12, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 13, 2024</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Token 8 -->
+            <div class="token-card bg-white rounded-lg shadow-lg p-6 card-hover cursor-pointer" data-status="approved" data-category="placement" onclick="openTokenModal('TKN-2024-008')">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-lg font-bold text-gray-900">TKN-2024-008</div>
+                    <span class="px-3 py-1 rounded-full text-xs font-medium status-approved">Approved</span>
+                </div>
+                <div class="mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-2">Interview Slot Change</h3>
+                    <p class="text-gray-600 text-sm">Request to change interview slot due to medical emergency. Provide alternative dates.</p>
+                </div>
+                <div class="space-y-2 text-sm text-gray-500">
+                    <div class="flex justify-between">
+                        <span>Category:</span>
+                        <span class="font-medium">Placement Query</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Created:</span>
+                        <span class="font-medium">Dec 9, 2024</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span>Last Updated:</span>
+                        <span class="font-medium">Dec 11, 2024</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Summary Section -->
+        <div class="mt-8 bg-white rounded-lg shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-900 mb-4">Token Summary</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-blue-600">8</div>
+                    <div class="text-gray-600">Total Tokens</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-yellow-600">3</div>
+                    <div class="text-gray-600">Pending</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-green-600">3</div>
+                    <div class="text-gray-600">Approved</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-red-600">1</div>
+                    <div class="text-gray-600">Rejected</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Token Detail Modal -->
+    <div id="tokenModal" class="modal">
+        <div class="modal-content p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Token Details</h2>
+                <button onclick="closeTokenModal()" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div id="modalContent">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Token data
+        const tokenData = {
+            'TKN-2024-001': {
+                title: 'Placement Drive Registration',
+                status: 'Approved',
+                category: 'Placement Query',
+                created: 'Dec 10, 2024',
+                updated: 'Dec 12, 2024',
+                description: 'Request for registration in upcoming TCS placement drive scheduled for December 2024.',
+                priority: 'High',
+                assignedTo: 'Rahul Kumar (TPR - CSE & Placement)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 10, 2024 10:30 AM',
+                        message: 'I would like to register for the TCS placement drive. Please confirm my eligibility and provide further instructions.'
+                    },
+                    {
+                        sender: 'Rahul Kumar (TPR)',
+                        time: 'Dec 11, 2024 2:15 PM',
+                        message: 'Your profile has been reviewed. You meet all eligibility criteria. Please submit your updated resume by Dec 15th.'
+                    },
+                    {
+                        sender: 'Rahul Kumar (TPR)',
+                        time: 'Dec 12, 2024 9:00 AM',
+                        message: 'Registration confirmed. You will receive the test details via email by Dec 18th. Good luck!'
+                    }
+                ]
+            },
+            'TKN-2024-002': {
+                title: 'Portal Login Issue',
+                status: 'In Progress',
+                category: 'Technical Issue',
+                created: 'Dec 11, 2024',
+                updated: 'Dec 13, 2024',
+                description: 'Unable to access student portal. Getting authentication error when trying to log in with credentials.',
+                priority: 'Medium',
+                assignedTo: 'Priya Singh (TPR - IT Support)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 11, 2024 3:45 PM',
+                        message: 'I am unable to log into the student portal. It shows "Authentication Failed" error even with correct credentials.'
+                    },
+                    {
+                        sender: 'Priya Singh (TPR)',
+                        time: 'Dec 12, 2024 11:20 AM',
+                        message: 'We are investigating this issue. Please try clearing your browser cache and cookies, then attempt login again.'
+                    },
+                    {
+                        sender: 'You',
+                        time: 'Dec 12, 2024 4:30 PM',
+                        message: 'Tried clearing cache but still facing the same issue. Please help resolve this urgently.'
+                    },
+                    {
+                        sender: 'Priya Singh (TPR)',
+                        time: 'Dec 13, 2024 10:00 AM',
+                        message: 'We have identified the issue and are working on a fix. Expected resolution by end of day today.'
+                    }
+                ]
+            },
+            'TKN-2024-003': {
+                title: 'Transcript Request',
+                status: 'Pending',
+                category: 'Document Request',
+                created: 'Dec 13, 2024',
+                updated: 'Dec 13, 2024',
+                description: 'Need official transcript for job application. Require sealed envelope with university stamp.',
+                priority: 'High',
+                assignedTo: 'Amit Verma (TPR - Academic)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 13, 2024 2:00 PM',
+                        message: 'I need an official transcript in a sealed envelope for my job application. The deadline is Dec 20th. Please process this urgently.'
+                    }
+                ]
+            },
+            'TKN-2024-004': {
+                title: 'Late Registration Request',
+                status: 'Rejected',
+                category: 'Placement Query',
+                created: 'Dec 8, 2024',
+                updated: 'Dec 9, 2024',
+                description: 'Request for late registration in Infosys placement drive after deadline.',
+                priority: 'Low',
+                assignedTo: 'Sneha Joshi (TPR - Placement)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 8, 2024 5:30 PM',
+                        message: 'I missed the registration deadline for Infosys placement drive due to illness. Can I still register?'
+                    },
+                    {
+                        sender: 'Sneha Joshi (TPR)',
+                        time: 'Dec 9, 2024 9:15 AM',
+                        message: 'Unfortunately, the registration window has closed and the company has finalized the candidate list. Please watch for future opportunities.'
+                    }
+                ]
+            },
+            'TKN-2024-005': {
+                title: 'Resume Review Request',
+                status: 'Approved',
+                category: 'General Support',
+                created: 'Dec 5, 2024',
+                updated: 'Dec 7, 2024',
+                description: 'Request for professional resume review and feedback from placement cell.',
+                priority: 'Medium',
+                assignedTo: 'Neha Sharma (TPR - Career)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 5, 2024 1:20 PM',
+                        message: 'Could you please review my resume and provide feedback? I want to improve it before applying to companies.'
+                    },
+                    {
+                        sender: 'Neha Sharma (TPR)',
+                        time: 'Dec 6, 2024 3:45 PM',
+                        message: 'Please email your resume to career.counseling@university.edu. I will review it and schedule a feedback session.'
+                    },
+                    {
+                        sender: 'Neha Sharma (TPR)',
+                        time: 'Dec 7, 2024 11:30 AM',
+                        message: 'Resume reviewed. Overall good structure. Please schedule an appointment for detailed feedback session. Available slots: Dec 12-15.'
+                    }
+                ]
+            },
+            'TKN-2024-006': {
+                title: 'Profile Update Issue',
+                status: 'Pending',
+                category: 'Technical Issue',
+                created: 'Dec 14, 2024',
+                updated: 'Dec 14, 2024',
+                description: 'Cannot update CGPA and project details in student profile. Save button not working.',
+                priority: 'Medium',
+                assignedTo: 'Priya Singh (TPR - IT Support)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 14, 2024 11:15 AM',
+                        message: 'I am trying to update my CGPA and add new project details, but the save button is not responding. Please help.'
+                    }
+                ]
+            },
+            'TKN-2024-007': {
+                title: 'Bonafide Certificate',
+                status: 'In Progress',
+                category: 'Document Request',
+                created: 'Dec 12, 2024',
+                updated: 'Dec 13, 2024',
+                description: 'Need bonafide certificate for bank loan application. Urgent requirement.',
+                priority: 'High',
+                assignedTo: 'Amit Verma (TPR - Academic)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 12, 2024 9:30 AM',
+                        message: 'I need a bonafide certificate for my education loan application. This is urgent as the bank deadline is Dec 18th.'
+                    },
+                    {
+                        sender: 'Amit Verma (TPR)',
+                        time: 'Dec 13, 2024 2:00 PM',
+                        message: 'Your request is being processed. Please collect the certificate from the Academic Office on Dec 16th after 2 PM.'
+                    }
+                ]
+            },
+            'TKN-2024-008': {
+                title: 'Interview Slot Change',
+                status: 'Approved',
+                category: 'Placement Query',
+                created: 'Dec 9, 2024',
+                updated: 'Dec 11, 2024',
+                description: 'Request to change interview slot due to medical emergency. Provide alternative dates.',
+                priority: 'High',
+                assignedTo: 'Rahul Kumar (TPR - CSE & Placement)',
+                messages: [
+                    {
+                        sender: 'You',
+                        time: 'Dec 9, 2024 7:45 PM',
+                        message: 'Due to a medical emergency, I cannot attend my interview on Dec 15th. Can you please reschedule it? I have attached medical certificate.'
+                    },
+                    {
+                        sender: 'Rahul Kumar (TPR)',
+                        time: 'Dec 10, 2024 10:30 AM',
+                        message: 'Medical certificate verified. We will coordinate with the company for rescheduling. Please provide 3 alternative dates.'
+                    },
+                    {
+                        sender: 'You',
+                        time: 'Dec 10, 2024 2:15 PM',
+                        message: 'Available dates: Dec 18th, 19th, or 22nd. Any time slot works for me. Thank you for understanding.'
+                    },
+                    {
+                        sender: 'Rahul Kumar (TPR)',
+                        time: 'Dec 11, 2024 4:00 PM',
+                        message: 'Interview rescheduled to Dec 19th at 2:00 PM. You will receive confirmation email with updated details.'
+                    }
+                ]
+            }
+        };
+
+        // Filter functionality
+        document.getElementById('statusFilter').addEventListener('change', filterTokens);
+        document.getElementById('categoryFilter').addEventListener('change', filterTokens);
+
+        function filterTokens() {
+            const statusFilter = document.getElementById('statusFilter').value;
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const tokens = document.querySelectorAll('.token-card');
+
+            tokens.forEach(token => {
+                const tokenStatus = token.dataset.status;
+                const tokenCategory = token.dataset.category;
+                
+                const statusMatch = statusFilter === 'all' || tokenStatus === statusFilter;
+                const categoryMatch = categoryFilter === 'all' || tokenCategory === categoryFilter;
+                
+                if (statusMatch && categoryMatch) {
+                    token.style.display = 'block';
+                } else {
+                    token.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal functionality
+        function openTokenModal(tokenId) {
+            const token = tokenData[tokenId];
+            if (!token) return;
+
+            document.getElementById('modalTitle').textContent = `${tokenId} - ${token.title}`;
+            
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Status</label>
+                            <div class="text-lg font-semibold text-gray-900">${token.status}</div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Priority</label>
+                            <div class="text-lg font-semibold text-gray-900">${token.priority}</div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Category</label>
+                            <div class="text-lg font-semibold text-gray-900">${token.category}</div>
+                        </div>
+                        <div>
+                            <label class="text-sm font-medium text-gray-500">Assigned To</label>
+                            <div class="text-lg font-semibold text-gray-900">${token.assignedTo}</div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-medium text-gray-500">Description</label>
+                        <div class="text-gray-900 mt-1">${token.description}</div>
+                    </div>
+                    
+                    <div>
+                        <label class="text-sm font-medium text-gray-500 mb-3 block">Conversation History</label>
+                        <div class="space-y-4 max-h-60 overflow-y-auto">
+                            ${token.messages.map(msg => `
+                                <div class="border-l-4 ${msg.sender === 'You' ? 'border-blue-500 bg-blue-50' : 'border-gray-300 bg-gray-50'} pl-4 py-3">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="font-medium text-gray-900">${msg.sender}</span>
+                                        <span class="text-xs text-gray-500">${msg.time}</span>
+                                    </div>
+                                    <div class="text-gray-700">${msg.message}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    ${token.status !== 'Rejected' ? `
+                    <div>
+                        <label class="text-sm font-medium text-gray-500 mb-2 block">Add Reply</label>
+                        <textarea id="replyMessage" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Type your message here..."></textarea>
+                        <button onclick="sendReply('${tokenId}')" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Send Reply
+                        </button>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+            
+            document.getElementById('tokenModal').classList.add('show');
+        }
+
+        function closeTokenModal() {
+            document.getElementById('tokenModal').classList.remove('show');
+        }
+
+        function sendReply(tokenId) {
+            const replyMessage = document.getElementById('replyMessage').value.trim();
+            if (!replyMessage) return;
+
+            // Add the reply to the token data
+            const now = new Date();
+            const timeString = now.toLocaleDateString('en-US', { 
+                month: 'short', 
+                day: 'numeric', 
+                year: 'numeric',
+                hour: 'numeric',
+                minute: '2-digit',
+                hour12: true
+            });
+
+            tokenData[tokenId].messages.push({
+                sender: 'You',
+                time: timeString,
+                message: replyMessage
+            });
+
+            // Refresh the modal content
+            openTokenModal(tokenId);
+            
+            // Show success message
+            alert('Reply sent successfully!');
+        }
+
+        function createNewToken() {
+            alert('New token creation feature will be available soon!');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('tokenModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeTokenModal();
+            }
+        });
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9812c2d32427dc7f',t:'MTc1ODIxODYxNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

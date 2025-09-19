@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TPC Platform — TPR Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%); }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .pill { border: 1px solid rgba(0,0,0,.08); background: white; }
+    .label { display:flex; align-items:center; gap:.4rem; }
+    .hint { font-size: 12px; color:#6b7280; }
+    .required::after { content:" *"; color:#ef4444; }
+    .badge { padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;}
+    .badge-ok { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .readonly { background-color: #f8fafc !important; color:#475569 !important; cursor: not-allowed; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <!-- Navigation Header (reused style) -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16 min-w-0">
+        <div class="flex items-center space-x-3 flex-shrink-0">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <div class="hidden sm:block">
+            <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+            <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
+                    
+                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
+                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
+                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
+                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
+                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
+                        <a href="/tpr-profile" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Profile</a>
+                    <!-- </div> -->
+                </div>
+
+        <div class="flex-shrink-0">
+  <a href="/login" 
+     class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm inline-block">
+    Logout
+  </a>
+</div>
+
+      </div>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="gradient-bg text-white">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">TPR Profile</h2>
+          <p class="mt-2 text-white/90 max-w-2xl">Complete your profile so coordinators can reach you and assign duties.</p>
+        </div>
+        <div class="md:ml-auto flex items-center gap-3">
+          <span class="badge badge-ok">Profile Page</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Form Card -->
+  <main id="profile" class="max-w-5xl mx-auto px-6 -mt-6 relative z-10 pb-12">
+    <form id="tprForm" class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 md:p-8 card-hover space-y-8">
+      <!-- Identification -->
+      <section class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Identification</h3>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="label required text-sm font-medium text-gray-800">TPR Name</label>
+            <input id="tpr_name" type="text" placeholder="Enter full name" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+          </div>
+          <div>
+            <label class="label required text-sm font-medium text-gray-800">Email</label>
+            <input id="email" type="email" placeholder="tpr.name@college.edu" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+            <p class="hint mt-1">Use your college email for verification.</p>
+          </div>
+          <div>
+            <label class="label required text-sm font-medium text-gray-800">Phone Number</label>
+            <input id="phone_number" type="tel" placeholder="+91 98765 43210" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600" required>
+          </div>
+          <div>
+            <label class="label required text-sm font-medium text-gray-800">TPR ID</label>
+            <input id="tpr_id" type="text" placeholder="Auto-assigned" class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 readonly px-3 py-2.5 focus:outline-none" readonly>
+            <p class="hint mt-1">This value is assigned automatically by the system.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Academic / Role -->
+      <section class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Academic & Role</h3>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Branch</label>
+            <select id="branch" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <option value="">Select branch</option>
+              <option>CSE</option>
+              <option>ECE</option>
+              <option>EEE</option>
+              <option>ME</option>
+              <option>CE</option>
+              <option>IT</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Roll Number</label>
+            <input id="roll_no" type="text" placeholder="University Roll Number" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Role</label>
+            <select id="role" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <option value="">Select role</option>
+              <option value="TPR">TPR</option>
+              <option value="TPV">TPV</option>
+            </select>
+          </div>
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Duty Count</label>
+            <input id="duty_count" type="number" min="0" step="1" placeholder="Auto-assigned" class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 readonly px-3 py-2.5 focus:outline-none" readonly>
+            <p class="hint mt-1">This value updates automatically as duties are assigned/completed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Personal -->
+      <section class="space-y-4">
+        <h3 class="text-lg font-semibold text-gray-900">Personal</h3>
+        <div class="grid md:grid-cols-2 gap-5">
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Sex</label>
+            <select id="sex" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <option value="">Select</option>
+              <option value="MALE">MALE</option>
+              <option value="female">female</option>
+              <option value="OtheR">OtheR</option>
+            </select>
+            <p class="hint mt-1">Matches allowed values exactly.</p>
+          </div>
+          <div>
+            <label class="label text-sm font-medium text-gray-800">Local Address</label>
+            <textarea id="Local_Address" rows="3" placeholder="House, Street, City, PIN" class="mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-600"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- Actions -->
+      <section class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+        <button type="button" id="saveBtn" class="flex-1 sm:flex-none px-5 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Save Profile (Preview)</button>
+        <button type="button" id="resetBtn" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">Reset</button>
+        <button type="button" id="viewJsonBtn" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">View JSON</button>
+      </section>
+
+      <!-- Preview card -->
+      <div id="previewCard" class="hidden border border-emerald-200 bg-emerald-50 text-emerald-900 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-emerald-600 text-white grid place-items-center">✓</div>
+          <div>
+            <p class="font-semibold">Profile saved (preview)</p>
+            <p class="text-sm">This shows what would be stored. Connect your backend to save it for real.</p>
+            <div id="previewContent" class="mt-3 text-sm font-mono break-all"></div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Help -->
+  <section id="help" class="border-t bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="grid md:grid-cols-2 gap-6 items-start">
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">What gets stored?</h3>
+          <p class="mt-2 text-gray-600">This form captures all TPR attributes: tpr_name, email, phone_number, branch, Local_Address, sex, tpr_id, roll_no, role, and duty_count. Some fields are auto-assigned.</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-700">
+          Tip: Your developers can POST this JSON to your API. The “Save Profile (Preview)” shows the exact structure.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-white border-t">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-900">TPC Platform</p>
+          <p class="text-xs text-gray-600">TPR Profile</p>
+        </div>
+      </div>
+      <div class="text-sm text-gray-600">© <span id="year"></span> All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Header actions
+    document.getElementById('year').textContent = new Date().getFullYear();
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      alert('Logged out. Redirect to Login page.');
+    });
+
+    // Form logic
+    const form = document.getElementById('tprForm');
+    const previewCard = document.getElementById('previewCard');
+    const previewContent = document.getElementById('previewContent');
+
+    // Prefill read-only values (example; replace with actual assigned values)
+    document.getElementById('tpr_id').value = 'TPR-2025-CSE-001';
+    document.getElementById('duty_count').value = 0;
+
+    function collectData() {
+      const data = {
+        tpr_name: document.getElementById('tpr_name').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone_number: document.getElementById('phone_number').value.trim(),
+        branch: document.getElementById('branch').value,
+        Local_Address: document.getElementById('Local_Address').value.trim(),
+        sex: document.getElementById('sex').value,
+        tpr_id: document.getElementById('tpr_id').value.trim(),
+        roll_no: document.getElementById('roll_no').value.trim(),
+        role: document.getElementById('role').value,
+        duty_count: document.getElementById('duty_count').value === '' ? null : Number(document.getElementById('duty_count').value)
+      };
+      return data;
+    }
+
+    function validate(data) {
+      const errors = [];
+      if (!data.tpr_name) errors.push('TPR Name is required.');
+      if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) errors.push('Valid email is required.');
+      if (!data.phone_number) errors.push('Phone number is required.');
+      if (!data.tpr_id) errors.push('TPR ID is required.');
+      return errors;
+    }
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+      const data = collectData();
+      const errors = validate(data);
+      if (errors.length) {
+        alert('Please fix these issues:\n\n' + errors.map(e => '• ' + e).join('\n'));
+        return;
+      }
+      previewContent.textContent = JSON.stringify(data, null, 2);
+      previewCard.classList.remove('hidden');
+    });
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      form.reset();
+      // Keep read-only values after reset
+      document.getElementById('tpr_id').value = 'TPR-2025-CSE-001';
+      document.getElementById('duty_count').value = 0;
+
+      previewCard.classList.add('hidden');
+      previewContent.textContent = '';
+    });
+
+    document.getElementById('viewJsonBtn').addEventListener('click', () => {
+      const data = collectData();
+      alert('JSON preview:\n\n' + JSON.stringify(data, null, 2));
+    });
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98026ee046e05983',t:'MTc1ODA0NzQwNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

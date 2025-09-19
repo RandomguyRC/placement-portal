@@ -1,0 +1,46 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .student-avatar {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+        .branch-tab {
+            transition: all 0.3s ease;
+        }
+        .branch-tab.active {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+        }
+        .year-selector {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .student-card {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .student-card:hover {
+            border-left-color: #3b82f6;
+            transform: translateX(4px);
+        }
+        .spi-badge {
+            display: inline-block;
+            min-width: 45px;
+            text-align: center;
+        }
+        .modal-backdrop {
+            backdrop-filter: blur(4px);
+        }
+    

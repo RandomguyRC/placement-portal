@@ -1,0 +1,39 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .notice-card {
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+        .notice-card:hover {
+            border-left-color: #3b82f6;
+            transform: translateX(5px);
+        }
+        .priority-high {
+            border-left-color: #ef4444;
+        }
+        .priority-medium {
+            border-left-color: #f59e0b;
+        }
+        .priority-normal {
+            border-left-color: #10b981;
+        }
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        .filter-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+    

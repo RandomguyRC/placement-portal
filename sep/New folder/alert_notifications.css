@@ -1,0 +1,33 @@
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .resource-item {
+            transition: all 0.3s ease;
+        }
+        .resource-item:hover {
+            background: #f8fafc;
+            transform: translateX(5px);
+        }
+        .section-card {
+            transition: all 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        }
+        .notification-filter.active {
+            color: #2563eb;
+            border-bottom-color: #2563eb;
+        }
+    

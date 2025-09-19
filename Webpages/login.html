@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TPC Platform — Demo Login (Students & TPRs)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .feature-icon {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .glass {
+      background: rgba(255,255,255,.6);
+      backdrop-filter: blur(12px);
+    }
+    .tab-active {
+      color: #1d4ed8; border-color: #1d4ed8; background: #eff6ff;
+    }
+    .badge-demo {
+      background: linear-gradient(90deg,#fde68a,#fef3c7);
+      color: #92400e; border: 1px solid #f59e0b;
+    }
+    .divider {
+      display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: .75rem; color: #6b7280;
+    }
+    .divider:before, .divider:after {
+      content: ""; height: 1px; background: linear-gradient(90deg,rgba(0,0,0,.08),rgba(0,0,0,.02));
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-700">
+  <!-- Sticky TPC-style Navigation -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50" id="home">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <div>
+            <h1 class="text-xl font-bold text-gray-900">TPC Platform</h1>
+            <p class="text-xs text-gray-600">Training & Placement Cell</p>
+          </div>
+        </div>
+        <div class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
+          <a href="#login" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Login</a>
+          <a href="#help" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Help</a>
+        </div>
+        <button id="mobileMenuBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none" aria-label="Open menu">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="md:hidden hidden border-t border-gray-100">
+      <div class="px-4 py-3 space-y-2">
+        <a href="#home" class="block px-3 py-2 rounded-lg hover:bg-gray-100">Home</a>
+        <a href="#login" class="block px-3 py-2 rounded-lg hover:bg-gray-100">Login</a>
+        <a href="#help" class="block px-3 py-2 rounded-lg hover:bg-gray-100">Help</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Demo banner -->
+  <div class="bg-amber-50 border-b border-amber-200">
+    <div class="max-w-3xl mx-auto px-6 py-3 flex items-center gap-3">
+      <span class="px-2.5 py-0.5 rounded-md text-xs font-semibold badge-demo">DEMO</span>
+      <p class="text-sm text-amber-900">
+        This is a demo login experience. Email/password fields are disabled. Use the demo buttons to simulate login and redirection.
+      </p>
+    </div>
+  </div>
+
+  <!-- Login Section -->
+  <main id="login" class="min-h-[calc(100vh-200px)]">
+    <section class="max-w-3xl mx-auto px-6 py-12 md:py-16">
+      <div class="mb-8">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight">Sign in to TPC</h2>
+        <p class="mt-2 text-gray-600">Students and TPRs can access their dashboards using college email or Google. This page simulates the flow.</p>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm card-hover">
+        <!-- Tabs -->
+        <div class="flex">
+          <button id="tab-student" class="flex-1 px-5 py-3 text-sm font-semibold border-b-2 border-transparent hover:bg-gray-50">Student</button>
+          <button id="tab-tpr" class="flex-1 px-5 py-3 text-sm font-semibold border-b-2 border-transparent hover:bg-gray-50">TPR</button>
+        </div>
+
+        <!-- Panels -->
+        <div class="grid md:grid-cols-5 gap-0">
+          <!-- Illustration / Info -->
+          <aside class="md:col-span-2 p-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-r border-gray-200">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0v7"/>
+                </svg>
+              </div>
+              <div>
+                <p class="font-semibold text-gray-900">Secure Access</p>
+                <p class="text-xs text-gray-600">Use your college email or Google to sign in.</p>
+              </div>
+            </div>
+            <ul class="mt-6 space-y-3 text-sm text-gray-700">
+              <li>• Student dashboard: profile, notices, company visits</li>
+              <li>• TPR dashboard: manage notices, drive details</li>
+              <li>• Single place for placement activities</li>
+            </ul>
+            <div class="mt-6 text-xs text-gray-500">
+              Note: Real login requires backend integration. This page is a safe demo.
+            </div>
+          </aside>
+
+          <!-- Form Area -->
+          <section class="md:col-span-3 p-6">
+            <!-- Student Panel -->
+            <div id="panel-student" class="space-y-5">
+              <div>
+                <label class="block text-sm font-medium text-gray-800">College Email</label>
+                <input type="email" placeholder="name@college.edu" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-800">Password</label>
+                <div class="relative">
+                  <input type="password" placeholder="••••••••" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 pr-12 cursor-not-allowed">
+                  <button type="button" class="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-gray-500 px-2 py-1 rounded hover:bg-gray-100" aria-label="Show password" disabled>Show</button>
+                </div>
+                <div class="mt-1 text-xs text-gray-500">Fields are disabled in demo.</div>
+              </div>
+              <button id="student-demo-btn" class="w-full px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Demo Sign In (Student)</button>
+
+              <div class="divider text-xs"><span>OR</span></div>
+
+              <div class="grid sm:grid-cols-2 gap-3">
+                <button id="student-college-btn" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+                  <span class="w-5 h-5 rounded bg-blue-600 text-white grid place-items-center text-xs">C</span>
+                  Continue with College
+                </button>
+                <button id="student-google-btn" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+                  <span class="w-5 h-5 rounded bg-white grid place-items-center">
+                    <svg viewBox="0 0 48 48" class="w-5 h-5"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.676 31.91 29.223 35 24 35c-7.18 0-13-5.82-13-13s5.82-13 13-13c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 11.85 1 2 10.85 2 23s9.85 22 22 22c12.15 0 22-9.85 22-22 0-1.473-.153-2.91-.389-4.297z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.52 15.29 18.879 12 24 12c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 15.317 1 7.767 5.863 3.694 13.308z"/><path fill="#4CAF50" d="M24 45c5.166 0 9.86-1.977 13.409-5.197l-6.198-5.238C29.223 35 24 35 24 35c-5.193 0-9.636-3.063-11.342-7.385l-6.57 5.057C9.142 41.907 16.004 45 24 45z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.65 3.827-5.806 7-11.303 7 0 0 0 0 0 0 5.223 0 9.676-3.09 11.303-6.917z"/></svg>
+                  </span>
+                  Continue with Google
+                </button>
+              </div>
+
+              <div class="text-xs text-gray-500 text-center">
+                By continuing, you agree to our demo terms. No real data is collected here.
+              </div>
+            </div>
+
+            <!-- TPR Panel -->
+            <div id="panel-tpr" class="space-y-5 hidden">
+              <div>
+                <label class="block text-sm font-medium text-gray-800">College Email</label>
+                <input type="email" placeholder="tpr.name@college.edu" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-800">Password</label>
+                <input type="password" placeholder="••••••••" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
+                <div class="mt-1 text-xs text-gray-500">Fields are disabled in demo.</div>
+              </div>
+              <button id="tpr-demo-btn" class="w-full px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">Demo Sign In (TPR)</button>
+
+              <div class="divider text-xs"><span>OR</span></div>
+
+              <div class="grid sm:grid-cols-2 gap-3">
+                <button id="tpr-college-btn" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+                  <span class="w-5 h-5 rounded bg-blue-600 text-white grid place-items-center text-xs">C</span>
+                  Continue with College
+                </button>
+                <button id="tpr-google-btn" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+                  <span class="w-5 h-5 rounded bg-white grid place-items-center">
+                    <svg viewBox="0 0 48 48" class="w-5 h-5"><path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.676 31.91 29.223 35 24 35c-7.18 0-13-5.82-13-13s5.82-13 13-13c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 11.85 1 2 10.85 2 23s9.85 22 22 22c12.15 0 22-9.85 22-22 0-1.473-.153-2.91-.389-4.297z"/><path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.52 15.29 18.879 12 24 12c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 15.317 1 7.767 5.863 3.694 13.308z"/><path fill="#4CAF50" d="M24 45c5.166 0 9.86-1.977 13.409-5.197l-6.198-5.238C29.223 35 24 35 24 35c-5.193 0-9.636-3.063-11.342-7.385l-6.57 5.057C9.142 41.907 16.004 45 24 45z"/><path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.65 3.827-5.806 7-11.303 7 0 0 0 0 0 0 5.223 0 9.676-3.09 11.303-6.917z"/></svg>
+                  </span>
+                  Continue with Google
+                </button>
+              </div>
+
+              <div class="text-xs text-gray-500 text-center">
+                This is a demo. Connect to your backend to enable real sign-in.
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <!-- Redirect Preview -->
+      <div id="redirectCard" class="hidden mt-6 border border-blue-200 bg-blue-50 text-blue-900 rounded-xl p-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white grid place-items-center">→</div>
+          <div>
+            <p class="font-semibold">Simulated redirect</p>
+            <p class="text-sm">You’ll be taken to: <span id="redirectPath" class="font-mono"></span></p>
+            <p class="text-xs mt-1">In a real app, this button would navigate to your protected dashboard after verification.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Help / Footer -->
+  <section id="help" class="border-t bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <div class="grid md:grid-cols-2 gap-6 items-start">
+        <div>
+          <h3 class="text-xl font-bold text-gray-900">Need adjustments?</h3>
+          <p class="mt-2 text-gray-600">Tell me your exact branding (logo, colors), what fields to show, and the final redirect paths you’ll use.</p>
+        </div>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-4 text-sm text-gray-700">
+          Includes: student & TPR tabs, demo email/password, college/Google demo buttons, and simulated redirects.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-white border-t">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-900">TPC Platform</p>
+          <p class="text-xs text-gray-600">Demo Login</p>
+        </div>
+      </div>
+      <div class="text-sm text-gray-600">© <span id="year"></span> All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileBtn.addEventListener('click', ()=> mobileMenu.classList.toggle('hidden'));
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Tabs
+    const tabStudent = document.getElementById('tab-student');
+    const tabTpr = document.getElementById('tab-tpr');
+    const panelStudent = document.getElementById('panel-student');
+    const panelTpr = document.getElementById('panel-tpr');
+
+    function activateTab(which){
+      if(which === 'student'){
+        tabStudent.classList.add('tab-active');
+        tabStudent.classList.add('border-blue-600');
+        tabTpr.classList.remove('tab-active','border-indigo-600');
+        panelStudent.classList.remove('hidden');
+        panelTpr.classList.add('hidden');
+      } else {
+        tabTpr.classList.add('tab-active');
+        tabTpr.classList.add('border-indigo-600');
+        tabStudent.classList.remove('tab-active','border-blue-600');
+        panelTpr.classList.remove('hidden');
+        panelStudent.classList.add('hidden');
+      }
+    }
+    tabStudent.addEventListener('click', ()=>activateTab('student'));
+    tabTpr.addEventListener('click', ()=>activateTab('tpr'));
+    // Default
+    activateTab('student');
+
+    // Demo redirect helpers
+    const redirectCard = document.getElementById('redirectCard');
+    const redirectPath = document.getElementById('redirectPath');
+
+    function simulateRedirect(path){
+      redirectPath.textContent = path;
+      redirectCard.classList.remove('hidden');
+      // Friendly banner + timed navigation (simulated)
+      setTimeout(()=>{
+        // In a real app you would use: window.location.href = path
+        // Here we just show a confirmation
+        alert('Demo redirect to: ' + path + '\\n\\nReplace this with real navigation when integrated.');
+      }, 500);
+    }
+
+    // Student actions
+    document.getElementById('student-demo-btn').addEventListener('click', ()=> simulateRedirect('/student-dashboard'));
+    document.getElementById('student-college-btn').addEventListener('click', ()=> simulateRedirect('/auth/college/student'));
+    document.getElementById('student-google-btn').addEventListener('click', ()=> simulateRedirect('/auth/google/student'));
+
+    // TPR actions
+    document.getElementById('tpr-demo-btn').addEventListener('click', ()=> simulateRedirect('/tpr-dashboard'));
+    document.getElementById('tpr-college-btn').addEventListener('click', ()=> simulateRedirect('/auth/college/tpr'));
+    document.getElementById('tpr-google-btn').addEventListener('click', ()=> simulateRedirect('/auth/google/tpr'));
+  </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98020f6587b55522',t:'MTc1ODA0MzQ5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Company Priority Preferences - TPC Platform</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+
+<link href="preferences.css" rel="stylesheet"/></head>
+<body class="bg-gray-50">
+<!-- Navigation Header -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+<svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h1 class="text-xl font-bold text-gray-900">TPC Platform</h1>
+<p class="text-xs text-gray-600">Training &amp; Placement Cell</p>
+</div>
+</div>
+<div class="hidden md:flex items-center space-x-8">
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors" href="#home">Dashboard</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors" href="#applications">Applications</a>
+<a class="text-blue-600 font-semibold" href="#interviews">Interviews</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors" href="#profile">Profile</a>
+<a class="text-gray-700 hover:text-blue-600 font-medium transition-colors" href="#notices">Notices</a>
+</div>
+<div class="flex items-center space-x-4">
+<div class="text-sm text-gray-600">Welcome, <span class="font-semibold">Rahul Sharma</span></div>
+<button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        Logout
+                    </button>
+</div>
+</div>
+</div>
+</nav>
+<!-- Header Section -->
+<section class="gradient-bg text-white py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center">
+<h1 class="text-4xl font-bold mb-4">Company Priority Preferences</h1>
+<p class="text-xl text-blue-100">Organize companies by priority within each time slot</p>
+<div class="mt-4 bg-blue-800 bg-opacity-50 rounded-lg p-4 inline-block">
+<p class="text-blue-100">📅 Interview Date: <span class="font-semibold text-white">March 15, 2024</span></p>
+</div>
+</div>
+</div>
+</section>
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<!-- Student Info Card -->
+<div class="bg-white rounded-xl shadow-lg p-6 mb-8 card-hover">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center space-x-4">
+<div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+<span class="text-2xl font-bold text-blue-600">RS</span>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-gray-900">Rahul Sharma</h2>
+<p class="text-gray-600">Computer Science Engineering • Final Year</p>
+<p class="text-sm text-gray-500">Roll No: 2021CS001 • CGPA: 8.7</p>
+</div>
+</div>
+<div class="text-right">
+<div class="text-sm text-gray-500">Shortlisted Companies</div>
+<div class="text-lg font-semibold text-gray-900">6 Companies</div>
+</div>
+</div>
+</div>
+<!-- Instructions -->
+<div class="bg-blue-50 rounded-xl p-6 mb-8">
+<div class="flex items-start space-x-3">
+<svg class="w-6 h-6 text-blue-600 mt-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<div>
+<h3 class="text-lg font-semibold text-blue-900 mb-2">How to Set Your Preferences</h3>
+<ul class="text-blue-800 space-y-1">
+<li>• Companies are grouped by their assigned time slots</li>
+<li>• Drag and drop companies within each slot to set your priority order</li>
+<li>• Higher priority companies will be scheduled first if there are conflicts</li>
+<li>• Your #1 priority in each slot gets first preference for interview scheduling</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Time Slots with Companies -->
+<div class="space-y-8">
+<!-- Slot 1: 9:00 - 10:30 AM -->
+<div class="bg-white rounded-xl shadow-lg p-6">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-2xl font-bold text-gray-900">Slot 1: 9:00 - 10:30 AM</h3>
+<p class="text-gray-600">Morning Session • 3 Companies</p>
+</div>
+<div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                        3 Companies Assigned
+                    </div>
+</div>
+<div class="slot-container" data-slot="slot1" ondragover="allowDrop(event)" ondrop="drop(event)">
+<div class="space-y-4">
+<!-- Company 1 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="techcorp" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        1
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">TechCorp Inc.</h4>
+<p class="text-gray-600">Software Development • ₹8-12 LPA</p>
+<p class="text-sm text-gray-500">Bangalore • Full Stack Developer</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        High Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Company 2 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="innovate" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        2
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">Innovate Solutions</h4>
+<p class="text-gray-600">Product Development • ₹7-10 LPA</p>
+<p class="text-sm text-gray-500">Mumbai • Frontend Developer</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        Medium Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Company 3 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="webtech" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        3
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">WebTech Systems</h4>
+<p class="text-gray-600">Web Development • ₹6-9 LPA</p>
+<p class="text-sm text-gray-500">Pune • Backend Developer</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        Low Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Slot 2: 2:00 - 3:30 PM -->
+<div class="bg-white rounded-xl shadow-lg p-6">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-2xl font-bold text-gray-900">Slot 2: 2:00 - 3:30 PM</h3>
+<p class="text-gray-600">Afternoon Session • 2 Companies</p>
+</div>
+<div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                        2 Companies Assigned
+                    </div>
+</div>
+<div class="slot-container" data-slot="slot2" ondragover="allowDrop(event)" ondrop="drop(event)">
+<div class="space-y-4">
+<!-- Company 1 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="datasoft" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        1
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">DataSoft Analytics</h4>
+<p class="text-gray-600">Data Science • ₹9-13 LPA</p>
+<p class="text-sm text-gray-500">Hyderabad • Data Analyst</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        High Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- Company 2 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="cloudtech" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        2
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">CloudTech Services</h4>
+<p class="text-gray-600">Cloud Computing • ₹8-11 LPA</p>
+<p class="text-sm text-gray-500">Chennai • DevOps Engineer</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        Medium Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Slot 3: 4:00 - 5:30 PM -->
+<div class="bg-white rounded-xl shadow-lg p-6">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h3 class="text-2xl font-bold text-gray-900">Slot 3: 4:00 - 5:30 PM</h3>
+<p class="text-gray-600">Evening Session • 1 Company</p>
+</div>
+<div class="bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                        1 Company Assigned
+                    </div>
+</div>
+<div class="slot-container" data-slot="slot3" ondragover="allowDrop(event)" ondrop="drop(event)">
+<div class="space-y-4">
+<!-- Company 1 -->
+<div class="company-item bg-gray-50 border-2 border-gray-200 rounded-lg p-4" data-company="fintech" draggable="true" ondragstart="drag(event)">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="priority-badge text-white w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm">
+                                        1
+                                    </div>
+<div>
+<h4 class="text-lg font-bold text-gray-900">FinTech Solutions</h4>
+<p class="text-gray-600">Financial Technology • ₹10-15 LPA</p>
+<p class="text-sm text-gray-500">Delhi • Software Engineer</p>
+</div>
+</div>
+<div class="flex items-center space-x-2">
+<div class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium">
+                                        High Priority
+                                    </div>
+<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex flex-col sm:flex-row gap-4 justify-between mt-8">
+<button class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium hover:bg-gray-300 transition-colors">
+                Save as Draft
+            </button>
+<div class="flex gap-4">
+<button class="bg-red-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-red-700 transition-colors" onclick="resetPreferences()">
+                    Reset to Default
+                </button>
+<button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors" onclick="submitPreferences()">
+                    Submit Preferences
+                </button>
+</div>
+</div>
+<!-- Summary Card -->
+<div class="bg-blue-50 rounded-xl p-6 mt-8">
+<h3 class="text-xl font-bold text-blue-900 mb-4">Current Preference Summary</h3>
+<div class="grid md:grid-cols-3 gap-6">
+<div>
+<h4 class="font-semibold text-blue-800 mb-2">Slot 1 (9:00-10:30 AM)</h4>
+<ol class="text-blue-700 text-sm space-y-1" id="slot1-summary">
+<li>1. TechCorp Inc.</li>
+<li>2. Innovate Solutions</li>
+<li>3. WebTech Systems</li>
+</ol>
+</div>
+<div>
+<h4 class="font-semibold text-blue-800 mb-2">Slot 2 (2:00-3:30 PM)</h4>
+<ol class="text-blue-700 text-sm space-y-1" id="slot2-summary">
+<li>1. DataSoft Analytics</li>
+<li>2. CloudTech Services</li>
+</ol>
+</div>
+<div>
+<h4 class="font-semibold text-blue-800 mb-2">Slot 3 (4:00-5:30 PM)</h4>
+<ol class="text-blue-700 text-sm space-y-1" id="slot3-summary">
+<li>1. FinTech Solutions</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<script>
+        let draggedElement = null;
+        
+        function drag(event) {
+            draggedElement = event.target;
+            event.target.classList.add('dragging');
+        }
+        
+        function allowDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('drag-over');
+        }
+        
+        function drop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
+            
+            if (draggedElement) {
+                const dropZone = event.currentTarget;
+                const draggedSlot = draggedElement.closest('.slot-container');
+                
+                // Only allow dropping within the same slot
+                if (dropZone === draggedSlot) {
+                    const afterElement = getDragAfterElement(dropZone, event.clientY);
+                    const companiesContainer = dropZone.querySelector('.space-y-4');
+                    
+                    if (afterElement == null) {
+                        companiesContainer.appendChild(draggedElement);
+                    } else {
+                        companiesContainer.insertBefore(draggedElement, afterElement);
+                    }
+                    
+                    updatePriorities(dropZone);
+                    updateSummary();
+                }
+                
+                draggedElement.classList.remove('dragging');
+                draggedElement = null;
+            }
+        }
+        
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.company-item:not(.dragging)')];
+            
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+        
+        function updatePriorities(slotContainer) {
+            const companies = slotContainer.querySelectorAll('.company-item');
+            companies.forEach((company, index) => {
+                const priorityBadge = company.querySelector('.priority-badge');
+                const priorityLabel = company.querySelector('.text-xs');
+                
+                priorityBadge.textContent = index + 1;
+                
+                if (index === 0) {
+                    priorityLabel.textContent = 'High Priority';
+                    priorityLabel.className = 'bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-xs font-medium';
+                } else if (index === 1) {
+                    priorityLabel.textContent = 'Medium Priority';
+                    priorityLabel.className = 'bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-medium';
+                } else {
+                    priorityLabel.textContent = 'Low Priority';
+                    priorityLabel.className = 'bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-xs font-medium';
+                }
+            });
+        }
+        
+        function updateSummary() {
+            const slots = ['slot1', 'slot2', 'slot3'];
+            
+            slots.forEach(slotId => {
+                const slotContainer = document.querySelector(`[data-slot="${slotId}"]`);
+                const summaryElement = document.getElementById(`${slotId}-summary`);
+                const companies = slotContainer.querySelectorAll('.company-item');
+                
+                let summaryHTML = '';
+                companies.forEach((company, index) => {
+                    const companyName = company.querySelector('h4').textContent;
+                    summaryHTML += `<li>${index + 1}. ${companyName}</li>`;
+                });
+                
+                summaryElement.innerHTML = summaryHTML;
+            });
+        }
+        
+        function resetPreferences() {
+            if (confirm('Are you sure you want to reset all preferences to default order?')) {
+                location.reload();
+            }
+        }
+        
+        function submitPreferences() {
+            const preferences = {};
+            const slots = ['slot1', 'slot2', 'slot3'];
+            
+            slots.forEach(slotId => {
+                const slotContainer = document.querySelector(`[data-slot="${slotId}"]`);
+                const companies = slotContainer.querySelectorAll('.company-item');
+                preferences[slotId] = [];
+                
+                companies.forEach((company, index) => {
+                    const companyName = company.querySelector('h4').textContent;
+                    preferences[slotId].push({
+                        name: companyName,
+                        priority: index + 1
+                    });
+                });
+            });
+            
+            let summaryText = 'Preferences submitted successfully!\n\nYour priority order:\n\n';
+            
+            const slotNames = {
+                'slot1': 'Slot 1 (9:00-10:30 AM)',
+                'slot2': 'Slot 2 (2:00-3:30 PM)',
+                'slot3': 'Slot 3 (4:00-5:30 PM)'
+            };
+            
+            Object.keys(preferences).forEach(slotId => {
+                summaryText += `${slotNames[slotId]}:\n`;
+                preferences[slotId].forEach(company => {
+                    summaryText += `  ${company.priority}. ${company.name}\n`;
+                });
+                summaryText += '\n';
+            });
+            
+            alert(summaryText);
+        }
+        
+        // Prevent default drag behavior on drag leave
+        document.addEventListener('dragleave', function(event) {
+            event.currentTarget.classList.remove('drag-over');
+        });
+        
+        // Initialize summary on page load
+        updateSummary();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980219d416608985',t:'MTc1ODA0MzkyMi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

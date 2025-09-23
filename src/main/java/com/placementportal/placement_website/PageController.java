@@ -19,40 +19,40 @@ public class PageController {
 
     // ---------------- MOCK LOGIN HANDLERS ----------------
 
-    @PostMapping("/login/student")
-    public String loginStudent(@RequestParam String username,
-                               @RequestParam String password,
-                               Model model) {
-        // Hardcoded student login
-        if ("student@college.edu".equals(username) && "pass".equals(password)) {
-            model.addAttribute("username", username);
-            return "redirect:/profile"; // student.html
-        } else {
-            model.addAttribute("error", "Invalid student credentials");
-            return "login"; // back to login.html
-        }
-    }
+    // @PostMapping("/login/student")
+    // public String loginStudent(@RequestParam String username,
+    //                            @RequestParam String password,
+    //                            Model model) {
+    //     // Hardcoded student login
+    //     if ("student@college.edu".equals(username) && "pass".equals(password)) {
+    //         model.addAttribute("username", username);
+    //         return "redirect:/profile"; // student.html
+    //     } else {
+    //         model.addAttribute("error", "Invalid student credentials");
+    //         return "login"; // back to login.html
+    //     }
+    // }
 
-    @PostMapping("/login/tpr")
-    public String loginTpr(@RequestParam String username,
-                           @RequestParam String password,
-                           Model model) {
-        // Hardcoded TPR login
-        if ("tpr@college.edu".equals(username) && "1234".equals(password)) {
-            model.addAttribute("username", username);
-            return "redirect:/tpr-profile"; // tpr_profile.html
-        } else {
-            model.addAttribute("error", "Invalid TPR credentials");
-            return "login"; // back to login.html
-        }
-    }
+    // @PostMapping("/login/tpr")
+    // public String loginTpr(@RequestParam String username,
+    //                        @RequestParam String password,
+    //                        Model model) {
+    //     // Hardcoded TPR login
+    //     if ("tpr@college.edu".equals(username) && "1234".equals(password)) {
+    //         model.addAttribute("username", username);
+    //         return "redirect:/tpr-profile"; // tpr_profile.html
+    //     } else {
+    //         model.addAttribute("error", "Invalid TPR credentials");
+    //         return "login"; // back to login.html
+    //     }
+    // }
 
     // -----------------------------------------------------
 
-    @GetMapping("/signup")
-    public String signup() {
-        return "signup"; // signup.html
-    }
+    // @GetMapping("/signup")
+    // public String signup() {
+    //     return "signup"; // signup.html
+    // }
 
     @GetMapping("/profile")
     public String profile() {

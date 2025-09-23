@@ -35,9 +35,8 @@
           </div>
         </div>
         <div class="hidden md:flex items-center space-x-8">
-          <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
-          <a href="#signup" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Sign Up</a>
-          <a href="#help" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Help</a>
+          <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
+          <a href="/signup" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Sign Up</a>
         </div>
         <button id="mobileMenuBtn" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-700 hover:bg-gray-100" aria-label="Open menu">
           <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,31 +99,72 @@
           <!-- Form area (visual only) -->
           <section class="md:col-span-3 p-6">
             <!-- Student form -->
-            <form id="form-student" class="space-y-5">
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Full Name</label>
-                <input type="text" placeholder="Student Name" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Email</label>
-                <input type="email" placeholder="name@college.edu" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Phone</label>
-                <input type="tel" placeholder="+91 98765 43210" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Password</label>
-                <input type="password" placeholder="••••••••" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-                <p class="mt-1 text-xs text-gray-500">Fields are disabled here. Connect to your secure backend to enable.</p>
-              </div>
-              <button type="button" id="student-create" class="w-full px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">Create Account (Preview)</button>
-              <div class="divider text-xs"><span>OR</span></div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <button type="button" id="student-college" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">Use College Email</button>
-                <button type="button" id="student-google" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">Continue with Google</button>
-              </div>
-            </form>
+            <form id="form-student" class="space-y-5" th:action="@{/signup}" method="post">
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Enrollment Number</label>
+    <input type="text" name="enrollmentNumber" placeholder="Enrollment Number"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Full Name</label>
+    <input type="text" name="studentName" placeholder="Student Name"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Email</label>
+    <input type="email" name="email" placeholder="name@college.edu"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Phone</label>
+    <input type="tel" name="phoneNumber" placeholder="+91 98765 43210"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Branch</label>
+    <input type="text" name="branch" placeholder="Branch"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Address</label>
+    <input type="text" name="address" placeholder="Address"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Local Address</label>
+    <input type="text" name="localAddress" placeholder="Local Address"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Sex</label>
+    <select name="sex" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+      <option value="MALE">Male</option>
+      <option value="FEMALE">Female</option>
+      <option value="OTHER">Other</option>
+    </select>
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">CPI</label>
+    <input type="number" name="cpi" placeholder="CPI" step="0.01"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Date of Birth</label>
+    <input type="date" name="dob"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Password</label>
+    <input type="password" name="password" placeholder="••••••••"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+  <button type="submit"
+          class="w-full px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">
+    Create Account
+  </button>
+</form>
+
+
 
             <!-- TPR form -->
             <form id="form-tpr" class="space-y-5 hidden">
@@ -171,7 +211,7 @@
       </div>
 
       <div class="mt-8 text-center">
-        <a href="login.html" class="text-sm font-semibold text-blue-700 hover:underline">Back to Login</a>
+        <a href="/login" class="text-sm font-semibold text-blue-700 hover:underline">Back to Login</a>
       </div>
     </section>
   </main>
@@ -258,5 +298,4 @@
     document.getElementById('tpr-college').addEventListener('click', ()=> previewRedirect('/auth/college/tpr/signup'));
     document.getElementById('tpr-google').addEventListener('click', ()=> previewRedirect('/auth/google/tpr/signup'));
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98024f00660791e6',t:'MTc1ODA0NjEwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

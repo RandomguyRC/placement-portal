@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPR Profile - TPC Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .profile-avatar {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        }
+        .edit-mode {
+            border-color: #3b82f6 !important;
+            background-color: #f8fafc;
+        }
+        .status-badge {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation Header -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            
+            <!-- Left: Logo -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+                    <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
+                </div>
+            </div>
+
+            <!-- Center: Nav Links -->
+            <div class="hidden md:flex items-center space-x-6">
+                <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Home</a>
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Company Listing</a>
+                <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Schedule</a>
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Notices</a>
+                <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base">Students</a>
+            </div>
+
+            <!-- Right: Profile / Login / Logout -->
+            <div class="flex items-center space-x-3">
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors text-sm">
+                   Profile
+                </a>
+
+                <a th:if="${tpr == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+                   Login
+                </a>
+
+                <a th:if="${tpr != null}" href="/logout"
+                   class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
+                   Logout
+                </a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+    <!-- Profile Header -->
+<div class="gradient-bg py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <!-- Avatar with Initials -->
+            <div class="profile-avatar w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                <span th:text="${#strings.isEmpty(tpr.tprName) ? '' : 
+                               #strings.substring(tpr.tprName,0,1) + 
+                               (tpr.tprName.contains(' ') ? 
+                               #strings.substring(tpr.tprName.split(' ')[1],0,1) : '')}"></span>
+            </div>
+
+            <!-- Name & Details -->
+            <div class="text-center md:text-left text-white">
+                <h1 class="text-3xl font-bold" th:text="${tpr.tprName}"></h1>
+                <p class="text-blue-100 text-lg" th:text="'Employee ID: ' + ${tpr.tprId}"></p>
+                <div class="flex items-center justify-center md:justify-start mt-2">
+                    <span class="status-badge bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        Active TPR
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Profile Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Profile -->
+<div class="lg:col-span-2">
+    <div class="bg-white rounded-xl shadow-lg p-6">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">TPR Profile</h2>
+            <button onclick="toggleEditMode()" id="editBtn"
+                class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Edit Profile
+            </button>
+        </div>
+
+        <!-- Profile Form -->
+        <form id="tprProfileForm" action="/tpr-profile/update" method="post">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- TPR ID (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">TPR ID</label>
+                    <input type="text" id="tprId" name="tprId" th:value="${tpr.tprId}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Full Name (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                    <input type="text" id="fullName" name="tprName" th:value="${tpr.tprName}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Email (editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                    <input type="email" id="email" name="email" th:value="${tpr.email}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        readonly>
+                </div>
+
+                <!-- Phone Number (editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <input type="text" id="phone" name="phoneNumber" th:value="${tpr.phoneNumber}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                        readonly>
+                </div>
+
+                <!-- Branch (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Branch</label>
+                    <input type="text" id="branch" name="branch" th:value="${tpr.branch}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Roll No (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Roll No</label>
+                    <input type="text" id="rollNo" name="rollNo" th:value="${tpr.rollNo}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Gender (editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                    <select id="gender" name="sex"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        disabled>
+                        <option value="MALE" th:selected="${tpr.sex.name() == 'MALE'}">Male</option>
+                        <option value="FEMALE" th:selected="${tpr.sex.name() == 'FEMALE'}">Female</option>
+                        <option value="OTHER" th:selected="${tpr.sex.name() == 'OTHER'}">Other</option>
+                    </select>
+                </div>
+
+                <!-- Role (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Role</label>
+                    <input type="text" id="role" name="role" th:value="${tpr.role}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Duty Count (non-editable) -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Duty Count</label>
+                    <input type="number" id="dutyCount" th:value="${tpr.dutyCount}"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+            </div>
+
+            <!-- Local Address (editable) -->
+            <div class="mt-6">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Local Address</label>
+                <textarea id="residentialAddress" name="localAddress" rows="3"
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    readonly th:text="${tpr.localAddress}"></textarea>
+            </div>
+
+            <!-- Save / Cancel Buttons -->
+            <div id="actionButtons" class="mt-6 flex space-x-4 hidden">
+                <button type="submit"
+                    class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Save Changes
+                </button>
+                <button type="button" onclick="cancelEdit()"
+                    class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+    <script>
+let isEditMode = false;
+let originalData = {};
+
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const editBtn = document.getElementById('editBtn');
+    const actionButtons = document.getElementById('actionButtons');
+
+    // Fields that can be edited
+    const editableFields = ['email', 'phone', 'gender', 'residentialAddress'];
+
+    if (isEditMode) {
+        // Store original data
+        originalData = {};
+        editableFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el.tagName === 'SELECT') {
+                originalData[id] = el.value;
+            } else {
+                originalData[id] = el.value;
+            }
+        });
+
+        editBtn.textContent = 'Editing...';
+        editBtn.disabled = true;
+        editBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+        editBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+
+        actionButtons.classList.remove('hidden');
+
+        // Enable fields
+        editableFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (el.tagName === 'SELECT') {
+                el.disabled = false;
+            } else {
+                el.removeAttribute('readonly');
+            }
+            el.classList.add('edit-mode');
+        });
+    }
+}
+
+function cancelEdit() {
+    const editableFields = ['email', 'phone', 'gender', 'residentialAddress'];
+    editableFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el.tagName === 'SELECT') {
+            el.value = originalData[id];
+        } else {
+            el.value = originalData[id];
+        }
+    });
+    exitEditMode();
+    showNotification('Changes cancelled', 'info');
+}
+
+function exitEditMode() {
+    isEditMode = false;
+    const editBtn = document.getElementById('editBtn');
+    const actionButtons = document.getElementById('actionButtons');
+    const editableFields = ['email', 'phone', 'gender', 'residentialAddress'];
+
+    editBtn.textContent = 'Edit Profile';
+    editBtn.disabled = false;
+    editBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+    editBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+
+    actionButtons.classList.add('hidden');
+
+    editableFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el.tagName === 'SELECT') {
+            el.disabled = true;
+        } else {
+            el.setAttribute('readonly', true);
+        }
+        el.classList.remove('edit-mode');
+    });
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-20 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 transform transition-all duration-300 translate-x-full`;
+
+    notification.classList.add(type === 'success' ? 'bg-green-500' : 'bg-blue-500');
+    notification.textContent = message;
+    document.body.appendChild(notification);
+
+    setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
+}
+</script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9828816b851f59c9',t:'MTc1ODQ0NjYyNC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>

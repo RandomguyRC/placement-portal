@@ -99,7 +99,7 @@
           <!-- Form area (visual only) -->
           <section class="md:col-span-3 p-6">
             <!-- Student form -->
-            <form id="form-student" class="space-y-5" th:action="@{/signup}" method="post">
+<form id="form-student" class="space-y-5" th:action="@{/signup}" method="post">
   <div>
     <label class="block text-sm font-medium text-gray-800">Enrollment Number</label>
     <input type="text" name="enrollmentNumber" placeholder="Enrollment Number"
@@ -158,6 +158,15 @@
     <input type="password" name="password" placeholder="••••••••"
            required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
   </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Confirm Password</label>
+    <input type="password" name="confirmPassword" placeholder="••••••••"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <!-- Error message -->
+  <p th:if="${error}" th:text="${error}" class="text-red-600 text-sm text-center"></p>
+
   <button type="submit"
           class="w-full px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">
     Create Account
@@ -166,37 +175,83 @@
 
 
 
-            <!-- TPR form -->
-            <form id="form-tpr" class="space-y-5 hidden">
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Full Name</label>
-                <input type="text" placeholder="TPR Name" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Email</label>
-                <input type="email" placeholder="tpr.name@college.edu" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Phone</label>
-                <input type="tel" placeholder="+91 98765 43210" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-              </div>
-              <div>
-                <label class="block text-sm font-medium text-gray-800">Password</label>
-                <input type="password" placeholder="••••••••" disabled class="mt-1 w-full rounded-lg border border-gray-300 bg-gray-100 text-gray-500 px-3 py-2 cursor-not-allowed">
-                <p class="mt-1 text-xs text-gray-500">Fields are disabled here. Connect to your secure backend to enable.</p>
-              </div>
-              <button type="button" id="tpr-create" class="w-full px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">Create Account (Preview)</button>
-              <div class="divider text-xs"><span>OR</span></div>
-              <div class="grid sm:grid-cols-2 gap-3">
-                <button type="button" id="tpr-college" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">Use College Email</button>
-                <button type="button" id="tpr-google" class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold">Continue with Google</button>
-              </div>
-            </form>
 
-            <p class="mt-4 text-xs text-gray-500">For live sign up, your developers can connect this to your authentication system.</p>
-          </section>
-        </div>
-      </div>
+            <!-- TPR form -->
+<form id="form-tpr" class="space-y-5" th:action="@{/signup/tpr}" method="post">
+  <div>
+    <label class="block text-sm font-medium text-gray-800">TPR ID</label>
+    <input type="text" name="tprId" placeholder="TPR ID"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Full Name</label>
+    <input type="text" name="tprName" placeholder="Full Name"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Email</label>
+    <input type="email" name="email" placeholder="tpr.name@college.edu"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Phone</label>
+    <input type="tel" name="phoneNumber" placeholder="+91 98765 43210"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Branch</label>
+    <input type="text" name="branch" placeholder="Branch"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Local Address</label>
+    <input type="text" name="localAddress" placeholder="Local Address"
+           class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Sex</label>
+    <select name="sex" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+      <option value="MALE">Male</option>
+      <option value="FEMALE">Female</option>
+      <option value="OTHER">Other</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Role</label>
+    <select name="role" class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+      <option value="TPR">TPR</option>
+      <option value="TPV">TPV</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Password</label>
+    <input type="password" name="password" placeholder="••••••••"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <div>
+    <label class="block text-sm font-medium text-gray-800">Confirm Password</label>
+    <input type="password" name="confirmPassword" placeholder="••••••••"
+           required class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2">
+  </div>
+
+  <!-- Error message -->
+  <p th:if="${error}" th:text="${error}" class="text-red-600 text-sm text-center"></p>
+
+  <button type="submit"
+          class="w-full px-4 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition">
+    Create Account
+  </button>
+</form>
+
 
       <!-- Redirect Preview -->
       <div id="redirectCard" class="hidden mt-6 border border-emerald-200 bg-emerald-50 text-emerald-900 rounded-xl p-4">

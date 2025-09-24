@@ -4,61 +4,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.placementportal.placement_website.model.Student;
+
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 public class PageController {
 
-    @GetMapping("/")
-    public String homepage() {
-        return "homepage"; // homepage.html
-    }
 
     @GetMapping("/login")
     public String loginPage() {
         return "login"; // login.html
     }
 
-    // ---------------- MOCK LOGIN HANDLERS ----------------
-
-    // @PostMapping("/login/student")
-    // public String loginStudent(@RequestParam String username,
-    //                            @RequestParam String password,
-    //                            Model model) {
-    //     // Hardcoded student login
-    //     if ("student@college.edu".equals(username) && "pass".equals(password)) {
-    //         model.addAttribute("username", username);
-    //         return "redirect:/profile"; // student.html
-    //     } else {
-    //         model.addAttribute("error", "Invalid student credentials");
-    //         return "login"; // back to login.html
-    //     }
-    // }
-
-    // @PostMapping("/login/tpr")
-    // public String loginTpr(@RequestParam String username,
-    //                        @RequestParam String password,
-    //                        Model model) {
-    //     // Hardcoded TPR login
-    //     if ("tpr@college.edu".equals(username) && "1234".equals(password)) {
-    //         model.addAttribute("username", username);
-    //         return "redirect:/tpr-profile"; // tpr_profile.html
-    //     } else {
-    //         model.addAttribute("error", "Invalid TPR credentials");
-    //         return "login"; // back to login.html
-    //     }
-    // }
-
-    // -----------------------------------------------------
-
-    // @GetMapping("/signup")
-    // public String signup() {
-    //     return "signup"; // signup.html
-    // }
-
-    @GetMapping("/profile")
-    public String profile() {
-        return "profile"; // profile.html
-    }
-
+    
     @GetMapping("/companies")
     public String companies() {
         return "company-listing"; // company-listing.html
@@ -69,10 +28,10 @@ public class PageController {
         return "student"; // student.html
     }
 
-    @GetMapping("/tpr-profile")
-    public String tprProfile() {
-        return "tpr_profile"; // tpr_profile.html
-    }
+    // @GetMapping("/tpr-profile")
+    // public String tprProfile() {
+    //     return "tpr_profile"; // tpr_profile.html
+    // }
 
     @GetMapping("/notices")
     public String notices() {

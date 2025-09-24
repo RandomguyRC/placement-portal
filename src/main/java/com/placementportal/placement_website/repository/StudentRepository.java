@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public class StudentRepository {
@@ -44,37 +45,60 @@ public class StudentRepository {
         return count != null && count > 0;
     }
 
+    public int update(Student student) {
+    String sql = "UPDATE student_details SET " +
+            "student_name = ?, " +
+            "email = ?, " +
+            "phone_number = ?, " +
+            "address = ?, " +
+            "local_address = ?, " +
+            "sex = ?, " +
+            "cpi = ?, " +
+            "dob = ? " +
+            "WHERE enrollment_number = ?";  // enrollment_number is immutable
+
+    return jdbcTemplate.update(sql,
+            student.getStudentName(),
+            student.getEmail(),
+            student.getPhoneNumber(),
+            student.getAddress(),
+            student.getLocalAddress(),
+            student.getSex(),
+            student.getCpi(),
+            student.getDob(),        // make sure this is in correct SQL format
+            student.getEnrollmentNumber()
+    );
+}
+
+
     public Student findByEmail(String email) {
-        String sql = "SELECT * FROM student_details WHERE email = ?";
-        return jdbcTemplate.queryForObject(
-                sql,
-                new Object[]{email}, // pass parameters as Object array
-                new RowMapper<Student>() {
-                    @Override
-                    public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Student student = new Student();
-                        student.setEnrollmentNumber(rs.getString("enrollment_number"));
-                        student.setStudentName(rs.getString("student_name"));
-                        student.setEmail(rs.getString("email"));
-                        student.setPhoneNumber(rs.getString("phone_number"));
-                        student.setBranch(rs.getString("branch"));
-                        student.setAddress(rs.getString("address"));
-                        student.setLocalAddress(rs.getString("local_address"));
-                        student.setSex(rs.getString("sex"));
-                        student.setCpi(rs.getDouble("cpi"));
+    String sql = "SELECT * FROM student_details WHERE email = ?";
+    List<Student> students = jdbcTemplate.query(
+        sql,
+        new Object[]{email},
+        (rs, rowNum) -> {
+            Student student = new Student();
+            student.setEnrollmentNumber(rs.getString("enrollment_number"));
+            student.setStudentName(rs.getString("student_name"));
+            student.setEmail(rs.getString("email"));
+            student.setPhoneNumber(rs.getString("phone_number"));
+            student.setBranch(rs.getString("branch"));
+            student.setAddress(rs.getString("address"));
+            student.setLocalAddress(rs.getString("local_address"));
+            student.setSex(rs.getString("sex"));
+            student.setCpi(rs.getDouble("cpi"));
+            if(rs.getTimestamp("dob") != null) {
+                student.setDob(rs.getTimestamp("dob").toLocalDateTime().toLocalDate().toString());
+            }
+            student.setPassword(rs.getString("password"));
+            return student;
+        }
+    );
 
-                        // Convert timestamp to formatted string
-                        if(rs.getTimestamp("dob") != null) {
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                            student.setDob(rs.getTimestamp("dob").toLocalDateTime().format(formatter));
-                        } else {
-                            student.setDob(null);
-                        }
+    return students.isEmpty() ? null : students.get(0);
+}
 
-                        student.setPassword(rs.getString("password"));
-                        return student;
-                    }
-                }
-        );
-    }
+
+
+
 }

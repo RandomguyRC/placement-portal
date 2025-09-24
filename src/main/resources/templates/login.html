@@ -101,62 +101,41 @@
                 <p class="text-xs text-gray-600">Use your college email or Google to sign in.</p>
               </div>
             </div>
-            <ul class="mt-6 space-y-3 text-sm text-gray-700">
-              <li>• Student dashboard: profile, notices, company visits</li>
-              <li>• TPR dashboard: manage notices, drive details</li>
-              <li>• Single place for placement activities</li>
-            </ul>
-            <div class="mt-6 text-xs text-gray-500">
-              Note: Real login requires backend integration. This page is a safe demo.
-            </div>
+            
           </aside>
 
           <!-- Form Area -->
-<section class="md:col-span-3 p-6">
+<section class="md:col-span-3 p-6 space-y-6">
+
   <!-- Student Panel -->
-<div id="panel-student" class="space-y-5">
-  <form action="/login/student" method="post" class="space-y-5">
-    <div>
-      <label class="block text-sm font-medium text-gray-800">College Email</label>
-      <input type="email" name="email" placeholder="name@college.edu"
-             class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
-    </div>
-    <div>
-      <label class="block text-sm font-medium text-gray-800">Password</label>
-      <input type="password" name="password" placeholder="••••••••"
-             class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
-    </div>
+  <div id="panel-student" class="space-y-5">
+    <form th:action="@{/login/student}" method="post" class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-gray-800">College Email</label>
+        <input type="email" name="email" placeholder="name@college.edu"
+               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
+      </div>
 
-    <!-- Error message from backend -->
-    <p th:if="${error}" th:text="${error}" class="text-red-600 text-sm text-center"></p>
+      <div>
+        <label class="block text-sm font-medium text-gray-800">Password</label>
+        <input type="password" name="password" placeholder="••••••••"
+               class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
+      </div>
 
-    <button type="submit"
-            class="w-full px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
-      Sign In (Student)
-    </button>
-  </form>
-</div>
+      <!-- Error message -->
+      <p th:if="${error}" class="text-red-600 text-sm text-center">Invalid email or password</p>
 
+      <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">
+        Sign In (Student)
+      </button>
 
-    <!-- Divider -->
-    <div class="divider text-xs"><span>OR</span></div>
-
-    <!-- Dummy Google Button -->
-    <button type="button"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
-      <span class="w-5 h-5 rounded bg-white grid place-items-center">
-        <svg viewBox="0 0 48 48" class="w-5 h-5">
-          <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.676 31.91 29.223 35 24 35c-7.18 0-13-5.82-13-13s5.82-13 13-13c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 11.85 1 2 10.85 2 23s9.85 22 22 22c12.15 0 22-9.85 22-22 0-1.473-.153-2.91-.389-4.297z"/>
-          <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.52 15.29 18.879 12 24 12c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 15.317 1 7.767 5.863 3.694 13.308z"/>
-          <path fill="#4CAF50" d="M24 45c5.166 0 9.86-1.977 13.409-5.197l-6.198-5.238C29.223 35 24 35 24 35c-5.193 0-9.636-3.063-11.342-7.385l-6.57 5.057C9.142 41.907 16.004 45 24 45z"/>
-          <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.65 3.827-5.806 7-11.303 7 0 0 0 0 0 5.223 0 9.676-3.09 11.303-6.917z"/>
-        </svg>
-      </span>
-      Continue with Google
-    </button>
-
-    <!-- Error message -->
-    <p th:if="${error}" th:text="${error}" class="text-red-600 text-sm text-center"></p>
+      <!-- Divider & Google Button -->
+      <div class="divider text-xs"><span>OR</span></div>
+      <button type="button"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+        Continue with Google
+      </button>
+    </form>
   </div>
 
   <!-- TPR Panel -->
@@ -164,41 +143,35 @@
     <form action="/login/tpr" method="post" class="space-y-5">
       <div>
         <label class="block text-sm font-medium text-gray-800">College Email</label>
-        <input type="email" name="username" placeholder="tpr.name@college.edu"
+        <input type="email" name="email" placeholder="tpr.name@college.edu"
                class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-800">Password</label>
         <input type="password" name="password" placeholder="••••••••"
                class="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2" required>
       </div>
-      <button type="submit"
-              class="w-full px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">
+
+      <!-- Error message -->
+      <p th:if="${error}" class="text-red-600 text-sm text-center">Invalid email or password</p>
+
+      <button type="submit" class="w-full px-4 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition">
         Sign In (TPR)
       </button>
+
+      <!-- Divider & Google Button -->
+      <div class="divider text-xs"><span>OR</span></div>
+      <button type="button"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
+        Continue with Google
+      </button>
     </form>
-
-    <!-- Divider -->
-    <div class="divider text-xs"><span>OR</span></div>
-
-    <!-- Dummy Google Button -->
-    <button type="button"
-            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white hover:bg-gray-50 font-semibold flex items-center justify-center gap-2">
-      <span class="w-5 h-5 rounded bg-white grid place-items-center">
-        <svg viewBox="0 0 48 48" class="w-5 h-5">
-          <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303C33.676 31.91 29.223 35 24 35c-7.18 0-13-5.82-13-13s5.82-13 13-13c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 11.85 1 2 10.85 2 23s9.85 22 22 22c12.15 0 22-9.85 22-22 0-1.473-.153-2.91-.389-4.297z"/>
-          <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.52 15.29 18.879 12 24 12c3.314 0 6.34 1.23 8.646 3.254l5.657-5.657C34.901 3.042 29.73 1 24 1 15.317 1 7.767 5.863 3.694 13.308z"/>
-          <path fill="#4CAF50" d="M24 45c5.166 0 9.86-1.977 13.409-5.197l-6.198-5.238C29.223 35 24 35 24 35c-5.193 0-9.636-3.063-11.342-7.385l-6.57 5.057C9.142 41.907 16.004 45 24 45z"/>
-          <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-1.65 3.827-5.806 7-11.303 7 0 0 0 0 0 5.223 0 9.676-3.09 11.303-6.917z"/>
-        </svg>
-      </span>
-      Continue with Google
-    </button>
-
-    <!-- Error message -->
-    <p th:if="${error}" th:text="${error}" class="text-red-600 text-sm text-center"></p>
   </div>
+
 </section>
+
+
 
 
       <!-- Redirect Preview -->
@@ -264,20 +237,19 @@
     const panelTpr = document.getElementById('panel-tpr');
 
     function activateTab(which){
-      if(which === 'student'){
-        tabStudent.classList.add('tab-active');
-        tabStudent.classList.add('border-blue-600');
-        tabTpr.classList.remove('tab-active','border-indigo-600');
-        panelStudent.classList.remove('hidden');
-        panelTpr.classList.add('hidden');
-      } else {
-        tabTpr.classList.add('tab-active');
-        tabTpr.classList.add('border-indigo-600');
-        tabStudent.classList.remove('tab-active','border-blue-600');
-        panelTpr.classList.remove('hidden');
-        panelStudent.classList.add('hidden');
-      }
-    }
+  if(which === 'student'){
+    tabStudent.classList.add('tab-active', 'border-blue-600');
+    tabTpr.classList.remove('tab-active','border-indigo-600');
+    panelStudent.classList.remove('hidden');
+    panelTpr.classList.add('hidden');
+  } else {
+    tabTpr.classList.add('tab-active','border-indigo-600');
+    tabStudent.classList.remove('tab-active','border-blue-600');
+    panelTpr.classList.remove('hidden');
+    panelStudent.classList.add('hidden');
+  }
+}
+
     tabStudent.addEventListener('click', ()=>activateTab('student'));
     tabTpr.addEventListener('click', ()=>activateTab('tpr'));
     // Default

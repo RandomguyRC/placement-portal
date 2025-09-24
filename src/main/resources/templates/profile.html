@@ -63,378 +63,293 @@
                      
                 </div>
 
-                <div class="flex-shrink-0">
-                    <a id="login-button" href="/profile" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-                        Profile
-                    </a>
-                    <button id="logout-button" class="hidden bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
-                        Logout
-                    </button>
-                </div>
+                <div class="flex-shrink-0 flex items-center space-x-2">
+    <!-- Profile link, visible only if student is logged in -->
+    <a th:if="${student != null}" href="/profile"
+       class="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors text-sm">
+       Profile
+    </a>
+
+    <!-- Login button, visible only if student is not logged in -->
+    <a th:if="${student == null}" href="/login"
+       class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+       Login
+    </a>
+
+    <!-- Logout button, visible only if student is logged in -->
+    <a th:if="${student != null}" href="/logout"
+       class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
+       Logout
+    </a>
+</div>
             </div>
         </div>
     </nav>
 
     <!-- Profile Header -->
-    <div class="gradient-bg py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
-                <div class="profile-avatar w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                    AS
-                </div>
-                <div class="text-center md:text-left text-white">
-                    <h1 class="text-3xl font-bold" id="displayName">Arjun Sharma</h1>
-                    <p class="text-blue-100 text-lg" id="displayEnrollment">Enrollment: 2021CS001</p>
-                    <div class="flex items-center justify-center md:justify-start mt-2">
-                        <span class="status-badge bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">Active Student</span>
-                    </div>
-                </div>
+<div class="gradient-bg py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+            <!-- Avatar with Initials -->
+            <div class="profile-avatar w-24 h-24 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                <span th:text="${#strings.isEmpty(student.studentName) ? '' : 
+                               #strings.substring(student.studentName,0,1) + 
+                               (student.studentName.contains(' ') ? 
+                               #strings.substring(student.studentName.split(' ')[1],0,1) : '')}"></span>
+            </div>
+
+            <!-- Name & Details -->
+            <div class="text-center md:text-left text-white">
+                <h1 class="text-3xl font-bold" th:text="${student.studentName}"></h1>
+                <p class="text-blue-100 text-lg" th:text="'Enrollment: ' + ${student.enrollmentNumber}"></p>
+                
             </div>
         </div>
     </div>
+</div>
+
 
     <!-- Profile Content -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Main Profile Information -->
-            <div class="lg:col-span-2">
-                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
-                    <div class="flex justify-between items-center mb-6">
-                        <a href="/mytoken" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:from-purple-700 hover:to-indigo-700 transition-all">
-            My Tokens
-        </a>
-                        <h2 class="text-2xl font-bold text-gray-900">Personal Information</h2>
-                        <button onclick="toggleEditMode()" id="editBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
-                            Edit Profile
-                        </button>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Main Profile Information -->
+<div class="lg:col-span-2">
+    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+        <div class="flex justify-between items-center mb-6">
+            <a href="/mytoken" class="bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:from-purple-700 hover:to-indigo-700 transition-all">
+                My Tokens
+            </a>
+            <h2 class="text-2xl font-bold text-gray-900">Personal Information</h2>
+            <button onclick="toggleEditMode()" id="editBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Edit Profile
+            </button>
+        </div>
+
+        <form id="profileForm" action="/profile/update" method="post">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Non-editable Top Fields -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input type="text" id="fullName" name="studentName" th:value="${student.studentName}" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Enrollment Number</label>
+                    <input type="text" id="enrollment" th:value="${student.enrollmentNumber}" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Branch</label>
+                    <input type="text" id="branch" th:value="${student.branch}" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
+                </div>
+
+                <!-- Editable Fields -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input type="email" id="email" name="email" th:value="${student.email}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <input type="tel" id="phone" name="phoneNumber" th:value="${student.phoneNumber}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
+                    <input type="date" id="dob" name="dob" th:value="${student.dob}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
+                    <select id="gender" name="sex" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" disabled>
+                        <option value="male" th:selected="${student.sex == 'male'}">Male</option>
+                        <option value="female" th:selected="${student.sex == 'female'}">Female</option>
+                        <option value="other" th:selected="${student.sex == 'other'}">Other</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Current CPI</label>
+                    <input type="number" id="cpi" name="cpi" th:value="${student.cpi}" step="0.01" min="0" max="10" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
+                    <textarea id="permanentAddress" name="address" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly th:text="${student.address}"></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Local Address</label>
+                    <textarea id="localAddress" name="localAddress" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly th:text="${student.localAddress}"></textarea>
+                </div>
+
+            </div>
+
+            <!-- Save/Cancel Buttons -->
+            <div id="actionButtons" class="mt-6 flex space-x-4 hidden">
+                <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Save Changes
+                </button>
+                <button type="button" onclick="cancelEdit()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+            <!-- Profile Status -->
+            <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Status</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Profile Completion</span>
+                        <span class="text-green-600 font-semibold" th:text="${student.profileStat} + '%'">95%</span>
                     </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Full Name -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
-                            <input type="text" id="fullName" value="Arjun Sharma" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
-                        </div>
-
-                        <!-- Email -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                            <input type="email" id="email" value="arjun.sharma@college.edu" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
-                        </div>
-
-                        <!-- Phone Number -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                            <input type="tel" id="phone" value="+91 9876543210" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
-                        </div>
-
-                        <!-- Date of Birth -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Date of Birth</label>
-                            <input type="date" id="dob" value="2003-05-15" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
-                        </div>
-
-                        <!-- Gender -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Gender</label>
-                            <select id="gender" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" disabled>
-                                <option value="male" selected>Male</option>
-                                <option value="female">Female</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-
-                        <!-- Enrollment Number -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Enrollment Number</label>
-                            <input type="text" id="enrollment" value="2021CS001" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
-                        </div>
-
-                        <!-- Branch -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Branch</label>
-                            <input type="text" id="branch" value="Computer Science Engineering" class="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-100" readonly>
-                        </div>
-
-                        <!-- CPI -->
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">Current CPI</label>
-                            <input type="number" id="cpi" value="8.75" step="0.01" min="0" max="10" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>
-                        </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                        <div class="bg-green-500 h-2 rounded-full" th:style="'width:' + ${student.profileStat} + '%;'"></div>
                     </div>
-
-                    <!-- Address Section -->
-                    <div class="mt-8">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Address Information</h3>
-                        <div class="grid grid-cols-1 gap-6">
-                            <!-- Permanent Address -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Permanent Address</label>
-                                <textarea id="permanentAddress" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>123 Main Street, Sector 15, New Delhi, Delhi - 110001</textarea>
-                            </div>
-
-                            <!-- Local Address -->
-                            <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Local Address</label>
-                                <textarea id="localAddress" rows="3" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" readonly>Hostel Block A, Room 205, College Campus, City - 123456</textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Save/Cancel Buttons (Hidden by default) -->
-                    <div id="actionButtons" class="mt-6 flex space-x-4 hidden">
-                        <button onclick="saveProfile()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                            Save Changes
-                        </button>
-                        <button onclick="cancelEdit()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
-                            Cancel
-                        </button>
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-600">Placement Status</span>
+                        <span class="text-blue-600 font-semibold" id="placementStatus">Available</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Profile Status -->
-                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Profile Status</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Profile Completion</span>
-                            <span class="text-green-600 font-semibold" id="profileCompletion">95%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div class="bg-green-500 h-2 rounded-full" style="width: 95%"></div>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <span class="text-gray-600">Placement Status</span>
-                            <span class="text-blue-600 font-semibold" id="placementStatus">Available</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Stats -->
-                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h3>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m8 6V8a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-600">Applications</span>
-                            </div>
-                            <span class="font-semibold text-gray-900">12</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-600">Interviews</span>
-                            </div>
-                            <span class="font-semibold text-gray-900">3</span>
-                        </div>
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-2">
-                                <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                </div>
-                                <span class="text-gray-600">Pending</span>
-                            </div>
-                            <span class="font-semibold text-gray-900">5</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
-                            <div>
-                                <p class="text-sm text-gray-900">Applied to TechCorp</p>
-                                <p class="text-xs text-gray-500">2 days ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
-                            <div>
-                                <p class="text-sm text-gray-900">Interview scheduled with DataSoft</p>
-                                <p class="text-xs text-gray-500">5 days ago</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start space-x-3">
-                            <div class="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
-                            <div>
-                                <p class="text-sm text-gray-900">Profile updated</p>
-                                <p class="text-xs text-gray-500">1 week ago</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- Quick Stats & Recent Activity can stay hardcoded or be dynamically loaded later -->
         </div>
     </div>
+</div>
+
 
     <script>
-        let isEditMode = false;
-        let originalData = {};
+let isEditMode = false;
+let originalData = {};
 
-        function toggleEditMode() {
-            isEditMode = !isEditMode;
-            const editBtn = document.getElementById('editBtn');
-            const actionButtons = document.getElementById('actionButtons');
-            const inputs = document.querySelectorAll('input:not([readonly]), textarea, select');
-            const readonlyInputs = document.querySelectorAll('input[readonly]:not(#enrollment):not(#branch)');
+function toggleEditMode() {
+    isEditMode = !isEditMode;
+    const editBtn = document.getElementById('editBtn');
+    const actionButtons = document.getElementById('actionButtons');
+    const readonlyInputs = document.querySelectorAll('input[readonly]:not(#enrollment):not(#branch):not(#fullName)');
 
-            if (isEditMode) {
-                // Store original data
-                originalData = {
-                    fullName: document.getElementById('fullName').value,
-                    email: document.getElementById('email').value,
-                    phone: document.getElementById('phone').value,
-                    dob: document.getElementById('dob').value,
-                    gender: document.getElementById('gender').value,
-                    cpi: document.getElementById('cpi').value,
-                    permanentAddress: document.getElementById('permanentAddress').value,
-                    localAddress: document.getElementById('localAddress').value
-                };
+    if (isEditMode) {
+        // Store original data
+        originalData = {
+            fullName: document.getElementById('fullName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            dob: document.getElementById('dob').value,
+            gender: document.getElementById('gender').value,
+            cpi: document.getElementById('cpi').value,
+            permanentAddress: document.getElementById('permanentAddress').value,
+            localAddress: document.getElementById('localAddress').value
+        };
 
-                editBtn.textContent = 'Editing...';
-                editBtn.disabled = true;
-                editBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-                editBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                
-                actionButtons.classList.remove('hidden');
-                
-                // Enable editable fields
-                readonlyInputs.forEach(input => {
-                    if (input.id !== 'enrollment' && input.id !== 'branch') {
-                        input.removeAttribute('readonly');
-                        input.classList.add('edit-mode');
-                    }
-                });
-                
-                document.getElementById('gender').disabled = false;
-                document.getElementById('permanentAddress').removeAttribute('readonly');
-                document.getElementById('localAddress').removeAttribute('readonly');
-                document.getElementById('permanentAddress').classList.add('edit-mode');
-                document.getElementById('localAddress').classList.add('edit-mode');
-                document.getElementById('gender').classList.add('edit-mode');
-            }
+        editBtn.textContent = 'Editing...';
+        editBtn.disabled = true;
+        editBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+        editBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+
+        actionButtons.classList.remove('hidden');
+
+        // Enable editable fields
+        readonlyInputs.forEach(input => {
+            input.removeAttribute('readonly');
+            input.classList.add('edit-mode');
+        });
+
+        const gender = document.getElementById('gender');
+        const permAddr = document.getElementById('permanentAddress');
+        const localAddr = document.getElementById('localAddress');
+
+        gender.disabled = false;
+        gender.classList.add('edit-mode');
+        permAddr.removeAttribute('readonly');
+        permAddr.classList.add('edit-mode');
+        localAddr.removeAttribute('readonly');
+        localAddr.classList.add('edit-mode');
+    }
+}
+
+function cancelEdit() {
+    // Restore original data
+    Object.keys(originalData).forEach(key => {
+        document.getElementById(key).value = originalData[key];
+    });
+
+    exitEditMode();
+    showNotification('Changes cancelled', 'info');
+}
+
+function exitEditMode() {
+    isEditMode = false;
+    const editBtn = document.getElementById('editBtn');
+    const actionButtons = document.getElementById('actionButtons');
+    const readonlyInputs = document.querySelectorAll('input, textarea, select');
+
+    editBtn.textContent = 'Edit Profile';
+    editBtn.disabled = false;
+    editBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
+    editBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+
+    actionButtons.classList.add('hidden');
+
+    readonlyInputs.forEach(input => {
+        if (input.id !== 'enrollment' && input.id !== 'branch') {
+            input.setAttribute('readonly', true);
+            input.classList.remove('edit-mode');
         }
+    });
 
-        function saveProfile() {
-            // Simulate saving
-            const saveBtn = event.target;
-            saveBtn.textContent = 'Saving...';
-            saveBtn.disabled = true;
-            
-            setTimeout(() => {
-                // Update display name
-                const fullName = document.getElementById('fullName').value;
-                document.getElementById('displayName').textContent = fullName;
-                
-                // Exit edit mode
-                exitEditMode();
-                
-                // Show success message
-                showNotification('Profile updated successfully!', 'success');
-            }, 1000);
-        }
+    document.getElementById('gender').disabled = true;
+    document.getElementById('permanentAddress').setAttribute('readonly', true);
+    document.getElementById('localAddress').setAttribute('readonly', true);
+}
 
-        function cancelEdit() {
-            // Restore original data
-            Object.keys(originalData).forEach(key => {
-                document.getElementById(key).value = originalData[key];
-            });
-            
-            exitEditMode();
-            showNotification('Changes cancelled', 'info');
-        }
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-20 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 transform transition-all duration-300 translate-x-full`;
 
-        function exitEditMode() {
-            isEditMode = false;
-            const editBtn = document.getElementById('editBtn');
-            const actionButtons = document.getElementById('actionButtons');
-            const readonlyInputs = document.querySelectorAll('input, textarea, select');
+    if (type === 'success') notification.classList.add('bg-green-500');
+    else if (type === 'info') notification.classList.add('bg-blue-500');
+    else if (type === 'error') notification.classList.add('bg-red-500');
 
-            editBtn.textContent = 'Edit Profile';
-            editBtn.disabled = false;
-            editBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-            editBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-            
-            actionButtons.classList.add('hidden');
-            
-            // Disable all editable fields
-            readonlyInputs.forEach(input => {
-                if (input.id !== 'enrollment' && input.id !== 'branch') {
-                    input.setAttribute('readonly', true);
-                    input.classList.remove('edit-mode');
-                }
-            });
-            
-            document.getElementById('gender').disabled = true;
-            document.getElementById('permanentAddress').setAttribute('readonly', true);
-            document.getElementById('localAddress').setAttribute('readonly', true);
-        }
+    notification.textContent = message;
+    document.body.appendChild(notification);
 
-        function showNotification(message, type) {
-            const notification = document.createElement('div');
-            notification.className = `fixed top-20 right-4 px-6 py-3 rounded-lg text-white font-medium z-50 transform transition-all duration-300 translate-x-full`;
-            
-            if (type === 'success') {
-                notification.classList.add('bg-green-500');
-            } else if (type === 'info') {
-                notification.classList.add('bg-blue-500');
-            }
-            
-            notification.textContent = message;
-            document.body.appendChild(notification);
-            
-            // Animate in
-            setTimeout(() => {
-                notification.classList.remove('translate-x-full');
-            }, 100);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.classList.add('translate-x-full');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
-            }, 3000);
-        }
+    // Animate in
+    setTimeout(() => notification.classList.remove('translate-x-full'), 100);
 
-        // Initialize profile completion calculation
-        function calculateProfileCompletion() {
-            const fields = ['fullName', 'email', 'phone', 'dob', 'cpi', 'permanentAddress', 'localAddress'];
-            let filledFields = 0;
-            
-            fields.forEach(fieldId => {
-                const field = document.getElementById(fieldId);
-                if (field && field.value.trim() !== '') {
-                    filledFields++;
-                }
-            });
-            
-            const completion = Math.round((filledFields / fields.length) * 100);
-            document.getElementById('profileCompletion').textContent = completion + '%';
-            
-            const progressBar = document.querySelector('.bg-green-500');
-            progressBar.style.width = completion + '%';
-        }
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.classList.add('translate-x-full');
+        setTimeout(() => document.body.removeChild(notification), 300);
+    }, 3000);
+}
 
-        // Calculate on page load
-        calculateProfileCompletion();
-    </script>
+// Profile completion
+function calculateProfileCompletion() {
+    const fields = ['fullName', 'email', 'phone', 'dob', 'cpi', 'permanentAddress', 'localAddress'];
+    let filledFields = 0;
+
+    fields.forEach(id => {
+        const field = document.getElementById(id);
+        if (field && field.value.trim() !== '') filledFields++;
+    });
+
+    const completion = Math.round((filledFields / fields.length) * 100);
+    document.getElementById('profileCompletion').textContent = completion + '%';
+
+    const progressBar = document.querySelector('.bg-green-500');
+    if (progressBar) progressBar.style.width = completion + '%';
+}
+
+// Calculate on page load
+calculateProfileCompletion();
+</script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'98024247d6d654d1',t:'MTc1ODA0NTU3OS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

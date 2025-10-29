@@ -88,41 +88,52 @@
                 <div class="flex items-center space-x-3 flex-shrink-0">
                     <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
                         <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
                         </svg>
                     </div>
                     <div class="hidden sm:block">
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPR Dashboard</h1>
-                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Representative</p>
+                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
                     </div>
                 </div>
 
                 <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-                    <a href="/tprtoken" class="text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap border-b-2 border-blue-600">Dashboard</a>
-                    <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-                    <div class="flex items-center space-x-2 bg-blue-50 px-3 py-1 rounded-lg">
-                        <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                            <span class="text-white text-sm font-medium">RK</span>
-                        </div>
-                        <span class="text-sm font-medium text-blue-900">Rahul Kumar</span>
-                    </div>
+                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
+                    
+                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
+                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
+                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
+                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
+                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
+                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
+                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
+                    <!-- </div> -->
                 </div>
+
+                <!-- Example nav buttons -->
+<div class="flex-shrink-0 flex items-center space-x-2">
+    <!-- Profile link (Student) -->
+    <a th:if="${student != null}" href="/profile"
+       class="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors text-sm">
+       Profile
+    </a>
+
+    <!-- Profile link (TPR) -->
+    <a th:if="${tpr != null}" href="/tpr-profile"
+       class="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors text-sm">
+       Profile
+    </a>
+
+    <!-- Login button (show only if nobody is logged in) -->
+    <a href="/login" id="loginBtn" class="text-gray-600 hover:text-black">Login</a>
+    <a href="/logout" id="logoutBtn" style="display:none;" class="text-gray-600 hover:text-black">Logout</a>
+
+</div>
+
             </div>
         </div>
     </nav>
 
-    <!-- Header Section -->
-    <div class="gradient-bg text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4">TPR Dashboard</h1>
-                <p class="text-xl text-blue-100 mb-6">Manage student support tokens and requests</p>
-                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 inline-block">
-                    <p class="text-lg font-medium">Rahul Kumar - TPR (CSE & Placement) | Active Tokens: 15</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -148,38 +159,40 @@
 
         <!-- Filters and Controls -->
         <div class="mb-8 flex flex-wrap gap-4 items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">All Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="in-progress">In Progress</option>
-                    <option value="approved">Approved</option>
-                    <option value="rejected">Rejected</option>
-                </select>
-                <select id="priorityFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">All Priority</option>
-                    <option value="high">High Priority</option>
-                    <option value="medium">Medium Priority</option>
-                    <option value="low">Low Priority</option>
-                </select>
-                <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                    <option value="all">All Categories</option>
-                    <option value="placement">Placement Query</option>
-                    <option value="technical">Technical Issue</option>
-                    <option value="document">Document Request</option>
-                    <option value="general">General Support</option>
-                </select>
-                <input type="text" id="searchInput" placeholder="Search by student ID or token..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-            </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="refreshTokens()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
-                    Refresh
-                </button>
-                <button onclick="exportTokens()" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                    Export
-                </button>
-            </div>
-        </div>
+  <div class="flex items-center space-x-4">
+    <select id="statusFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <option value="all">All Status</option>
+      <option value="pending">Pending</option>
+      <option value="resolved">Resolved</option>
+    </select>
+
+    <select id="priorityFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <option value="all">All Priority</option>
+      <option value="low">Low</option>
+      <option value="normal">Normal</option>
+      <option value="high">High</option>
+    </select>
+
+    <select id="categoryFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+      <option value="all">All Categories</option>
+      <option value="placement">Placement Query</option>
+      <option value="technical">Technical Issue</option>
+      <option value="document">Document Request</option>
+      <option value="general">General Support</option>
+    </select>
+
+    <input type="text" id="searchInput"
+           placeholder="Search by student ID or token..."
+           class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+  </div>
+
+  <div class="flex items-center space-x-2">
+    <button onclick="refreshTokens()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+      Refresh
+    </button>
+  </div>
+</div>
+
 
         <!-- Tokens Table -->
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
@@ -207,450 +220,275 @@
             </div>
         </div>
     </div>
+    <!-- Token Details Modal -->
+<div id="tokenModal" class="hidden fixed inset-0 bg-black bg-opacity-40 flex justify-center items-center z-50">
+  <div class="bg-white rounded-2xl shadow-lg w-full max-w-lg p-6">
+    <h2 id="modalTitle" class="text-xl font-semibold mb-2"></h2>
+    <p class="text-sm text-gray-600 mb-4" id="modalDescription"></p>
+    <div class="text-sm text-gray-500 mb-2">Student ID: <span id="modalStudent" class="font-medium text-gray-700"></span></div>
+    <div class="text-sm text-gray-500 mb-2">Priority: <span id="modalPriority" class="font-medium text-gray-700"></span></div>
+    <div class="text-sm text-gray-500 mb-4">Status: <span id="modalStatus" class="font-medium text-gray-700"></span></div>
 
-    <!-- Token Detail Modal -->
-    <div id="tokenModal" class="modal">
-        <div class="modal-content p-6">
-            <div class="flex items-center justify-between mb-6">
-                <h2 id="modalTitle" class="text-2xl font-bold text-gray-900">Token Details</h2>
-                <button onclick="closeTokenModal()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
-            
-            <div id="modalContent">
-                <!-- Content will be populated by JavaScript -->
-            </div>
-        </div>
+    <div id="replySection">
+      <textarea id="modalReply" rows="3" class="w-full border rounded-lg p-2 mb-3" placeholder="Enter your reply..."></textarea>
+      <input type="hidden" id="modalTokenId">
+      <button onclick="submitReply()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+        Reply & Resolve
+      </button>
     </div>
 
-    <script>
-        // Token data for TPR dashboard
-        const tprTokenData = {
-            'TKN-2024-001': {
-                title: 'Placement Drive Registration',
-                status: 'Approved',
-                category: 'Placement Query',
-                priority: 'High',
-                studentId: '23075063',
-                studentName: 'Arjun Patel',
-                created: 'Dec 10, 2024',
-                updated: 'Dec 12, 2024',
-                description: 'Request for registration in upcoming TCS placement drive scheduled for December 2024.',
-                messages: [
-                    {
-                        sender: 'Arjun Patel (23075063)',
-                        time: 'Dec 10, 2024 10:30 AM',
-                        message: 'I would like to register for the TCS placement drive. Please confirm my eligibility and provide further instructions.'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 11, 2024 2:15 PM',
-                        message: 'Your profile has been reviewed. You meet all eligibility criteria. Please submit your updated resume by Dec 15th.'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 12, 2024 9:00 AM',
-                        message: 'Registration confirmed. You will receive the test details via email by Dec 18th. Good luck!'
-                    }
-                ]
-            },
-            'TKN-2024-008': {
-                title: 'Interview Slot Change',
-                status: 'Approved',
-                category: 'Placement Query',
-                priority: 'High',
-                studentId: '23075063',
-                studentName: 'Arjun Patel',
-                created: 'Dec 9, 2024',
-                updated: 'Dec 11, 2024',
-                description: 'Request to change interview slot due to medical emergency. Provide alternative dates.',
-                messages: [
-                    {
-                        sender: 'Arjun Patel (23075063)',
-                        time: 'Dec 9, 2024 7:45 PM',
-                        message: 'Due to a medical emergency, I cannot attend my interview on Dec 15th. Can you please reschedule it? I have attached medical certificate.'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 10, 2024 10:30 AM',
-                        message: 'Medical certificate verified. We will coordinate with the company for rescheduling. Please provide 3 alternative dates.'
-                    },
-                    {
-                        sender: 'Arjun Patel (23075063)',
-                        time: 'Dec 10, 2024 2:15 PM',
-                        message: 'Available dates: Dec 18th, 19th, or 22nd. Any time slot works for me. Thank you for understanding.'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 11, 2024 4:00 PM',
-                        message: 'Interview rescheduled to Dec 19th at 2:00 PM. You will receive confirmation email with updated details.'
-                    }
-                ]
-            },
-            'TKN-2024-009': {
-                title: 'Eligibility Clarification',
-                status: 'Pending',
-                category: 'Placement Query',
-                priority: 'Medium',
-                studentId: '23075064',
-                studentName: 'Priya Sharma',
-                created: 'Dec 14, 2024',
-                updated: 'Dec 14, 2024',
-                description: 'Student asking about eligibility criteria for upcoming placement drives.',
-                messages: [
-                    {
-                        sender: 'Priya Sharma (23075064)',
-                        time: 'Dec 14, 2024 2:30 PM',
-                        message: 'Hi, I want to know if I am eligible for the upcoming Wipro placement drive. My CGPA is 7.2 and I have one active backlog. Please clarify.'
-                    }
-                ]
-            },
-            'TKN-2024-010': {
-                title: 'Company Information Request',
-                status: 'In Progress',
-                category: 'Placement Query',
-                priority: 'Low',
-                studentId: '23075065',
-                studentName: 'Rohit Singh',
-                created: 'Dec 13, 2024',
-                updated: 'Dec 14, 2024',
-                description: 'Request for detailed information about upcoming company visits.',
-                messages: [
-                    {
-                        sender: 'Rohit Singh (23075065)',
-                        time: 'Dec 13, 2024 4:15 PM',
-                        message: 'Can you provide more details about the Accenture placement drive? What are the job roles and package details?'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 14, 2024 10:00 AM',
-                        message: 'I will gather the complete information from the company and share it with you by tomorrow. Please check your email.'
-                    }
-                ]
-            },
-            'TKN-2024-011': {
-                title: 'Resume Feedback Request',
-                status: 'Pending',
-                category: 'General Support',
-                priority: 'Medium',
-                studentId: '23075066',
-                studentName: 'Sneha Gupta',
-                created: 'Dec 14, 2024',
-                updated: 'Dec 14, 2024',
-                description: 'Student requesting feedback on resume before placement applications.',
-                messages: [
-                    {
-                        sender: 'Sneha Gupta (23075066)',
-                        time: 'Dec 14, 2024 11:45 AM',
-                        message: 'I have updated my resume and would like your feedback before applying to companies. Can you please review it?'
-                    }
-                ]
-            },
-            'TKN-2024-012': {
-                title: 'Placement Process Query',
-                status: 'In Progress',
-                category: 'Placement Query',
-                priority: 'High',
-                studentId: '23075067',
-                studentName: 'Vikash Kumar',
-                created: 'Dec 12, 2024',
-                updated: 'Dec 13, 2024',
-                description: 'Questions about the overall placement process and timeline.',
-                messages: [
-                    {
-                        sender: 'Vikash Kumar (23075067)',
-                        time: 'Dec 12, 2024 3:20 PM',
-                        message: 'I am confused about the placement process. Can you explain the complete timeline and what documents I need to prepare?'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 13, 2024 9:30 AM',
-                        message: 'I will schedule a session to explain the complete placement process. Please attend the orientation on Dec 16th at 2 PM in Seminar Hall.'
-                    }
-                ]
-            },
-            'TKN-2024-013': {
-                title: 'Multiple Company Applications',
-                status: 'Approved',
-                category: 'Placement Query',
-                priority: 'Medium',
-                studentId: '23075068',
-                studentName: 'Anita Reddy',
-                created: 'Dec 11, 2024',
-                updated: 'Dec 12, 2024',
-                description: 'Query about applying to multiple companies simultaneously.',
-                messages: [
-                    {
-                        sender: 'Anita Reddy (23075068)',
-                        time: 'Dec 11, 2024 1:10 PM',
-                        message: 'Am I allowed to apply to multiple companies? What happens if I get selected in more than one?'
-                    },
-                    {
-                        sender: 'You (TPR)',
-                        time: 'Dec 12, 2024 11:15 AM',
-                        message: 'Yes, you can apply to multiple companies. However, once you accept an offer, you cannot participate in further placement drives. Choose wisely.'
-                    }
-                ]
-            },
-            'TKN-2024-014': {
-                title: 'Internship to PPO Query',
-                status: 'Pending',
-                category: 'Placement Query',
-                priority: 'High',
-                studentId: '23075069',
-                studentName: 'Karthik Nair',
-                created: 'Dec 14, 2024',
-                updated: 'Dec 14, 2024',
-                description: 'Student asking about converting internship to full-time offer.',
-                messages: [
-                    {
-                        sender: 'Karthik Nair (23075069)',
-                        time: 'Dec 14, 2024 4:50 PM',
-                        message: 'I completed my internship at Microsoft and they offered me a PPO. How do I proceed with this? Do I need to register separately?'
-                    }
-                ]
-            }
-        };
+    <button onclick="closeModal()" class="mt-3 text-gray-500 hover:text-gray-700 text-sm font-medium">Close</button>
+  </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('/session/tpr');
+    if (!res.ok) {
+      // ❌ No TPR logged in
+      window.location.href = '/login';
+      return;
+    }
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', function() {
-            populateTokensTable();
-            setupFilters();
-        });
+    // ✅ Logged in — get TPR details
+    const tpr = await res.json();
 
-        function populateTokensTable() {
-            const tbody = document.getElementById('tokensTableBody');
-            tbody.innerHTML = '';
+    // Optional: store for later use (if you need assigned_to = tpr.tprId)
+    window.loggedInTpr = tpr;
 
-            Object.entries(tprTokenData).forEach(([tokenId, token]) => {
-                const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 cursor-pointer';
-                row.onclick = () => openTokenModal(tokenId);
-                
-                row.innerHTML = `
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600">${tokenId}</td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <div class="text-sm font-medium text-gray-900">${token.studentName}</div>
-                        <div class="text-sm text-gray-500">${token.studentId}</div>
-                    </td>
-                    <td class="px-6 py-4">
-                        <div class="text-sm text-gray-900 max-w-xs truncate">${token.title}</div>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">${token.category}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 text-xs font-medium rounded-full priority-${token.priority.toLowerCase()}">${token.priority}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-2 py-1 text-xs font-medium rounded-full status-${token.status.toLowerCase().replace(' ', '-')}">${token.status}</span>
-                    </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${token.created}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <button onclick="event.stopPropagation(); updateTokenStatus('${tokenId}')" class="text-blue-600 hover:text-blue-900 mr-3">Update</button>
-                        <button onclick="event.stopPropagation(); openTokenModal('${tokenId}')" class="text-green-600 hover:text-green-900">View</button>
-                    </td>
-                `;
-                
-                tbody.appendChild(row);
-            });
-        }
+    // ✅ Show logout, hide login
+    const loginBtn = document.querySelector('#loginBtn');
+    const logoutBtn = document.querySelector('#logoutBtn');
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (logoutBtn) logoutBtn.style.display = 'inline-block';
 
-        function setupFilters() {
-            document.getElementById('statusFilter').addEventListener('change', filterTokens);
-            document.getElementById('priorityFilter').addEventListener('change', filterTokens);
-            document.getElementById('categoryFilter').addEventListener('change', filterTokens);
-            document.getElementById('searchInput').addEventListener('input', filterTokens);
-        }
+  } catch (error) {
+    console.error('Session check failed:', error);
+    window.location.href = '/login';
+  }
+});
+</script>
 
-        function filterTokens() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const priorityFilter = document.getElementById('priorityFilter').value;
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            
-            const rows = document.querySelectorAll('#tokensTableBody tr');
-            
-            rows.forEach(row => {
-                const tokenId = row.cells[0].textContent;
-                const token = tprTokenData[tokenId];
-                
-                const statusMatch = statusFilter === 'all' || token.status.toLowerCase().replace(' ', '-') === statusFilter;
-                const priorityMatch = priorityFilter === 'all' || token.priority.toLowerCase() === priorityFilter;
-                const categoryMatch = categoryFilter === 'all' || token.category.toLowerCase().includes(categoryFilter);
-                const searchMatch = searchTerm === '' || 
-                    tokenId.toLowerCase().includes(searchTerm) ||
-                    token.studentId.toLowerCase().includes(searchTerm) ||
-                    token.studentName.toLowerCase().includes(searchTerm) ||
-                    token.title.toLowerCase().includes(searchTerm);
-                
-                if (statusMatch && priorityMatch && categoryMatch && searchMatch) {
-                    row.style.display = '';
-                } else {
-                    row.style.display = 'none';
-                }
-            });
-        }
+<script>
+let allTokens = [];
+let filteredTokens = [];
 
-        function openTokenModal(tokenId) {
-            const token = tprTokenData[tokenId];
-            if (!token) return;
+// helper: normalize strings for safe comparisons
+function norm(s) {
+    return (s || "").toString().trim().toLowerCase().replace(/[-_]+/g, " ");
+}
 
-            document.getElementById('modalTitle').textContent = `${tokenId} - ${token.title}`;
-            
-            const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = `
-                <div class="space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="text-sm font-medium text-gray-500">Student</label>
-                            <div class="text-lg font-semibold text-gray-900">${token.studentName} (${token.studentId})</div>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-500">Status</label>
-                            <div class="text-lg font-semibold text-gray-900">${token.status}</div>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-500">Priority</label>
-                            <div class="text-lg font-semibold text-gray-900">${token.priority}</div>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-500">Category</label>
-                            <div class="text-lg font-semibold text-gray-900">${token.category}</div>
-                        </div>
-                    </div>
-                    
-                    <div>
-                        <label class="text-sm font-medium text-gray-500">Description</label>
-                        <div class="text-gray-900 mt-1">${token.description}</div>
-                    </div>
-                    
-                    <div>
-                        <label class="text-sm font-medium text-gray-500 mb-3 block">Conversation History</label>
-                        <div class="space-y-4 max-h-60 overflow-y-auto">
-                            ${token.messages.map(msg => `
-                                <div class="border-l-4 ${msg.sender.includes('TPR') ? 'border-green-500 bg-green-50' : 'border-blue-500 bg-blue-50'} pl-4 py-3">
-                                    <div class="flex justify-between items-center mb-1">
-                                        <span class="font-medium text-gray-900">${msg.sender}</span>
-                                        <span class="text-xs text-gray-500">${msg.time}</span>
-                                    </div>
-                                    <div class="text-gray-700">${msg.message}</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                    
-                    <div class="border-t pt-4">
-                        <div class="flex space-x-4 mb-4">
-                            <select id="statusUpdate" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="pending" ${token.status === 'Pending' ? 'selected' : ''}>Pending</option>
-                                <option value="in-progress" ${token.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
-                                <option value="approved" ${token.status === 'Approved' ? 'selected' : ''}>Approved</option>
-                                <option value="rejected" ${token.status === 'Rejected' ? 'selected' : ''}>Rejected</option>
-                            </select>
-                            <select id="priorityUpdate" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                                <option value="low" ${token.priority === 'Low' ? 'selected' : ''}>Low Priority</option>
-                                <option value="medium" ${token.priority === 'Medium' ? 'selected' : ''}>Medium Priority</option>
-                                <option value="high" ${token.priority === 'High' ? 'selected' : ''}>High Priority</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="text-sm font-medium text-gray-500 mb-2 block">Add Response</label>
-                            <textarea id="responseMessage" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500" rows="3" placeholder="Type your response here..."></textarea>
-                            <div class="flex space-x-2 mt-2">
-                                <button onclick="sendResponse('${tokenId}')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                                    Send Response
-                                </button>
-                                <button onclick="updateToken('${tokenId}')" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
-                                    Update Status
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            
-            document.getElementById('tokenModal').classList.add('show');
-        }
+// ✅ Fetch all tokens
+async function fetchTokens() {
+    try {
+        const response = await fetch("/api/tokens/all");
+        allTokens = await response.json();
+        filteredTokens = [...allTokens];
+        populateTokensTable(filteredTokens);
+        updateStats(allTokens);
+    } catch (error) {
+        console.error("Error fetching tokens:", error);
+    }
+}
 
-        function closeTokenModal() {
-            document.getElementById('tokenModal').classList.remove('show');
-        }
+// ✅ Populate table
+function populateTokensTable(tokens = filteredTokens) {
+    const tbody = document.getElementById("tokensTableBody");
+    tbody.innerHTML = "";
 
-        function sendResponse(tokenId) {
-            const responseMessage = document.getElementById('responseMessage').value.trim();
-            if (!responseMessage) return;
+    if (!tokens || tokens.length === 0) {
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="8" class="text-center py-6 text-gray-500">No tokens found</td>
+            </tr>`;
+        return;
+    }
 
-            const now = new Date();
-            const timeString = now.toLocaleDateString('en-US', { 
-                month: 'short', 
-                day: 'numeric', 
-                year: 'numeric',
-                hour: 'numeric',
-                minute: '2-digit',
-                hour12: true
-            });
+    tokens.forEach(token => {
+        const row = document.createElement("tr");
+        row.className = "hover:bg-gray-50 transition";
 
-            tprTokenData[tokenId].messages.push({
-                sender: 'You (TPR)',
-                time: timeString,
-                message: responseMessage
-            });
+        row.innerHTML = `
+            <td class="px-6 py-4 text-sm text-gray-900">${token.tokenId}</td>
+            <td class="px-6 py-4 text-sm text-gray-700">${token.studentId}</td>
+            <td class="px-6 py-4 text-sm text-gray-700">${token.title}</td>
+            <td class="px-6 py-4 text-sm text-gray-700">${token.category}</td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full ${getPriorityClass(token.priority)}">${token.priority}</span>
+            </td>
+            <td class="px-6 py-4">
+                <span class="px-2 py-1 text-xs font-semibold rounded-full ${getStatusClass(token.status)}">${token.status}</span>
+            </td>
+            <td class="px-6 py-4 text-sm text-gray-500">${token.createdAt ? new Date(token.createdAt).toLocaleDateString() : "-"}</td>
+            <td class="px-6 py-4 text-sm font-medium">
+                <button onclick="openTokenModal(${token.id})" class="text-blue-600 hover:text-blue-800 font-semibold">View</button>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+}
 
-            openTokenModal(tokenId);
-            alert('Response sent successfully!');
-        }
+// ✅ Update quick stats
+function updateStats(tokens) {
+    const total = tokens.length;
+    const pending = tokens.filter(t => norm(t.status) === "pending").length;
+    const resolved = tokens.filter(t => norm(t.status) === "resolved").length;
+    // support legacy "in progress" naming if you use it anywhere
+    const inProgress = tokens.filter(t => ["in progress", "in-progress", "inprogress"].includes(norm(t.status))).length;
+    const highPriority = tokens.filter(t => norm(t.priority) === "high").length;
 
-        function updateToken(tokenId) {
-            const newStatus = document.getElementById('statusUpdate').value;
-            const newPriority = document.getElementById('priorityUpdate').value;
-            
-            // Update the token data
-            tprTokenData[tokenId].status = newStatus.charAt(0).toUpperCase() + newStatus.slice(1).replace('-', ' ');
-            tprTokenData[tokenId].priority = newPriority.charAt(0).toUpperCase() + newPriority.slice(1);
-            
-            // Refresh the table and modal
-            populateTokensTable();
-            openTokenModal(tokenId);
-            alert('Token updated successfully!');
-        }
+    const stats = document.querySelectorAll(".grid > div .text-3xl");
+    if (stats.length >= 4) {
+        stats[0].textContent = total;
+        stats[1].textContent = pending;
+        // keep in-progress in the 3rd card if you show it there; otherwise show resolved
+        // I'll show in-progress (existing layout used that slot)
+        stats[2].textContent = inProgress;
+        stats[3].textContent = highPriority;
+    }
+}
 
-        function updateTokenStatus(tokenId) {
-            const token = tprTokenData[tokenId];
-            const newStatus = prompt(`Update status for ${tokenId}:\n1. Pending\n2. In Progress\n3. Approved\n4. Rejected\n\nEnter choice (1-4):`);
-            
-            const statusMap = {
-                '1': 'Pending',
-                '2': 'In Progress', 
-                '3': 'Approved',
-                '4': 'Rejected'
-            };
-            
-            if (statusMap[newStatus]) {
-                token.status = statusMap[newStatus];
-                populateTokensTable();
-                alert('Status updated successfully!');
-            }
-        }
+// ✅ Filtering logic
+function applyFilters() {
+    const statusFilter = norm(document.getElementById("statusFilter").value);
+    const priorityFilter = norm(document.getElementById("priorityFilter").value);
+    const categoryFilter = norm(document.getElementById("categoryFilter").value);
+    const search = (document.getElementById("searchInput").value || "").toLowerCase().trim();
 
-        function refreshTokens() {
-            populateTokensTable();
-            alert('Tokens refreshed!');
-        }
+    filteredTokens = allTokens.filter(token => {
+        const tokenStatus = norm(token.status);
+        const tokenPriority = norm(token.priority);
+        const tokenCategory = norm(token.category);
+        const tokenStudent = (token.studentId || "").toString().toLowerCase();
+        const tokenTokenId = (token.tokenId || "").toString().toLowerCase();
+        const tokenTitle = (token.title || "").toString().toLowerCase();
 
-        function exportTokens() {
-            alert('Export functionality will be available soon!');
-        }
+        const matchStatus = statusFilter === "all" || tokenStatus === statusFilter;
+        const matchPriority = priorityFilter === "all" || tokenPriority === priorityFilter;
+        const matchCategory = categoryFilter === "all" || tokenCategory === categoryFilter;
 
-        // Close modal when clicking outside
-        document.getElementById('tokenModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeTokenModal();
-            }
-        });
-    </script>
+        const matchSearch =
+            search === "" ||
+            tokenStudent.includes(search) ||
+            tokenTokenId.includes(search) ||
+            tokenTitle.includes(search);
+
+        return matchStatus && matchPriority && matchCategory && matchSearch;
+    });
+
+    populateTokensTable(filteredTokens);
+}
+
+// ✅ Event listeners for filters and search
+document.getElementById("statusFilter").addEventListener("change", applyFilters);
+document.getElementById("priorityFilter").addEventListener("change", applyFilters);
+document.getElementById("categoryFilter").addEventListener("change", applyFilters);
+document.getElementById("searchInput").addEventListener("input", applyFilters);
+
+// ✅ Modal logic
+function openTokenModal(id) {
+    const token = allTokens.find(t => t.id === id);
+    if (!token) return;
+
+    const modal = document.getElementById("tokenModal");
+    modal.classList.remove("hidden");
+
+    document.getElementById("modalTitle").innerText = token.title;
+    document.getElementById("modalDescription").innerText = token.description;
+    document.getElementById("modalStudent").innerText = token.studentId;
+    document.getElementById("modalStatus").innerText = token.status;
+    document.getElementById("modalPriority").innerText = token.priority;
+    document.getElementById("modalReply").value = token.tprReply || "";
+    document.getElementById("modalTokenId").value = token.id;
+
+    if (norm(token.status) === "resolved") {
+        document.getElementById("replySection").classList.add("hidden");
+    } else {
+        document.getElementById("replySection").classList.remove("hidden");
+    }
+}
+
+function closeModal() {
+    document.getElementById("tokenModal").classList.add("hidden");
+}
+
+// ✅ Reply & resolve
+// ✅ Reply & resolve with double-click protection
+async function submitReply() {
+  const replyBtn = document.querySelector("#replySection button");
+  const id = document.getElementById("modalTokenId").value;
+  const reply = document.getElementById("modalReply").value.trim();
+
+  if (!reply) {
+    alert("Please enter a reply before submitting.");
+    return;
+  }
+
+  // ✅ Disable button immediately
+  replyBtn.disabled = true;
+  const originalText = replyBtn.innerText;
+  replyBtn.innerText = "Sending...";
+
+  try {
+    const response = await fetch(`/api/tokens/${id}/reply`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reply })
+    });
+
+    if (!response.ok) throw new Error("Failed to submit reply.");
+
+    closeModal();
+    await fetchTokens();
+    showSuccess("Reply added and token marked as resolved.");
+  } catch (err) {
+    console.error("Error:", err);
+    alert("❌ Failed to submit reply. Please try again.");
+  } finally {
+    // ✅ Re-enable safely
+    replyBtn.disabled = false;
+    replyBtn.innerText = originalText;
+  }
+}
+
+
+// ✅ Styling helpers (matching your actual values)
+function getStatusClass(status) {
+    switch (norm(status)) {
+        case "pending": return "bg-yellow-100 text-yellow-800";
+        case "resolved": return "bg-green-100 text-green-800";
+        case "in progress": return "bg-blue-100 text-blue-800";
+        default: return "bg-gray-100 text-gray-700";
+    }
+}
+
+function getPriorityClass(priority) {
+    switch (norm(priority)) {
+        case "high": return "bg-red-100 text-red-800";
+        case "normal": return "bg-yellow-100 text-yellow-800"; // normal
+        case "low": return "bg-green-100 text-green-800";
+        default: return "bg-gray-100 text-gray-700";
+    }
+}
+
+// ✅ Success banner
+function showSuccess(msg) {
+    const banner = document.createElement("div");
+    banner.className = "fixed top-5 right-5 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg";
+    banner.textContent = msg;
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 2500);
+}
+
+// ✅ Manual refresh
+function refreshTokens() {
+    fetchTokens();
+}
+
+// ✅ Init
+document.addEventListener("DOMContentLoaded", fetchTokens);
+</script>
+
+
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9812ca69301bdc7f',t:'MTc1ODIxODkyNy4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

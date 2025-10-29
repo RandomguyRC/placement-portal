@@ -26,38 +26,52 @@
 <body class="bg-gray-50 text-gray-800">
   <!-- Navigation Header (reused) -->
   <nav class="bg-white shadow-lg sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-16 min-w-0">
-        <div class="flex items-center space-x-3 flex-shrink-0">
-          <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-            </svg>
-          </div>
-          <div class="hidden sm:block">
-            <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
-            <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
-          </div>
-        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 min-w-0">
+                <div class="flex items-center space-x-3 flex-shrink-0">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
+                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
+                    </div>
+                </div>
 
-        <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-          <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
-          <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
-          <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
-          <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
-          <a href="/students" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-          <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
-          <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
-        
+                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
+                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
+                    
+                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
+                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
+                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
+                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
+                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
+                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
+                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
+                    <!-- </div> -->
+                </div>
 
-        <div class="flex-shrink-0">
-          <button id="loginBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-            Login
-          </button>
+                <!-- Example nav buttons -->
+<div class="flex-shrink-0 flex items-center space-x-2">
+    <!-- Profile link (Student) -->
+    <a th:if="${student != null}" href="/profile"
+       class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+       Profile
+    </a>
+
+    <!-- Profile link (TPR) -->
+    <a th:if="${tpr != null}" href="/tpr-profile"
+       class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
+       Profile
+    </a>
+
+</div>
+
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
+    </nav>
 
   <!-- Page Header -->
   <header class="gradient-bg text-white">
@@ -66,12 +80,6 @@
         <div>
           <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">OA Schedule</h2>
           <p class="mt-2 text-white/90 max-w-2xl">View all Online Assessments that are upcoming or completed. Manage attendance for each OA with one click.</p>
-        </div>
-        <div class="md:ml-auto">
-          <div class="grid sm:grid-cols-2 gap-3">
-            <button id="addOA" class="px-4 py-2.5 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 font-semibold backdrop-blur text-white">Add OA (Sample)</button>
-            <a href="#reports" class="px-4 py-2.5 rounded-lg bg-white text-blue-900 font-semibold hover:bg-blue-50">Reports</a>
-          </div>
         </div>
       </div>
     </div>
@@ -169,53 +177,66 @@
   <script>
     // Global UI
     document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      alert('Navigate to Login page');
-    });
+    // document.getElementById('loginBtn').addEventListener('click', () => {
+    //   alert('Navigate to Login page');
+    // });
 
     // Sample OA data (small set)
-    const oaData = [
-      {
-        id: 'oa-101',
-        title: 'Apex Corp OA',
-        company: 'Apex Corp',
-        date: '2025-09-20',
-        time: '10:00 AM – 12:00 PM',
-        venue: 'Lab 3, Block B',
-        registered: 120,
-        status: 'upcoming'
-      },
-      {
-        id: 'oa-102',
-        title: 'TechNova Online Test',
-        company: 'TechNova',
-        date: '2025-09-18',
-        time: '02:00 PM – 03:30 PM',
-        venue: 'Auditorium',
-        registered: 210,
-        status: 'ongoing'
-      },
-      {
-        id: 'oa-103',
-        title: 'BluePeak Assessment',
-        company: 'BluePeak',
-        date: '2025-09-10',
-        time: '09:00 AM – 11:00 AM',
-        venue: 'Lab 1, Block A',
-        registered: 95,
-        status: 'completed'
-      },
-      {
-        id: 'oa-104',
-        title: 'Vertex Hiring OA',
-        company: 'Vertex',
-        date: '2025-09-22',
-        time: '11:30 AM – 01:00 PM',
-        venue: 'Online',
-        registered: 160,
-        status: 'upcoming'
-      }
-    ];
+    let oaData = [];
+
+async function loadOAs() {
+  try {
+    const res = await fetch('/api/schedule/student');
+    if (!res.ok) throw new Error("Unable to fetch data");
+
+    const data = await res.json();
+
+    oaData = data.map(item => ({
+      id: item.id,
+      title: item.title,
+      company: item.company,
+      date: item.start_time.split('T')[0],
+      time: formatTimeRange(item.start_time, item.end_time),
+      venue: item.venue || 'Online',
+      registered: '-', // or fill later if needed
+      status: computeStatus(item.start_time, item.end_time)
+    }));
+
+    // build venues dynamically
+    const venueFilter = document.getElementById('venueFilter');
+    const venues = Array.from(new Set(oaData.map(o => o.venue)));
+    venues.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.textContent = v;
+      venueFilter.appendChild(opt);
+    });
+
+    applyFilters();
+  } catch (err) {
+    console.error(err);
+    alert("Error loading schedule data.");
+  }
+}
+
+function computeStatus(start, end) {
+  const now = new Date();
+  const s = new Date(start);
+  const e = new Date(end);
+  if (now < s) return 'upcoming';
+  if (now >= s && now <= e) return 'ongoing';
+  return 'completed';
+}
+
+function formatTimeRange(start, end) {
+  const s = new Date(start);
+  const e = new Date(end);
+  return `${s.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} – ${e.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
+}
+
+// Load OAs on page load
+loadOAs();
+
 
     // Build venue filter options
     const venueFilter = document.getElementById('venueFilter');

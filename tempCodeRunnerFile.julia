@@ -5,80 +5,71 @@ from OpenGL.GLU import *
 angle = 0
 
 def draw_cube():
-    glutWireCube(1.0)
-
-def init():
-    glClearColor(0.1, 0.1, 0.1, 1.0)   # background color (dark gray)
-    glEnable(GL_DEPTH_TEST)
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    gluPerspective(45, 800/600, 0.1, 50.0)  # fov, aspect, near, far
-    glMatrixMode(GL_MODELVIEW)
+    glBegin(GL_QUADS)
+    # Front face
+    glColor3f(1,0,0); glVertex3f(-1,-1,1)
+    glColor3f(0,1,0); glVertex3f(1,-1,1)
+    glColor3f(0,0,1); glVertex3f(1,1,1)
+    glColor3f(1,1,0); glVertex3f(-1,1,1)
+    # Back face
+    glColor3f(1,0,1); glVertex3f(-1,-1,-1)
+    glColor3f(0,1,1); glVertex3f(1,-1,-1)
+    glColor3f(0.5,0.5,0.5); glVertex3f(1,1,-1)
+    glColor3f(1,0.5,0); glVertex3f(-1,1,-1)
+    # Left face
+    glColor3f(1,0,0); glVertex3f(-1,-1,-1)
+    glColor3f(1,1,0); glVertex3f(-1,-1,1)
+    glColor3f(1,1,1); glVertex3f(-1,1,1)
+    glColor3f(1,0,1); glVertex3f(-1,1,-1)
+    # Right face
+    glColor3f(0,1,0); glVertex3f(1,-1,-1)
+    glColor3f(0,0,1); glVertex3f(1,-1,1)
+    glColor3f(0,1,1); glVertex3f(1,1,1)
+    glColor3f(0.5,0,0.5); glVertex3f(1,1,-1)
+    # Top face
+    glColor3f(1,1,0); glVertex3f(-1,1,1)
+    glColor3f(0,0,1); glVertex3f(1,1,1)
+    glColor3f(0.5,0.5,0.5); glVertex3f(1,1,-1)
+    glColor3f(1,0.5,0); glVertex3f(-1,1,-1)
+    # Bottom face
+    glColor3f(1,0,0); glVertex3f(-1,-1,1)
+    glColor3f(0,1,0); glVertex3f(1,-1,1)
+    glColor3f(0,1,1); glVertex3f(1,-1,-1)
+    glColor3f(1,0,1); glVertex3f(-1,-1,-1)
+    glEnd()
 
 def display():
     global angle
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     glLoadIdentity()
-
-    # Move scene back so cubes are visible
-    glTranslatef(-1.5, 0.0, -10.0)
-
-    # --- Translation ---
-    glPushMatrix()
-    glTranslatef(2.0, 0.0, 0.0)   # move cube
-    glColor3f(1,0,0)
+    # Camera still at an angle to see rotation
+    gluLookAt(4,4,4, 0,0,0, 0,1,0)
+    glRotatef(angle,1,1,0)
     draw_cube()
-    glPopMatrix()
-
-    # --- Scaling ---
-    glPushMatrix()
-    glScalef(1.5, 0.5, 1.0)
-    glTranslatef(-2.0, 0.0, 0.0)
-    glColor3f(0,1,0)
-    draw_cube()
-    glPopMatrix()
-
-    # --- Rotation ---
-    glPushMatrix()
-    glTranslatef(0.0, 2.0, 0.0)
-    glRotatef(angle, 1, 1, 0)
-    glColor3f(0,0,1)
-    draw_cube()
-    glPopMatrix()
-
-    # --- Reflection (scale by -1 on X) ---
-    glPushMatrix()
-    glTranslatef(0.0, -2.0, 0.0)
-    glScalef(-1.0, 1.0, 1.0)
-    glColor3f(1,1,0)
-    draw_cube()
-    glPopMatrix()
-
-    # --- Shearing (custom matrix) ---
-    glPushMatrix()
-    shear_matrix = [
-        1.0, 0.5, 0.0, 0.0,
-        0.0, 1.0, 0.0, 0.0,
-        0.0, 0.0, 1.0, 0.0,
-        0.0, 0.0, 0.0, 1.0
-    ]
-    glMultMatrixf(shear_matrix)
-    glTranslatef(2.0, -2.0, 0.0)
-    glColor3f(0,1,1)
-    draw_cube()
-    glPopMatrix()
-
     glutSwapBuffers()
     angle += 1
 
-def idle():
-    glutPostRedisplay()
+def reshape(width, height):
+    if height == 0:
+        height = 1
+    glViewport(0,0,width,height)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    # Orthographic / Parallel projection
+    # Left, Right, Bottom, Top, Near, Far
+    glOrtho(-3, 3, -3, 3, -10, 10)
+    glMatrixMode(GL_MODELVIEW)
+
+def init():
+    glClearColor(1,1,1,1)  # white background
+    glEnable(GL_DEPTH_TEST)
 
 glutInit()
 glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
-glutInitWindowSize(800, 600)
-glutCreateWindow(b"3D Transformations")
+glutInitWindowSize(600,600)
+glutCreateWindow(b'Parallel Projection')
 init()
 glutDisplayFunc(display)
-glutIdleFunc(idle)
+glutIdleFunc(display)
+glutReshapeFunc(reshape)
 glutMainLoop()

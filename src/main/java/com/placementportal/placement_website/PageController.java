@@ -33,10 +33,10 @@ public class PageController {
     //     return "tpr_profile"; // tpr_profile.html
     // }
 
-    @GetMapping("/notices")
-    public String notices() {
-        return "notices"; // notices.html
-    }
+    // @GetMapping("/notices")
+    // public String notices() {
+    //     return "notices"; // notices.html
+    // }
 
     @GetMapping("/opportunities")
     public String opportunities() {
@@ -54,9 +54,17 @@ public class PageController {
     }
 
     @GetMapping("/schedule")
-    public String schedule() {
-        return "schedule_tpr"; // schedule_tpr.html
-    }
+public String scheduleTprPage(HttpSession session, Model model) {
+    // pull from session and put into Thymeleaf model
+    Object student = session.getAttribute("student");
+    Object tpr = session.getAttribute("tpr");
+
+    model.addAttribute("student", student);
+    model.addAttribute("tpr", tpr);
+
+    return "schedule_tpr"; // corresponds to schedule_tpr.html
+}
+
 
     @GetMapping("/alerts")
     public String alerts() {

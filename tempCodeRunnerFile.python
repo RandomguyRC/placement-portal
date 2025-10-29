@@ -1,47 +1,166 @@
+"""
+scanline_zbuffer_cube.py
+Simple software Scan-Line Z-Buffer renderer (PyOpenGL) showing a cube.
+
+Requirements:
+    pip install PyOpenGL PyOpenGL_accelerate numpy
+Run:
+    python scanline_zbuffer_cube.py
+"""
+
 from OpenGL.GL import *
 from OpenGL.GLUT import *
-from OpenGL.GLU import *
+import numpy as np
+from dataclasses import dataclass
+import sys, math
 
-angle = 0
+# Window size
+WIDTH, HEIGHT = 800, 600
+INF = 1e9
 
-def draw_cube():
-    glutWireCube(1.0)   # change to glutSolidCube(1.0) if you want solid
+# -------------------------------------------------------------------
+# Data structures
+# -------------------------------------------------------------------
+@dataclass
+class Vertex:
+    x: float
+    y: float
+    z: float
 
-def init():
-    glClearColor(0.1, 0.1, 0.1, 1.0)   # background color
-    glEnable(GL_DEPTH_TEST)
+@dataclass
+class Polygon:
+    vertices: list   # List[Vertex]
+    color: tuple     # (r,g,b)
 
-    # Setup perspective projection
-    glMatrixMode(GL_PROJECTION)
-    glLoadIdentity()
-    gluPerspective(45, 600/600, 0.1, 50.0)  # fov, aspect, near, far
-    glMatrixMode(GL_MODELVIEW)
+# -------------------------------------------------------------------
+# Cube definition in 3D
+# -------------------------------------------------------------------
+def make_cube(size=1.0) -> list:
+    s = size / 2
+    v = [
+        Vertex(-s, -s, -s), Vertex(s, -s, -s),
+        Vertex(s,  s, -s),  Vertex(-s,  s, -s),
+        Vertex(-s, -s,  s), Vertex(s, -s,  s),
+        Vertex(s,  s,  s),  Vertex(-s,  s,  s)
+    ]
+    faces = [
+        [0,1,2,3],   # back
+        [4,5,6,7],   # front
+        [0,1,5,4],   # bottom
+        [2,3,7,6],   # top
+        [1,2,6,5],   # right
+        [0,3,7,4]    # left
+    ]
+    colors = [
+        (255,0,0), (0,255,0), (0,0,255),
+        (255,255,0), (0,255,255), (255,128,0)
+    ]
+    polys = []
+    for i, f in enumerate(faces):
+        polys.append(Polygon([v[idx] for idx in f], colors[i]))
+    return polys
+
+# -------------------------------------------------------------------
+# Projection + transformation
+# -------------------------------------------------------------------
+def rotate_y(vertex: Vertex, angle: float) -> Vertex:
+    c, s = math.cos(angle), math.sin(angle)
+    x = vertex.x * c + vertex.z * s
+    z = -vertex.x * s + vertex.z * c
+    return Vertex(x, vertex.y, z)
+
+def project_to_screen(v: Vertex) -> Vertex:
+    # Orthographic projection: scale and translate to window coords
+    scale = 200
+    x = WIDTH/2  + v.x * scale
+    y = HEIGHT/2 + v.y * scale
+    z = v.z + 1.5   # shift so z>0
+    return Vertex(x, y, z)
+
+# -------------------------------------------------------------------
+# Scan-line Z-Buffer core
+# -------------------------------------------------------------------
+def edge_intersection(v1, v2, y):
+    if (y < min(v1.y, v2.y)) or (y > max(v1.y, v2.y)): return None
+    if abs(v2.y - v1.y) < 1e-6: return None
+    t = (y - v1.y) / (v2.y - v1.y)
+    x = v1.x + t*(v2.x - v1.x)
+    z = v1.z + t*(v2.z - v1.z)
+    return x, z
+
+def scanline_zbuffer(polygons, width, height):
+    color_buf = np.zeros((height, width, 3), np.uint8)
+    z_buf = np.full((height, width), INF, np.float32)
+
+    for yi in range(height):
+        y = yi + 0.5
+        for poly in polygons:
+            ints = []
+            verts = poly.vertices
+            for i in range(len(verts)):
+                res = edge_intersection(verts[i], verts[(i+1)%len(verts)], y)
+                if res: ints.append(res)
+            if len(ints) < 2: continue
+            ints.sort(key=lambda p:p[0])
+            for k in range(0, len(ints)-1, 2):
+                x0,z0 = ints[k]
+                x1,z1 = ints[k+1]
+                if x0 > x1: x0,x1,z0,z1 = x1,x0,z1,z0
+                x_start, x_end = int(max(0, math.ceil(x0))), int(min(width-1, math.floor(x1)))
+                if x_end < x_start: continue
+                for x in range(x_start, x_end+1):
+                    t = (x+0.5 - x0) / (x1-x0+1e-8)
+                    z = z0 + t*(z1-z0)
+                    if z < z_buf[yi, x]:
+                        z_buf[yi, x] = z
+                        color_buf[yi, x] = poly.color
+    return color_buf
+
+# -------------------------------------------------------------------
+# OpenGL Display
+# -------------------------------------------------------------------
+angle = 25*np.pi/180
+cube = make_cube(1.0)
+
+def render_scene():
+    # Rotate cube and project
+    polys2D = []
+    for p in cube:
+        verts2D = [project_to_screen(rotate_y(v, angle)) for v in p.vertices]
+        polys2D.append(Polygon(verts2D, p.color))
+    color = scanline_zbuffer(polys2D, WIDTH, HEIGHT)
+    return np.flipud(color)
 
 def display():
     global angle
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+    glClear(GL_COLOR_BUFFER_BIT)
+    color = render_scene()
+    glDrawPixels(WIDTH, HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, color)
+    glutSwapBuffers()
+
+def keyboard(key, x, y):
+    if key == b'\x1b' or key in [b'q', b'Q']:
+        sys.exit(0)
+
+def reshape(w,h):
+    glViewport(0,0,w,h)
+    glMatrixMode(GL_PROJECTION)
+    glLoadIdentity()
+    glOrtho(0, w, 0, h, -1, 1)
+    glMatrixMode(GL_MODELVIEW)
     glLoadIdentity()
 
-    # Move cube back into view
-    glTranslatef(0.0, 0.0, -6.0)
+def main():
+    glutInit(sys.argv)
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB)
+    glutInitWindowSize(WIDTH, HEIGHT)
+    glutCreateWindow(b"Scan-Line Z-Buffer Cube (software)")
+    glClearColor(0,0,0,1)
+    glutDisplayFunc(display)
+    glutKeyboardFunc(keyboard)
+    glutReshapeFunc(reshape)
+    print("Press Esc to quit.")
+    glutMainLoop()
 
-    # Rotate about arbitrary axis (1,1,1)
-    glRotatef(angle, 1, 1, 1)
-
-    glColor3f(0, 1, 0)  # green cube
-    draw_cube()
-
-    glutSwapBuffers()
-    angle = 10  # continuous rotation
-
-def idle():
-    glutPostRedisplay()
-
-glutInit()
-glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH)
-glutInitWindowSize(600, 600)
-glutCreateWindow(b"Rotation about arbitrary line")
-init()
-glutDisplayFunc(display)
-glutIdleFunc(idle)
-glutMainLoop()
+if __name__ == "__main__":
+    main()

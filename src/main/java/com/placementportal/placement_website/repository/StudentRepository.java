@@ -98,6 +98,41 @@ public class StudentRepository {
     return students.isEmpty() ? null : students.get(0);
 }
 
+public List<Student> findAll() {
+    String sql = "SELECT * FROM student_details";
+    return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToStudent(rs));
+}
+
+public List<Student> findByBranch(String branch) {
+    String sql = "SELECT * FROM student_details WHERE branch = ?";
+    return jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToStudent(rs), branch);
+}
+
+public Student findByEnrollmentNumber(String enrollmentNumber) {
+    String sql = "SELECT * FROM student_details WHERE enrollment_number = ?";
+    List<Student> students = jdbcTemplate.query(sql, (rs, rowNum) -> mapRowToStudent(rs), enrollmentNumber);
+    return students.isEmpty() ? null : students.get(0);
+}
+
+// Helper function to avoid repeating mapping logic
+private Student mapRowToStudent(ResultSet rs) throws SQLException {
+    Student student = new Student();
+    student.setEnrollmentNumber(rs.getString("enrollment_number"));
+    student.setStudentName(rs.getString("student_name"));
+    student.setEmail(rs.getString("email"));
+    student.setPhoneNumber(rs.getString("phone_number"));
+    student.setBranch(rs.getString("branch"));
+    student.setAddress(rs.getString("address"));
+    student.setLocalAddress(rs.getString("local_address"));
+    student.setSex(rs.getString("sex"));
+    student.setCpi(rs.getDouble("cpi"));
+    student.setProfileStat(rs.getString("profile_stat"));
+    if (rs.getTimestamp("dob") != null) {
+        student.setDob(rs.getTimestamp("dob").toLocalDateTime().toLocalDate().toString());
+    }
+    student.setPassword(rs.getString("password"));
+    return student;
+}
 
 
 

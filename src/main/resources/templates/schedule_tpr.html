@@ -166,85 +166,101 @@
     </div>
   </footer>
 
-  <script>
-    // Global UI
-    document.getElementById('year').textContent = new Date().getFullYear();
-    document.getElementById('loginBtn').addEventListener('click', () => {
-      alert('Navigate to Login page');
-    });
+<script>
+  // --- Utility: display current year ---
+  document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Sample OA data (small set)
-    const oaData = [
-      {
-        id: 'oa-101',
-        title: 'Apex Corp OA',
-        company: 'Apex Corp',
-        date: '2025-09-20',
-        time: '10:00 AM – 12:00 PM',
-        venue: 'Lab 3, Block B',
-        registered: 120,
-        status: 'upcoming'
-      },
-      {
-        id: 'oa-102',
-        title: 'TechNova Online Test',
-        company: 'TechNova',
-        date: '2025-09-18',
-        time: '02:00 PM – 03:30 PM',
-        venue: 'Auditorium',
-        registered: 210,
-        status: 'ongoing'
-      },
-      {
-        id: 'oa-103',
-        title: 'BluePeak Assessment',
-        company: 'BluePeak',
-        date: '2025-09-10',
-        time: '09:00 AM – 11:00 AM',
-        venue: 'Lab 1, Block A',
-        registered: 95,
-        status: 'completed'
-      },
-      {
-        id: 'oa-104',
-        title: 'Vertex Hiring OA',
-        company: 'Vertex',
-        date: '2025-09-22',
-        time: '11:30 AM – 01:00 PM',
-        venue: 'Online',
-        registered: 160,
-        status: 'upcoming'
-      }
-    ];
+  // --- Login Button (can be removed later) ---
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    alert('Navigate to Login page');
+  });
 
-    // Build venue filter options
-    const venueFilter = document.getElementById('venueFilter');
-    const venues = Array.from(new Set(oaData.map(o => o.venue)));
-    venues.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = v;
-      venueFilter.appendChild(opt);
-    });
+  // --- DOM Elements ---
+  const tbody = document.getElementById('oaBody');
+  const venueFilter = document.getElementById('venueFilter');
+  const statusFilter = document.getElementById('statusFilter');
+  const searchInput = document.getElementById('search');
+  const resetBtn = document.getElementById('resetFilters');
+  let oaData = [];
 
-    // Helpers for status UI
-    function statusBadge(status){
-      if(status === 'upcoming'){
-        return '<span class="badge badge-upcoming"><span class="status-dot dot-upcoming"></span>Upcoming</span>';
+  // --- Load Schedule from Backend ---
+  async function loadSchedule() {
+    try {
+      // ✅ Fetch logged-in student's data from session
+      const res = await fetch('/session/student', { credentials: 'include' });
+      let enrollmentNumber = null;
+
+      if (res.ok) {
+        const studentData = await res.json();
+        enrollmentNumber = studentData.enrollmentNumber;
       }
-      if(status === 'ongoing'){
-        return '<span class="badge badge-ongoing"><span class="status-dot dot-ongoing"></span>Ongoing</span>';
+
+      // fallback if not in session
+      if (!enrollmentNumber) {
+        console.warn('No session found. Please log in again.');
+        toggleEmptyState(true);
+        return; // stop loading
       }
-      return '<span class="badge badge-completed"><span class="status-dot dot-completed"></span>Completed</span>';
+
+      // ✅ Fetch schedule from backend
+      const scheduleRes = await fetch(`/api/schedule/${enrollmentNumber}`);
+      if (!scheduleRes.ok) throw new Error('Failed to load schedule');
+      const data = await scheduleRes.json();
+
+      // ✅ Map to match UpcomingAssessmentDTO structure
+      oaData = data.schedules.map((item, index) => ({
+        id: index + 1,
+        title: `${item.companyName} — ${item.jobRole || item.type || 'Assessment'}`,
+        company: item.companyName,
+        date: item.startTime ? item.startTime.split('T')[0] : '-',          // extract date part
+        time: item.startTime ? item.startTime.split('T')[1]?.slice(0, 5) : '-', // extract HH:MM part
+        venue: item.modeOfHiring || 'Online / TBA',
+        registered: '—',
+        status: computeStatus(item.startTime, item.endTime)
+      }));
+
+      // Build venue dropdown
+      const venues = Array.from(new Set(oaData.map(o => o.venue)));
+      venues.forEach(v => {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        venueFilter.appendChild(opt);
+      });
+
+      applyFilters();
+    } catch (err) {
+      console.error(err);
+      toggleEmptyState(true);
     }
+  }
 
-    // Render rows with selective updates
-    const tbody = document.getElementById('oaBody');
-    function renderRows(rows){
-  const existing = new Map(Array.from(tbody.children).map(tr => [tr.dataset.id, tr]));
+  // --- Helper Functions ---
+  function computeStatus(startTime, endTime) {
+    try {
+      const now = new Date();
+      const start = new Date(startTime);
+      const end = endTime ? new Date(endTime) : null;
+      if (now < start) return 'upcoming';
+      if (end && now <= end) return 'ongoing';
+      return 'completed';
+    } catch {
+      return 'upcoming';
+    }
+  }
+
+  function statusBadge(status) {
+    if (status === 'upcoming')
+      return '<span class="badge badge-upcoming"><span class="status-dot dot-upcoming"></span>Upcoming</span>';
+    if (status === 'ongoing')
+      return '<span class="badge badge-ongoing"><span class="status-dot dot-ongoing"></span>Ongoing</span>';
+    return '<span class="badge badge-completed"><span class="status-dot dot-completed"></span>Completed</span>';
+  }
+
+  function renderRows(rows) {
+  tbody.innerHTML = '';
   rows.forEach(item => {
-    const tr = existing.get(item.id) || document.createElement('tr');
-    tr.dataset.id = item.id;
+    const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="px-6 py-4">
         <div class="min-w-[220px]">
@@ -252,118 +268,107 @@
           <p class="text-xs text-gray-500">${item.company}</p>
         </div>
       </td>
-      <td class="px-6 py-4 text-sm">${formatDate(item.date)}</td>
-      <td class="px-6 py-4 text-sm">${item.time}</td>
+      <td class="px-6 py-4 text-sm">${item.date || '-'}</td>
+      <td class="px-6 py-4 text-sm">${item.time || '-'}</td>
       <td class="px-6 py-4 text-sm">${item.venue}</td>
       <td class="px-6 py-4 font-semibold">${item.registered}</td>
       <td class="px-6 py-4">${statusBadge(item.status)}</td>
-      <td class="px-6 py-4">
-        <div class="flex justify-end gap-2">
-          <!-- Sitting Plan link -->
-          <a href="/sittingplan?oa=${item.id}" 
-             class="px-3 py-2 rounded-lg bg-blue-50 text-blue-600 text-sm font-semibold hover:bg-blue-100 transition">
-            Sitting Plan
-          </a>
-
-          <!-- Attendance button -->
-          <button data-id="${item.id}" 
-                  class="attendance-btn px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
-            Attendance
-          </button>
-        </div>
+      <td class="px-6 py-4 text-right space-x-2">
+        <button data-listing="${item.id}" class="sitting-btn px-3 py-2 rounded-lg bg-blue-50 text-blue-600 text-sm font-semibold hover:bg-blue-100 transition">
+          Sitting Plan
+        </button>
+        <button data-id="${item.id}" class="attendance-btn px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+          Attendance
+        </button>
       </td>
     `;
-    if(!existing.get(item.id)){ tbody.appendChild(tr); }
+    tbody.appendChild(tr);
   });
-
-  // Remove rows that no longer exist
-  Array.from(tbody.children).forEach(tr => {
-    if(!rows.find(r => r.id === tr.dataset.id)){
-      tbody.removeChild(tr);
-    }
-  });
-
-  // Wire attendance buttons
-  wireAttendanceButtons();
   toggleEmptyState(rows.length === 0);
+
+  // --- Add sitting plan button listener ---
+  document.querySelectorAll('.sitting-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const listingId = e.target.getAttribute('data-listing');
+      showSittingPlan(listingId);
+    });
+  });
+}
+
+// --- Popup Grid for Sitting Plan ---
+async function showSittingPlan(listingId) {
+  try {
+    const res = await fetch(`/api/sitting-plan/${listingId}`);
+    if (!res.ok) throw new Error('Failed to fetch sitting plan');
+    const data = await res.json();
+
+    const { grid, rows, columns } = data;
+
+    const overlay = document.createElement('div');
+    overlay.className = 'fixed inset-0 bg-black/50 flex items-center justify-center z-50';
+    overlay.innerHTML = `
+      <div class="bg-white rounded-2xl shadow-xl max-w-5xl w-full p-6 relative">
+        <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl font-bold">&times;</button>
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">
+          Sitting Plan — Listing ID: ${listingId}
+        </h2>
+        <div class="grid" style="grid-template-columns: repeat(${columns}, minmax(0, 1fr)); gap: 10px;">
+          ${grid.flat().map(seat => seat
+            ? `<div class="border rounded-lg p-2 text-center bg-gray-50 hover:bg-blue-50 transition">
+                 <p class="font-semibold text-gray-900">${seat}</p>
+               </div>`
+            : `<div class="border rounded-lg p-2 bg-gray-100 opacity-50"></div>`
+          ).join('')}
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    overlay.querySelector('button').addEventListener('click', () => overlay.remove());
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) overlay.remove();
+    });
+
+  } catch (err) {
+    console.error(err);
+    alert('Unable to load sitting plan.');
+  }
 }
 
 
-    function formatDate(iso){
-      const d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString(undefined, { weekday:'short', year:'numeric', month:'short', day:'numeric' });
-    }
 
-    function toggleEmptyState(show){
-      document.getElementById('emptyState').classList.toggle('hidden', !show);
-    }
+  function toggleEmptyState(show) {
+    document.getElementById('emptyState').classList.toggle('hidden', !show);
+  }
 
-    function wireAttendanceButtons(){
-      document.querySelectorAll('.attendance-btn').forEach(btn => {
-        btn.onclick = () => {
-          const id = btn.getAttribute('data-id');
-          const oa = oaData.find(o => o.id === id);
-          const path = `/attendance/${id}`;
-          // Simulated navigation
-          alert(`Go to Attendance page for:\n${oa.title}\n\nPath: ${path}`);
-          // Replace alert with: window.location.href = path
-        };
-      });
-    }
-
-    // Filters and search
-    const statusFilter = document.getElementById('statusFilter');
-    const searchInput = document.getElementById('search');
-    const resetBtn = document.getElementById('resetFilters');
-
-    function applyFilters(){
-      const term = searchInput.value.trim().toLowerCase();
-      const status = statusFilter.value;
-      const venue = venueFilter.value;
-
-      const filtered = oaData.filter(o => {
-        const matchesTerm = !term || (o.title.toLowerCase().includes(term) || o.company.toLowerCase().includes(term));
-        const matchesStatus = status === 'all' || o.status === status;
-        const matchesVenue = venue === 'all' || o.venue === venue;
-        return matchesTerm && matchesStatus && matchesVenue;
-      });
-
-      renderRows(filtered);
-    }
-
-    searchInput.addEventListener('input', applyFilters);
-    statusFilter.addEventListener('change', applyFilters);
-    venueFilter.addEventListener('change', applyFilters);
-    resetBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      statusFilter.value = 'all';
-      venueFilter.value = 'all';
-      applyFilters();
+  function applyFilters() {
+    const term = searchInput.value.trim().toLowerCase();
+    const status = statusFilter.value;
+    const venue = venueFilter.value;
+    const filtered = oaData.filter(o => {
+      const matchesTerm = !term || (o.title.toLowerCase().includes(term) || o.company.toLowerCase().includes(term));
+      const matchesStatus = status === 'all' || o.status === status;
+      const matchesVenue = venue === 'all' || o.venue === venue;
+      return matchesTerm && matchesStatus && matchesVenue;
     });
+    renderRows(filtered);
+  }
 
-    // Initial render
+  searchInput.addEventListener('input', applyFilters);
+  statusFilter.addEventListener('change', applyFilters);
+  venueFilter.addEventListener('change', applyFilters);
+  resetBtn.addEventListener('click', () => {
+    searchInput.value = '';
+    statusFilter.value = 'all';
+    venueFilter.value = 'all';
     applyFilters();
+  });
 
-    // Add OA (sample) to show dynamic update
-    document.getElementById('addOA').addEventListener('click', () => {
-      const newOA = {
-        id: 'oa-' + Math.floor(Math.random()*10000),
-        title: 'New Company OA',
-        company: 'New Company',
-        date: new Date().toISOString().slice(0,10),
-        time: '03:00 PM – 04:00 PM',
-        venue: 'Lab 2, Block C',
-        registered: Math.floor(50 + Math.random()*150),
-        status: 'upcoming'
-      };
-      oaData.unshift(newOA);
-      if(!Array.from(venueFilter.options).some(o => o.value === newOA.venue)){
-        const opt = document.createElement('option');
-        opt.value = newOA.venue; opt.textContent = newOA.venue;
-        venueFilter.appendChild(opt);
-      }
-      applyFilters();
-    });
-  </script>
+  // --- Load Data on Page Load ---
+  loadSchedule();
+</script>
+
+
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980261d0c3ac5983',t:'MTc1ODA0Njg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

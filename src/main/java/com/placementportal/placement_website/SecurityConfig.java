@@ -12,11 +12,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll() // allow all pages without login
+                // ✅ Allow schedule and other student APIs
+                .requestMatchers("/student/**").permitAll()
+                // ✅ Allow static files (HTML, CSS, JS)
+                .requestMatchers("/", "/index.html", "/css/**", "/js/**", "/images/**").permitAll()
+                // ✅ Everything else can still be open for now
+                .anyRequest().permitAll()
             )
-            .csrf(csrf -> csrf.disable()) // disable CSRF for now
-            .formLogin(login -> login.disable()) // disable spring login page
-            .httpBasic(basic -> basic.disable()); // disable basic auth
+            // Disable Spring login and CSRF for testing
+            .csrf(csrf -> csrf.disable())
+            .formLogin(login -> login.disable())
+            .httpBasic(basic -> basic.disable());
 
         return http.build();
     }

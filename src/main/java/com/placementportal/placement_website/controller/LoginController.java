@@ -26,20 +26,22 @@ public class LoginController {
     // ---------------- STUDENT LOGIN ----------------
     @PostMapping("/login/student")
     public String loginStudent(@RequestParam("email") String email,
-                               @RequestParam("password") String password,
-                               Model model,
-                               HttpSession session) {
+                            @RequestParam("password") String password,
+                            Model model,
+                            HttpSession session) {
 
         Student student = studentRepository.findByEmail(email);
 
         if (student != null && passwordEncoder.matches(password, student.getPassword())) {
             // Login successful
             session.setAttribute("student", student);
-            return "redirect:/";  // Home page on success
+            session.setAttribute("role", "STUDENT"); // ✅ Add this line
+            session.setAttribute("userId", student.getEnrollmentNumber());
+            return "redirect:/";
         } else {
             // Login failed
             model.addAttribute("error", "Invalid email or password");
-            return "login";  // stay on login page
+            return "login";
         }
     }
 
@@ -62,8 +64,10 @@ public String loginTpr(@RequestParam("email") String email,
     }
 
     if (tpr != null && passwordEncoder.matches(password, tpr.getPassword())) {
-        // Login successful
+        // ✅ Login successful
         session.setAttribute("tpr", tpr);
+        session.setAttribute("role", "TPR"); // ✅ Add this line
+        session.setAttribute("userId", tpr.getTprId()); // optional but useful later
         return "redirect:/";  // Redirect to home page on success
     } else {
         // Login failed
@@ -71,6 +75,7 @@ public String loginTpr(@RequestParam("email") String email,
         return "login";  // stay on login page
     }
 }
+
 
 
 

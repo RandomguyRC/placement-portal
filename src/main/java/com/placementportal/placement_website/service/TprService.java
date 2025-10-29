@@ -17,14 +17,26 @@ public class TprService {
 
     // ---------------- REGISTER TPR ----------------
     public String register(Tpr tpr) {
-        if (tprRepository.findByEmail(tpr.getEmail()) != null) {
-            return "Email already registered!";
+        // 1️⃣ Validate TPR ID
+        if (tpr.getTprId() == null || tpr.getTprId().trim().isEmpty()) {
+            return "Error: TPR ID is required!";
         }
 
-        // 🔐 Hash password before saving
+        // 2️⃣ Check for existing email
+        if (tprRepository.findByEmail(tpr.getEmail()) != null) {
+            return "Error: Email already registered!";
+        }
+
+        // 3️⃣ Default role if not set
+        if (tpr.getRole() == null) {
+            tpr.setRole(Tpr.Role.TPR);
+        }
+
+        // 4️⃣ Hash password before saving
         tpr.setPassword(passwordEncoder.encode(tpr.getPassword()));
 
+        // 5️⃣ Save to DB
         int result = tprRepository.save(tpr);
-        return result > 0 ? "Signup successful!" : "Signup failed!";
+        return result > 0 ? "Signup successful!" : "Error: Signup failed!";
     }
 }

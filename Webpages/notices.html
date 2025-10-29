@@ -3,334 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notices - Training & Placement Cell</title>
+    <title>Placement Portal - Notices</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            background-color: #f8fafc;
         }
         .notice-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid transparent;
+            background-color: #ffffff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border: 1px solid #e5e7eb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .notice-card:hover {
-            border-left-color: #3b82f6;
-            transform: translateX(5px);
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
         }
-        .priority-high {
-            border-left-color: #ef4444;
-        }
-        .priority-medium {
-            border-left-color: #f59e0b;
-        }
-        .priority-normal {
-            border-left-color: #10b981;
-        }
-        .filter-btn {
-            transition: all 0.3s ease;
-        }
-        .filter-btn.active {
-            background: #3b82f6;
+        #addNoticeBtn {
+            background-color: #2563eb;
             color: white;
+            padding: 0.6rem 1.25rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+        }
+        #addNoticeBtn:hover {
+            background-color: #1d4ed8;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center space-x-3">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div>
-                        <h1 class="text-xl font-bold text-gray-900">TPC Platform</h1>
-                        <p class="text-xs text-gray-600">Training & Placement Cell</p>
-                    </div>
-                </div>
-                <div class="hidden md:flex items-center space-x-8">
-                    <a href="#home" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Home</a>
-                    <a href="#company-visit" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Company Visit</a>
-                    <a href="#notices" class="text-blue-600 font-medium">Notices</a>
-                    <a href="#students" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Students</a>
-                    <a href="#schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">Schedule</a>
-                </div>
-                <div class="flex items-center space-x-4">
-                    <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                        Login
-                    </button>
-                </div>
+
+<body>
+    <!-- Navbar -->
+    <nav class="bg-white shadow py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-blue-700">Placement Portal</h1>
+            <div>
+                <a href="/" class="mx-3 text-gray-700 font-medium">Home</a>
+                <a href="/notices" class="mx-3 text-blue-700 font-semibold">Notices</a>
+                <a href="/profile" class="mx-3 text-gray-700 font-medium">Profile</a>
             </div>
         </div>
     </nav>
 
-    <!-- Header Section -->
-    <section class="gradient-bg text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4">Official Notices</h1>
-                <p class="text-xl text-blue-100 max-w-2xl mx-auto">
-                    Stay updated with the latest announcements, placement drives, and important information from the Training & Placement Cell
-                </p>
+    <!-- Main Content -->
+    <main class="max-w-6xl mx-auto px-6 py-10">
+        <div class="flex justify-between items-center mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800">Notice Board</h2>
+            <div id="addNoticeSection" class="hidden">
+                <button id="addNoticeBtn">+ Add New Notice</button>
             </div>
         </div>
-    </section>
 
-    <!-- Notices Section -->
-    <section class="py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-
-            <!-- Notices Grid -->
-            <div class="grid gap-6" id="noticesContainer">
-                <!-- High Priority Notice - Malpractice Warning -->
-                <div class="notice-card priority-high bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-red-100 text-red-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">URGENT</span>
-                                <h3 class="text-xl font-semibold text-gray-900">Strict Action Against Malpractices in Online Assessments</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 15, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        It has come to our notice that some students are engaging in unfair practices during online assessments. Any form of cheating, proxy attendance, or use of unauthorized resources will result in immediate disqualification from all placement activities.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">⚠️ Disciplinary Action</span>
-                            <span class="text-sm text-gray-500">👥 All Students</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">Read Guidelines →</button>
-                    </div>
-                </div>
-
-                <!-- Interview Shortlist Notice -->
-                <div class="notice-card priority-normal bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">SHORTLIST</span>
-                                <h3 class="text-xl font-semibold text-gray-900">Microsoft Interview Shortlist - Round 1 Results</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 14, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        Congratulations! The following students have been shortlisted for Microsoft's technical interview round. Please report to the placement office by 9:00 AM on December 18th with required documents.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">📅 Dec 18, 2024</span>
-                            <span class="text-sm text-gray-500">👥 45 Students Selected</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">View List →</button>
-                    </div>
-                </div>
-
-                <!-- OA Results Notice -->
-                <div class="notice-card priority-medium bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-blue-100 text-blue-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">RESULTS</span>
-                                <h3 class="text-xl font-semibold text-gray-900">Google Online Assessment Results Published</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 12, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        The results for Google's Online Assessment conducted on December 8th are now available. Students can check their scores and qualification status on the placement portal using their registration ID.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">📊 Assessment Results</span>
-                            <span class="text-sm text-gray-500">🔍 Check Portal</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">Check Results →</button>
-                    </div>
-                </div>
-
-                <!-- Interview Schedule Notice -->
-                <div class="notice-card priority-medium bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 9l2 2 4-4m6-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-purple-100 text-purple-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">SCHEDULE</span>
-                                <h3 class="text-xl font-semibold text-gray-900">Amazon Interview Schedule - Final Round</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 10, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        Final interview schedule for Amazon SDE positions has been released. Shortlisted candidates must report 30 minutes before their scheduled time with original documents and a printed copy of their resume.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">📅 Dec 16-17, 2024</span>
-                            <span class="text-sm text-gray-500">💼 Final Round</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">View Schedule →</button>
-                    </div>
-                </div>
-
-                <!-- Document Verification Notice -->
-                <div class="notice-card priority-normal bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-amber-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-amber-100 text-amber-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">DOCUMENTS</span>
-                                <h3 class="text-xl font-semibold text-gray-900">Document Verification for Placed Students</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 8, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        All students who have received placement offers must complete document verification by December 20th. Please bring original certificates along with photocopies for verification at the TPC office.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">📋 Verification Required</span>
-                            <span class="text-sm text-gray-500">⏰ Deadline: Dec 20</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">Document List →</button>
-                    </div>
-                </div>
-
-                <!-- OA Shortlist Notice -->
-                <div class="notice-card priority-normal bg-white rounded-lg shadow-md p-6">
-                    <div class="flex items-start justify-between mb-4">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                <svg class="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <span class="inline-block bg-indigo-100 text-indigo-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">SHORTLIST</span>
-                                <h3 class="text-xl font-semibold text-gray-900">TCS Online Assessment Shortlist Released</h3>
-                            </div>
-                        </div>
-                        <span class="text-sm text-gray-500">Dec 5, 2024</span>
-                    </div>
-                    <p class="text-gray-600 mb-4">
-                        Students shortlisted for TCS technical interview round based on their online assessment performance. The interview will be conducted in multiple panels on December 19th, 2024.
-                    </p>
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center space-x-4">
-                            <span class="text-sm text-gray-500">📅 Dec 19, 2024</span>
-                            <span class="text-sm text-gray-500">👥 Technical Interview</span>
-                        </div>
-                        <button class="text-blue-600 hover:text-blue-800 font-medium">View Shortlist →</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Load More Button -->
-            <div class="text-center mt-12">
-                <button class="bg-blue-600 text-white px-8 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors">
-                    Load More Notices
-                </button>
-            </div>
+        <!-- Notices Container -->
+        <div class="grid gap-6" id="noticesContainer">
+            <!-- Dynamic notices will load here -->
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid md:grid-cols-3 gap-8">
-                <div>
-                    <div class="flex items-center space-x-3 mb-4">
-                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                            </svg>
-                        </div>
-                        <div>
-                            <h3 class="text-lg font-bold">TPC Platform</h3>
-                            <p class="text-sm text-gray-400">Training & Placement Cell</p>
-                        </div>
-                    </div>
-                    <p class="text-gray-400">Connecting students with career opportunities through our comprehensive placement platform.</p>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-                    <ul class="space-y-2 text-gray-400">
-                        <li><a href="#" class="hover:text-white transition-colors">Home</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Company Visits</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Student Portal</a></li>
-                        <li><a href="#" class="hover:text-white transition-colors">Placement Statistics</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 class="text-lg font-semibold mb-4">Contact Info</h4>
-                    <div class="space-y-2 text-gray-400">
-                        <p>📧 tpc@college.edu</p>
-                        <p>📞 +91 12345 67890</p>
-                        <p>📍 College Campus, City</p>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; 2024 Training & Placement Cell. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    </main>
 
     <script>
-        // Add smooth animations on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            const notices = document.querySelectorAll('.notice-card');
-            notices.forEach((notice, index) => {
-                notice.style.opacity = '0';
-                notice.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    notice.style.transition = 'all 0.5s ease';
-                    notice.style.opacity = '1';
-                    notice.style.transform = 'translateY(0)';
-                }, index * 100);
+        const role = localStorage.getItem("role"); // read stored role
+        const noticesContainer = document.getElementById('noticesContainer');
+        const addNoticeSection = document.getElementById('addNoticeSection');
+
+        if (role === 'tpr') {
+            addNoticeSection.classList.remove('hidden');
+        }
+
+        async function loadNotices() {
+            try {
+                const response = await fetch('/api/notices');
+                const notices = await response.json();
+                renderNotices(notices);
+            } catch (error) {
+                noticesContainer.innerHTML = `<p class="text-center text-gray-500 mt-8">Failed to load notices.</p>`;
+            }
+        }
+
+        function renderNotices(notices) {
+            noticesContainer.innerHTML = '';
+            if (notices.length === 0) {
+                noticesContainer.innerHTML = `<p class="text-center text-gray-500 mt-8">No notices available.</p>`;
+                return;
+            }
+
+            notices.forEach(notice => {
+                const div = document.createElement('div');
+                div.className = 'notice-card';
+                div.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <h3 class="text-lg font-semibold text-blue-800">${notice.title}</h3>
+                            <p class="text-gray-700 mt-2 whitespace-pre-line">${notice.content}</p>
+                            <p class="text-sm text-gray-500 mt-2">Posted on: ${new Date(notice.posted_at).toLocaleString()}</p>
+                        </div>
+                        ${role === 'tpr' ? `
+                        <div class="space-x-3">
+                            <button onclick="deleteNotice('${notice.notice_id}')" class="text-red-600 font-medium">Delete</button>
+                        </div>` : ''}
+                    </div>
+                `;
+                noticesContainer.appendChild(div);
             });
+        }
+
+        async function deleteNotice(id) {
+            if (!confirm("Are you sure you want to delete this notice?")) return;
+            const response = await fetch(`/api/notices/${id}`, { method: 'DELETE' });
+            if (response.ok) {
+                alert("Notice deleted successfully!");
+                loadNotices();
+            } else {
+                alert("Failed to delete notice.");
+            }
+        }
+
+        // Add Notice Button handler
+        document.getElementById("addNoticeBtn").addEventListener("click", async () => {
+            const title = prompt("Enter notice title:");
+            if (!title) return;
+            const content = prompt("Enter notice content:");
+            if (!content) return;
+
+            await fetch("/api/notices", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ title, content })
+            });
+            alert("Notice added!");
+            loadNotices();
         });
+
+        loadNotices();
     </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9802217bc74e8e78',t:'MTc1ODA0NDIzNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

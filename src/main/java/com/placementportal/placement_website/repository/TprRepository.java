@@ -99,4 +99,41 @@ public class TprRepository {
         if (storedHash == null || storedHash.isEmpty()) return false;
         return passwordEncoder.matches(rawPassword, storedHash);
     }
+
+    public Tpr findById(String tprId) {
+    String sql = "SELECT * FROM tpr WHERE tpr_id = ?";
+    List<Tpr> tprs = jdbcTemplate.query(
+            sql,
+            new Object[]{tprId},
+            (rs, rowNum) -> {
+                Tpr tpr = new Tpr();
+                tpr.setTprId(rs.getString("tpr_id"));
+                tpr.setTprName(rs.getString("tpr_name"));
+                tpr.setEmail(rs.getString("email"));
+                tpr.setPhoneNumber(rs.getString("phone_number"));
+                tpr.setBranch(rs.getString("branch"));
+                tpr.setLocalAddress(rs.getString("local_address"));
+
+                String sexStr = rs.getString("sex");
+                if (sexStr != null) tpr.setSex(Tpr.Sex.valueOf(sexStr));
+
+                tpr.setRollNo(rs.getString("roll_no"));
+
+                String roleStr = rs.getString("role");
+                if (roleStr != null) tpr.setRole(Tpr.Role.valueOf(roleStr));
+
+                tpr.setDutyCount(rs.getInt("duty_count"));
+                tpr.setPassword(rs.getString("password"));
+
+                return tpr;
+            }
+    );
+    return tprs.isEmpty() ? null : tprs.get(0);
+}
+public String findNameById(String tprId) {
+    String sql = "SELECT tpr_name FROM tpr WHERE tpr_id = ?";
+    List<String> names = jdbcTemplate.query(sql, new Object[]{tprId}, (rs, rowNum) -> rs.getString("tpr_name"));
+    return names.isEmpty() ? "Unknown TPR" : names.get(0);
+}
+
 }

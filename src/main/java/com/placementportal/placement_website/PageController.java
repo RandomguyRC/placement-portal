@@ -33,10 +33,10 @@ public class PageController {
     //     return "tpr_profile"; // tpr_profile.html
     // }
 
-    @GetMapping("/notices")
-    public String notices() {
-        return "notices"; // notices.html
-    }
+    // @GetMapping("/notices")
+    // public String notices() {
+    //     return "notices"; // notices.html
+    // }
 
     @GetMapping("/opportunities")
     public String opportunities() {

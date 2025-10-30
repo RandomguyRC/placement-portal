@@ -18,10 +18,10 @@ public class PageController {
     }
 
     
-    @GetMapping("/companies")
-    public String companies() {
-        return "company-listing"; // company-listing.html
-    }
+    // @GetMapping("/companies")
+    // public String companies() {
+    //     return "company-listing"; // company-listing.html
+    // }
 
     @GetMapping("/student")
     public String student() {
@@ -38,10 +38,10 @@ public class PageController {
         return "notices"; // notices.html
     }
 
-    @GetMapping("/opportunities")
-    public String opportunities() {
-        return "opportunities"; // opportunities.html
-    }
+    // @GetMapping("/opportunities")
+    // public String opportunities() {
+    //     return "opportunities"; // opportunities.html
+    // }
 
     @GetMapping("/preferences")
     public String preferences() {
@@ -77,4 +77,12 @@ public class PageController {
     public String tprtoken() {
         return "tprtoken"; //
     }
+
+    // @GetMapping("/conducted-at")
+    // public String showConductedAtPage(Model model) {
+    // model.addAttribute("venues", venueService.getAllVenues());
+    // model.addAttribute("listings", listingService.getAllListings());
+    // return "conducted_at";
 }
+
+

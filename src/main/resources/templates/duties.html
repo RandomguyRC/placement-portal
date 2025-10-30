@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invigilator Duties - TPC Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">Your Assigned Duties</h1>
+    <div id="duties-container" class="max-w-4xl mx-auto bg-white shadow-lg rounded-lg p-6">
+        <table class="w-full text-left border-collapse">
+            <thead>
+                <tr class="bg-blue-600 text-white">
+                    <th class="p-3">Duty ID</th>
+                    <th class="p-3">Venue</th>
+                    <th class="p-3">Company</th>
+                    <th class="p-3">Status</th>
+                </tr>
+            </thead>
+            <tbody id="duties-table-body" class="divide-y divide-gray-200"></tbody>
+        </table>
+    </div>
+
+    <script>
+        const tprId = localStorage.getItem("tprId"); // assuming login saves this
+
+        fetch(`/duties/tpr/${tprId}`)
+            .then(res => res.json())
+            .then(data => {
+                const tbody = document.getElementById('duties-table-body');
+                data.forEach(d => {
+                    const row = `<tr>
+                        <td class="p-3">${d.dutyId}</td>
+                        <td class="p-3">${d.venue.venueLocation}</td>
+                        <td class="p-3">${d.relatedListing.companyName}</td>
+                        <td class="p-3">${d.status}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            });
+    </script>
+</body>
+</html>

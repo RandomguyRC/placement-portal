@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class LoginController {
@@ -43,39 +44,47 @@ public class LoginController {
         }
     }
 
-// ---------------- TPR LOGIN ----------------
-@PostMapping("/login/tpr")
-public String loginTpr(@RequestParam("email") String email,
-                       @RequestParam("password") String password,
-                       Model model,
-                       HttpSession session) {
+    // ---------------- TPR LOGIN ----------------
+    @PostMapping("/login/tpr")
+    public String loginTpr(@RequestParam("email") String email,
+                           @RequestParam("password") String password,
+                           Model model,
+                           HttpSession session) {
 
-    System.out.println("TPR login attempt");
-    System.out.println("Email from form: " + email);
-    System.out.println("Password from form: " + password);
+        System.out.println("TPR login attempt");
+        System.out.println("Email from form: " + email);
+        System.out.println("Password from form: " + password);
 
-    Tpr tpr = tprRepository.findByEmail(email);
-    System.out.println("TPR found in DB: " + (tpr != null));
-    if (tpr != null) {
-        System.out.println("Stored password in DB: " + tpr.getPassword());
-        System.out.println("Password matches: " + passwordEncoder.matches(password, tpr.getPassword()));
-    }
+        Optional<Tpr> optionalTpr = tprRepository.findByEmail(email);
+        boolean found = optionalTpr.isPresent();
+        System.out.println("TPR found in DB: " + found);
 
-    if (tpr != null && passwordEncoder.matches(password, tpr.getPassword())) {
-        // Login successful
-        session.setAttribute("tpr", tpr);
-        return "redirect:/";  // Redirect to home page on success
-    } else {
+        if (found) {
+            Tpr tpr = optionalTpr.get();
+            System.out.println("Stored password in DB: " + tpr.getPassword());
+            System.out.println("Password matches: " + passwordEncoder.matches(password, tpr.getPassword()));
+
+            if (passwordEncoder.matches(password, tpr.getPassword())) {
+                // Login successful
+                session.setAttribute("tpr", tpr);
+                return "redirect:/tprhomepage";
+                //return "redirect:/";  // Redirect to home page on success
+            }
+        }
+
         // Login failed
         model.addAttribute("error", "Invalid email or password");
         return "login";  // stay on login page
     }
-}
-
-
-
-
-
+@GetMapping("/tprhomepage")
+    public String tprHomepage(HttpSession session, Model model) {
+        Tpr tpr = (Tpr) session.getAttribute("tpr");
+        if (tpr == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("tpr", tpr);
+        return "tprhomepage"; // render templates/tpr-homepage.html
+    }
     // ---------------- STUDENT DASHBOARD ----------------
     @GetMapping("/student/dashboard")
     public String studentDashboard(HttpSession session, Model model) {

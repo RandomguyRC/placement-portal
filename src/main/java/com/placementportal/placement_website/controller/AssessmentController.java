@@ -1,0 +1,47 @@
+package com.placementportal.placement_website.controller;
+
+import com.placementportal.placement_website.model.*;
+import com.placementportal.placement_website.repository.*;
+import com.placementportal.placement_website.service.DutyAssignmentService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/assessments")
+public class AssessmentController {
+
+    @Autowired
+    private AssessmentRepository assessmentRepository;
+
+    @Autowired
+    private ConductedAtRepository conductedAtRepository;
+
+    @Autowired
+    private DutyAssignmentService dutyAssignmentService;
+
+    @PostMapping("/create")
+    public Assessment createAssessment(@RequestBody Assessment assessment) {
+        // Save new assessment
+        Assessment savedAssessment = assessmentRepository.save(assessment);
+
+        // Fetch all venues linked with this assessment
+        List<ConductedAt> venues = conductedAtRepository.findByAssessment_AssessmentId(savedAssessment.getAssessmentId());
+
+        // Automatically assign duties to invigilators (TPRs)
+        dutyAssignmentService.assignDuties(savedAssessment, venues);
+
+        return savedAssessment;
+    }
+
+    @GetMapping
+    public List<Assessment> getAllAssessments() {
+        return assessmentRepository.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Assessment getAssessmentById(@PathVariable String id) {
+        return assessmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Assessment not found"));
+    }
+}

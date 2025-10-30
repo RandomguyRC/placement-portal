@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Company Listings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-8">
+<h1 class="text-3xl font-bold mb-6 text-center">Company Job Listings</h1>
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <!-- Loop through job listings -->
+    <div th:each="job : ${jobListings}"
+         class="bg-white shadow-lg rounded-lg p-6 hover:shadow-2xl transition-shadow duration-300">
+
+        <!-- Job Role -->
+        <h2 class="text-xl font-semibold text-blue-700 mb-2"
+            th:text="${job.jobRole}">Job Role</h2>
+
+        <!-- Company Name -->
+        <p class="text-gray-600 mb-1" th:if="${job.company != null}">
+            <strong>Company:</strong> <span th:text="${job.company.companyName}">Company Name</span>
+        </p>
+        <p class="text-gray-600 mb-1" th:if="${job.company == null}">
+            <strong>Company:</strong> N/A
+        </p>
+
+        <!-- CTC -->
+        <p class="text-gray-600 mb-1">
+            <strong>CTC:</strong> <span th:text="${job.ctc}">CTC</span>
+        </p>
+
+        <!-- Mode of Hiring -->
+        <p class="text-gray-600 mb-1">
+            <strong>Mode of Hiring:</strong> <span th:text="${job.modeOfHiring}">Mode</span>
+        </p>
+
+        <!-- Deadline -->
+        <p class="text-gray-600 mb-1">
+            <strong>Deadline:</strong> <span th:text="${job.deadline}">Deadline</span>
+        </p>
+
+        <!-- Description -->
+        <p class="text-gray-600 mb-1">
+            <strong>Description:</strong> <span th:text="${job.jobDescription}">Description</span>
+        </p>
+
+        <!-- Eligibility -->
+        <p class="text-gray-600 mb-1">
+            <strong>Eligibility:</strong> <span th:text="${job.eligibilityCriteria}">Eligibility</span>
+        </p>
+    </div>
+</div>
+</body>
+</html>

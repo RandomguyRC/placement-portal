@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class LoginController {
@@ -54,26 +55,39 @@ public String loginTpr(@RequestParam("email") String email,
     System.out.println("Email from form: " + email);
     System.out.println("Password from form: " + password);
 
-    Tpr tpr = tprRepository.findByEmail(email);
-    System.out.println("TPR found in DB: " + (tpr != null));
-    if (tpr != null) {
-        System.out.println("Stored password in DB: " + tpr.getPassword());
-        System.out.println("Password matches: " + passwordEncoder.matches(password, tpr.getPassword()));
-    }
+    Optional<Tpr> optionalTpr = tprRepository.findByEmail(email);
 
-    if (tpr != null && passwordEncoder.matches(password, tpr.getPassword())) {
-        // Login successful
+if (optionalTpr.isPresent()) {
+    Tpr tpr = optionalTpr.get();
+    System.out.println("TPR found in DB: true");
+    System.out.println("Stored password in DB: " + tpr.getPassword());
+    System.out.println("Password matches: " + passwordEncoder.matches(password, tpr.getPassword()));
+
+    if (passwordEncoder.matches(password, tpr.getPassword())) {
         session.setAttribute("tpr", tpr);
-        return "redirect:/";  // Redirect to home page on success
+        return "redirect:/";
     } else {
-        // Login failed
-        model.addAttribute("error", "Invalid email or password");
-        return "login";  // stay on login page
+        model.addAttribute("error", "Invalid password");
+        return "login";
     }
+} else {
+    System.out.println("TPR not found in DB: false");
+    model.addAttribute("error", "Email not found");
+    return "login";
+}
+
 }
 
 
-
+@GetMapping("/tprhomepage")
+    public String tprHomepage(HttpSession session, Model model) {
+        Tpr tpr = (Tpr) session.getAttribute("tpr");
+        if (tpr == null) {
+            return "redirect:/login";
+        }
+        model.addAttribute("tpr", tpr);
+        return "tprhomepage"; // render templates/tpr-homepage.html
+    }
 
 
     // ---------------- STUDENT DASHBOARD ----------------

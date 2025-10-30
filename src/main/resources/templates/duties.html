@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TPC Platform — Invigilation Duties</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
+    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
+    .status-dot { width: 10px; height: 10px; border-radius: 9999px; display: inline-block; }
+    .badge { padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;}
+    .badge-pending { background:#fff7ed; color:#9a3412; border:1px solid #fed7aa; }
+    .dot-pending { background:#fb923c; }
+    .badge-completed { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
+    .dot-completed { background:#22c55e; }
+    .table-head { background: #f8fafc; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+  <!-- ✅ Navigation (same style as company listing) -->
+  <nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell</p>
+                </div>
+            </div>
+
+            <!-- Center Nav Links -->
+            <div class="flex items-center space-x-6">
+
+                <!-- ✅ Home Button -->
+                <a href="/homepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+
+                <!-- Shared Links (for everyone logged in) -->
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+
+                <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
+                
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+
+                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+
+                <!-- TPR-specific links -->
+                <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+                <a th:if="${tpr != null}" href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+                <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
+
+            </div>
+
+            <!-- Right Profile / Login buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- For logged-in Student -->
+                <a th:if="${student != null}" href="/profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                <!-- <a th:if="${student != null}" href="/logout"
+                   class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700">Logout</a> -->
+
+                <!-- For logged-in TPR -->
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                <!-- <a th:if="${tpr != null}" href="/logout"
+                   class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700">Logout</a> -->
+
+                <!-- For guests -->
+                <a th:if="${tpr == null and student == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+  <!-- Header -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white">
+    <div class="max-w-7xl mx-auto px-6 py-10">
+      <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">Invigilation Duties</h2>
+      <p class="mt-2 text-white/90 max-w-2xl">View duties assigned to all students including venue, company, and status.</p>
+    </div>
+  </header>
+
+  <!-- Duties Table -->
+  <main class="max-w-7xl mx-auto px-6 py-10">
+    <div class="overflow-hidden bg-white rounded-2xl border border-gray-200 shadow-sm card-hover">
+      <div class="overflow-x-auto">
+        <table class="min-w-full whitespace-nowrap">
+          <thead class="table-head">
+            <tr>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Duty ID</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Company</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Job Role</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Venue</th>
+              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Timing</th>
+            </tr>
+          </thead>
+          <tbody>
+  <tr th:each="d : ${duties}">
+    <td class="px-6 py-4 font-semibold text-gray-900" th:text="${d['dutyId']}">D001</td>
+    <td class="px-6 py-4 text-sm" th:text="${d['companyName']}">Company</td>
+    <td class="px-6 py-4 text-sm" th:text="${d['jobRole']}">Role</td>
+    <td class="px-6 py-4 text-sm" th:text="${d['venueLocation']}">Venue</td>
+    <td class="px-6 py-4 text-sm" th:text="${d['timing']}">Timing</td>
+  </tr>
+</tbody>
+
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-white border-t mt-10">
+    <div class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+          </svg>
+        </div>
+        <div>
+          <p class="font-semibold text-gray-900">TPC Platform</p>
+          <p class="text-xs text-gray-600">Invigilation Duties</p>
+        </div>
+      </div>
+      <div class="text-sm text-gray-600">© <span id="year"></span> All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    
+
+    function renderDuties(duties) {
+      const tbody = document.getElementById('dutiesBody');
+      tbody.innerHTML = '';
+
+      duties.forEach(d => {
+        const row = `
+          <tr>
+            <td class="px-6 py-4 font-semibold text-gray-900">${d.dutyId || '-'}</td>
+            <td class="px-6 py-4 text-sm">${d.companyName || '-'}</td>
+            <td class="px-6 py-4 text-sm">${d.jobRole || '-'}</td>
+            <td class="px-6 py-4 text-sm">${d.venueLocation || '-'}</td>
+            <td class="px-6 py-4 text-sm">${d.timing || '-'}</td>
+          </tr>
+        `;
+        tbody.insertAdjacentHTML('beforeend', row);
+      });
+    }
+
+  </script>
+</body>
+</html>

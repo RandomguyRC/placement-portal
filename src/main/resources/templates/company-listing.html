@@ -34,44 +34,68 @@
 <body class="bg-gray-50">
     <!-- Navigation Header -->
     <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 min-w-0">
-                <div class="flex items-center space-x-3 flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
-                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
-                    </div>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
 
-                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
-                    
-                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
-                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
-                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
-                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
-                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
-                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
-                    <!-- </div> -->
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
                 </div>
-
-                <div class="flex-shrink-0">
-                    <a id="login-button" href="/profile" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-                        Profile
-                    </a>
-                    <button id="logout-button" class="hidden bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
-                        Logout
-                    </button>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell</p>
                 </div>
             </div>
+
+            <!-- Center Nav Links -->
+            <div class="flex items-center space-x-6">
+
+                <!-- ✅ Home Button -->
+                <a href="/homepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+
+                <!-- Shared Links (for everyone logged in) -->
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+
+                <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
+                
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+
+                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+
+                <!-- TPR-specific links -->
+                <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+                <a th:if="${tpr != null}" href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+                <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
+
+            </div>
+
+            <!-- Right Profile / Login buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- For logged-in Student -->
+                <a th:if="${student != null}" href="/profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                
+
+                <!-- For logged-in TPR -->
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+
+                <!-- For guests -->
+                <a th:if="${tpr == null and student == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+            </div>
+
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Header Section -->
     <section class="gradient-bg text-white py-12">
@@ -98,286 +122,101 @@
     <section class="py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="space-y-8" id="companies-container">
-                
-                <!-- Axis Bank -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover company-card" data-type="internship" data-status="open">
-                    <div class="p-8">
-                        <div class="flex items-start justify-between mb-6">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-red-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                    AB
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Axis Bank</h2>
-                                    <p class="text-lg text-gray-600">Multiple Roles</p>
-                                    <p class="text-blue-600 font-semibold">Placement 2025-26</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
-                                    Open for Willingness
-                                </span>
-                                <p class="text-sm text-gray-500 mt-2">Deadline: Tue, 16 Sep 2025 | 11:59 PM</p>
-                            </div>
-                        </div>
 
-                        <div class="grid lg:grid-cols-2 gap-8">
-                            <!-- Left Column -->
-                            <div class="space-y-6">
-                                <!-- Eligibility Criteria -->
-                                <div class="bg-gray-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Eligibility Criteria</h3>
-                                    <div class="grid grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                            <span class="font-medium text-gray-700">X:</span>
-                                            <span class="text-gray-600">60.00%</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">XII:</span>
-                                            <span class="text-gray-600">60.00%</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">CGPA:</span>
-                                            <span class="text-gray-600">6.00</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">Course(s):</span>
-                                            <span class="text-gray-600">B.Tech IDD</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4">
-                                        <p class="text-sm"><span class="font-medium text-gray-700">Department(s):</span></p>
-                                        <p class="text-gray-600 text-sm">CER, CHE, CIV, CSE, EEE, ECE, MEC, MET, MIN, PHE, BCE, BME, MST, CHY, PHY, MAT, APD, DSE</p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-                                        <div>
-                                            <span class="font-medium text-gray-700">Active Backlog:</span>
-                                            <span class="text-red-600">0</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">Total Backlog:</span>
-                                            <span class="text-gray-600">N/A</span>
-                                        </div>
-                                    </div>
-                                </div>
+    <div th:each="job : ${jobListings}"
+         class="bg-white rounded-xl shadow-lg overflow-hidden card-hover company-card"
+         data-type="placement" data-status="open">
 
-                                <!-- Details -->
-                                <div class="bg-blue-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
-                                    <div class="space-y-3 text-sm">
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">PPT Date:</span>
-                                            <span class="text-gray-600">TBA</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Exam Date:</span>
-                                            <span class="text-gray-600">TBA</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Interview Date:</span>
-                                            <span class="text-gray-600">TBA</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Branch Issues Deadline:</span>
-                                            <span class="text-gray-600">TBA</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Slot:</span>
-                                            <span class="text-gray-600">Slot 1</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Timing:</span>
-                                            <span class="text-gray-600">TBA</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <div class="p-8">
+            <div class="flex items-start justify-between mb-6">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl"
+                         th:text="${#strings.substring(job.company.companyName, 0, 2)}">
+                        AB
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-900" th:text="${job.company.companyName}">Company Name</h2>
+                        <p class="text-lg text-gray-600" th:text="${job.jobRole}">Job Role</p>
+                        <p class="text-blue-600 font-semibold" th:text="'Placement ' + ${#temporals.format(job.deadline, 'yyyy')}">Placement Year</p>
 
-                            <!-- Right Column -->
-                            <div class="space-y-6">
-                                <!-- Compensation -->
-                                <div class="bg-green-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Compensation</h3>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full text-sm">
-                                            <thead>
-                                                <tr class="border-b border-green-200">
-                                                    <th class="text-left py-2 font-medium text-gray-700">Course</th>
-                                                    <th class="text-left py-2 font-medium text-gray-700">CTC</th>
-                                                    <th class="text-left py-2 font-medium text-gray-700">Take Home</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-green-100">
-                                                    <td class="py-2 text-gray-600">B.Tech</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 50,000 PM</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 50,000 PM</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="py-2 text-gray-600">IDD/IMD</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 50,000 PM</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 50,000 PM</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- Job Description -->
-                                <div class="bg-purple-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Description</h3>
-                                    <div class="space-y-3 text-sm text-gray-700">
-                                        <p><span class="font-medium">Duration:</span> 2 Months</p>
-                                        <p><span class="font-medium">Tentative Locations:</span> Mumbai/Bangalore</p>
-                                        <p class="text-gray-600">Join Axis Bank's dynamic internship program and gain hands-on experience in banking operations, financial services, and digital transformation initiatives.</p>
-                                        <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
+                <div class="text-right">
+                    <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
+                        Open for Willingness
+                    </span>
+                    <p class="text-sm text-gray-500 mt-2" th:text="'Deadline: ' + ${#temporals.format(job.deadline, 'EEE, dd MMM yyyy | hh:mm a')}"></p>
 
-                <!-- TCS -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover company-card" data-type="placement" data-status="upcoming">
-                    <div class="p-8">
-                        <div class="flex items-start justify-between mb-6">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                    TCS
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Tata Consultancy Services</h2>
-                                    <p class="text-lg text-gray-600">Software Engineer</p>
-                                    <p class="text-blue-600 font-semibold">Placement 2024-25</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="status-upcoming text-white px-4 py-2 rounded-full text-sm font-medium">
-                                    Registration Opens Soon
-                                </span>
-                                <p class="text-sm text-gray-500 mt-2">Expected: Mon, 25 Mar 2024</p>
-                            </div>
-                        </div>
-
-                        <div class="grid lg:grid-cols-2 gap-8">
-                            <!-- Left Column -->
-                            <div class="space-y-6">
-                                <!-- Eligibility Criteria -->
-                                <div class="bg-gray-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Eligibility Criteria</h3>
-                                    <div class="grid grid-cols-2 gap-4 text-sm">
-                                        <div>
-                                            <span class="font-medium text-gray-700">X:</span>
-                                            <span class="text-gray-600">65.00%</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">XII:</span>
-                                            <span class="text-gray-600">65.00%</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">CGPA:</span>
-                                            <span class="text-gray-600">7.00</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">Course(s):</span>
-                                            <span class="text-gray-600">B.Tech, M.Tech</span>
-                                        </div>
-                                    </div>
-                                    <div class="mt-4">
-                                        <p class="text-sm"><span class="font-medium text-gray-700">Department(s):</span></p>
-                                        <p class="text-gray-600 text-sm">CSE, ECE, EEE, IT, MCA</p>
-                                    </div>
-                                    <div class="grid grid-cols-2 gap-4 mt-4 text-sm">
-                                        <div>
-                                            <span class="font-medium text-gray-700">Active Backlog:</span>
-                                            <span class="text-red-600">0</span>
-                                        </div>
-                                        <div>
-                                            <span class="font-medium text-gray-700">Total Backlog:</span>
-                                            <span class="text-red-600">0</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Details -->
-                                <div class="bg-blue-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
-                                    <div class="space-y-3 text-sm">
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">PPT Date:</span>
-                                            <span class="text-gray-600">Mon, 25 Mar 2024 | 2:00 PM</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Exam Date:</span>
-                                            <span class="text-gray-600">Wed, 27 Mar 2024</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Interview Date:</span>
-                                            <span class="text-gray-600">Fri, 29 Mar 2024</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Branch Issues Deadline:</span>
-                                            <span class="text-gray-600">Sun, 24 Mar 2024</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Slot:</span>
-                                            <span class="text-gray-600">Slot 1, Day 1</span>
-                                        </div>
-                                        <div class="flex justify-between">
-                                            <span class="font-medium text-gray-700">Timing:</span>
-                                            <span class="text-gray-600">9:00 AM - 6:00 PM</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right Column -->
-                            <div class="space-y-6">
-                                <!-- Compensation -->
-                                <div class="bg-green-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Compensation</h3>
-                                    <div class="overflow-x-auto">
-                                        <table class="w-full text-sm">
-                                            <thead>
-                                                <tr class="border-b border-green-200">
-                                                    <th class="text-left py-2 font-medium text-gray-700">Course</th>
-                                                    <th class="text-left py-2 font-medium text-gray-700">CTC</th>
-                                                    <th class="text-left py-2 font-medium text-gray-700">Take Home</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr class="border-b border-green-100">
-                                                    <td class="py-2 text-gray-600">B.Tech</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 3.5 LPA</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 3.2 LPA</td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="py-2 text-gray-600">M.Tech</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 4.2 LPA</td>
-                                                    <td class="py-2 text-gray-900 font-medium">INR 3.8 LPA</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-
-                                <!-- Job Description -->
-                                <div class="bg-purple-50 rounded-lg p-6">
-                                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Description</h3>
-                                    <div class="space-y-3 text-sm text-gray-700">
-                                        <p><span class="font-medium">Role:</span> Software Engineer</p>
-                                        <p><span class="font-medium">Locations:</span> Pan India</p>
-                                        <p class="text-gray-600">Join TCS as a Software Engineer and work on cutting-edge technologies including AI, Cloud Computing, and Digital Transformation projects for global clients.</p>
-                                        <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
             </div>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <!-- Details -->
+                    <div class="bg-blue-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex justify-between">
+                                <span class="font-medium text-gray-700">Mode of Hiring:</span>
+                                <span class="text-gray-600" th:text="${job.modeOfHiring}">Online</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="font-medium text-gray-700">Deadline:</span>
+                                <span class="text-gray-600" th:text="${#temporals.format(job.deadline, 'dd MMM yyyy hh:mm a')}">TBA</span>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div class="space-y-6">
+                    <!-- Compensation -->
+                    <div class="bg-green-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Compensation</h3>
+                        <table class="w-full text-sm">
+                            <thead>
+                            <tr class="border-b border-green-200">
+                                <th class="text-left py-2 font-medium text-gray-700">Course</th>
+                                <th class="text-left py-2 font-medium text-gray-700">CTC</th>
+                                <th class="text-left py-2 font-medium text-gray-700">Take Home</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr class="border-b border-green-100">
+                                <td class="py-2 text-gray-600">B.Tech</td>
+                                <td class="py-2 text-gray-900 font-medium"
+                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                                <td class="py-2 text-gray-900 font-medium"
+                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                            </tr>
+                            <tr>
+                                <td class="py-2 text-gray-600">IDD/IMD</td>
+                                <td class="py-2 text-gray-900 font-medium"
+                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                                <td class="py-2 text-gray-900 font-medium"
+                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Job Description -->
+                    <div class="bg-purple-50 rounded-lg p-6">
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Description</h3>
+                        <div class="space-y-3 text-sm text-gray-700">
+                            <p th:text="${job.jobDescription}">Job details here</p>
+                            <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
         </div>
     </section>
 

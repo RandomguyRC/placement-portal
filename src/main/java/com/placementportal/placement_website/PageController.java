@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.placementportal.placement_website.model.Student;
+import com.placementportal.placement_website.model.Tpr;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -18,14 +19,39 @@ public class PageController {
     }
 
     
-    @GetMapping("/companies")
-    public String companies() {
-        return "company-listing"; // company-listing.html
-    }
+//     @GetMapping("/companies")
+// public String companies(HttpSession session, Model model) {
+//     Object student = session.getAttribute("student");
+//     Object tpr = session.getAttribute("tpr");
+
+//     if (student == null && tpr == null) {
+//             return "redirect:/login";
+//         }
+
+//     model.addAttribute("student", student);
+//     model.addAttribute("tpr", tpr);
+
+//     return "company-listing"; // company-listing.html
+// }
+
 
     @GetMapping("/student")
-    public String student() {
-        return "student"; // student.html
+    public String studentPage(HttpSession session, Model model) {
+        // Read session data
+        Student student = (Student) session.getAttribute("student");
+        Tpr tpr = (Tpr) session.getAttribute("tpr");
+
+        // Add to Thymeleaf model so th:if can see them
+        model.addAttribute("student", student);
+        model.addAttribute("tpr", tpr);
+
+        // ✅ Redirect if not logged in
+        if (student == null && tpr == null) {
+            return "redirect:/login";
+        }
+
+        // ✅ Return the Thymeleaf view (student.html)
+        return "student";
     }
 
     // @GetMapping("/tpr-profile")
@@ -38,19 +64,34 @@ public class PageController {
     //     return "notices"; // notices.html
     // }
 
-    @GetMapping("/opportunities")
-    public String opportunities() {
-        return "opportunities"; // opportunities.html
-    }
+    // @GetMapping("/opportunities")
+    // public String opportunities() {
+    //     return "opportunities"; // opportunities.html
+    // }
 
     @GetMapping("/preferences")
     public String preferences() {
         return "preferences"; // preferences.html
     }
 
+    // @GetMapping("/resources")
+    // public String resources() {
+    //     return "resources"; // resources.html
+    // }
     @GetMapping("/resources")
-    public String resources() {
-        return "resources"; // resources.html
+    public String resources(HttpSession session, Model model) {
+        // Read session data
+        Student student = (Student) session.getAttribute("student");
+        Tpr tpr = (Tpr) session.getAttribute("tpr");
+
+        // Add to Thymeleaf model so th:if can see them
+        model.addAttribute("student", student);
+        model.addAttribute("tpr", tpr);
+
+        // ✅ Redirect if not logged in
+
+        // ✅ Return the Thymeleaf view (student.html)
+        return "resources";
     }
 
     @GetMapping("/schedule")
@@ -81,8 +122,26 @@ public String scheduleTprPage(HttpSession session, Model model) {
         return "mytoken"; //
     }
 
+    // @GetMapping("/tprtoken")
+    // public String tprtoken() {
+    //     return "tprtoken"; //
+    // }
     @GetMapping("/tprtoken")
-    public String tprtoken() {
-        return "tprtoken"; //
+    public String tprtoken(HttpSession session, Model model) {
+        // Read session data
+        Student student = (Student) session.getAttribute("student");
+        Tpr tpr = (Tpr) session.getAttribute("tpr");
+
+        // Add to Thymeleaf model so th:if can see them
+        model.addAttribute("student", student);
+        model.addAttribute("tpr", tpr);
+
+        // ✅ Redirect if not logged in
+        if (student == null && tpr == null) {
+            return "redirect:/login";
+        }
+
+        // ✅ Return the Thymeleaf view (student.html)
+        return "tprtoken";
     }
 }

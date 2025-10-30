@@ -5,6 +5,8 @@ import com.placementportal.placement_website.repository.TprRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class TprService {
 
@@ -17,7 +19,9 @@ public class TprService {
 
     // ---------------- REGISTER TPR ----------------
     public String register(Tpr tpr) {
-        if (tprRepository.findByEmail(tpr.getEmail()) != null) {
+        // Check if email exists
+        Optional<Tpr> existingTpr = tprRepository.findByEmail(tpr.getEmail());
+        if (existingTpr.isPresent()) {
             return "Email already registered!";
         }
 
@@ -26,5 +30,10 @@ public class TprService {
 
         int result = tprRepository.save(tpr);
         return result > 0 ? "Signup successful!" : "Signup failed!";
+    }
+
+    // ---------------- FIND TPR BY EMAIL ----------------
+    public Optional<Tpr> findByEmail(String email) {
+        return tprRepository.findByEmail(email);
     }
 }

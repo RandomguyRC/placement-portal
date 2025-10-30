@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conducted At Management | IIT BHU Placement Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+
+<!-- Navbar -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell</p>
+                </div>
+            </div>
+
+            <!-- Center Nav Links -->
+            <div class="flex items-center space-x-6">
+
+                <!-- ✅ Home Button -->
+                <a href="/homepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+
+                <!-- Shared Links (for everyone logged in) -->
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+
+                <!-- Student-specific links -->
+                <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
+                <a th:if="${student != null}" href="/students" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <!-- TPR-specific links -->
+                <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+                <a th:if="${tpr != null}" href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+                <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
+
+            </div>
+
+            <!-- Right Profile / Login buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- For logged-in Student -->
+                <a th:if="${student != null}" href="/profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                
+
+                <!-- For logged-in TPR -->
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                
+
+                <!-- For guests -->
+                <a th:if="${tpr == null and student == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- Conducted At Section -->
+<section class="py-16 bg-gray-100">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white shadow-md rounded-xl p-8">
+            <h2 class="text-3xl font-semibold text-center text-gray-900 mb-10">Conducted At Management</h2>
+
+            <form th:action="@{/conductedat/add-page}" method="post" class="space-y-6">
+                <div>
+                    <label for="assessmentId" class="block text-sm font-medium text-gray-700 mb-2">Select Assessment</label>
+                    <select id="assessmentId" name="assessmentId" required
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">-- Select Assessment --</option>
+                        <option th:each="a : ${assessments}" th:value="${a.assessmentId}" th:text="${a.assessmentId}"></option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="venueId" class="block text-sm font-medium text-gray-700 mb-2">Select Venue</label>
+                    <select id="venueId" name="venueId" required
+                            class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">-- Select Venue --</option>
+                        <option th:each="v : ${venues}" th:value="${v.venueId}" th:text="${v.venueId}"></option>
+                    </select>
+                </div>
+
+                <div class="flex justify-center">
+                    <button type="submit"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                        Add Conducted At
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-12">
+                <h3 class="text-2xl font-semibold text-center text-gray-800 mb-6">Existing Conducted At Entries</h3>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full border border-gray-200 rounded-lg shadow-sm">
+                        <thead class="bg-blue-600 text-white">
+                            <tr>
+                                <th class="px-4 py-2 text-left text-sm font-semibold">Assessment ID</th>
+                                <th class="px-4 py-2 text-left text-sm font-semibold">Venue ID</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                            <tr th:each="entry : ${conductedAtList}">
+                                <td class="px-4 py-2 text-gray-700" th:text="${entry.assessment.assessmentId}"></td>
+                                <td class="px-4 py-2 text-gray-700" th:text="${entry.venue.venueId}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(conductedAtList)}">
+                                <td colspan="2" class="text-center text-gray-500 py-4">No records available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div class="col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">IIT BHU TPC</h3>
+                        <p class="text-gray-400 text-sm">Training & Placement Cell</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-4 max-w-md">
+                    Connecting IIT BHU students with leading companies and career opportunities. Your success is our mission.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="/" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="/companies" class="hover:text-white transition-colors">Company Listing</a></li>
+                    <li><a href="/opportunities" class="hover:text-white transition-colors">Opportunities</a></li>
+                    <li><a href="/notices" class="hover:text-white transition-colors">Notices</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-semibold mb-4">Support</h4>
+                <ul class="space-y-2 text-gray-400">
+                    <li><a href="#" class="hover:text-white transition-colors">Help Center</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-white transition-colors">Terms of Service</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>&copy; 2024 IIT BHU Training & Placement Cell. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>

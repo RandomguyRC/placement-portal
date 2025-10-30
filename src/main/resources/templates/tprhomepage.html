@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TPR Homepage - IIT BHU Placement Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+        }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- NAVBAR -->
+
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell - TPR Panel</p>
+                </div>
+            </div>
+
+        <div class="flex items-center space-x-6">
+            <a href="/tprhomepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+            <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+            <a href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+            <a href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+            <a href="/resolve-tokens" class="text-gray-700 hover:text-blue-600 font-medium">Resolve Tokens</a>
+            <a href="noticessample.html" target="_blank" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+            <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+            <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <a th:if="${tpr != null}" href="/tpr-profile"
+               class="bg-gray-200 text-gray-900 px-4 py-2 rounded-lg font-medium hover:bg-gray-300">Profile</a>
+            <a th:if="${tpr != null}" href="/logout"
+               class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700">Logout</a>
+            <a th:if="${tpr == null}" href="/login"
+               class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+        </div>
+    </div>
+</div>
+
+</nav>
+
+<!-- HERO SECTION -->
+
+<section class="gradient-bg text-white py-20">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <div>
+                <h1 class="text-5xl font-bold leading-tight mb-6">
+                    Welcome, <span th:text="${tpr.tprName}">TPR</span>!
+                </h1>
+                <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+                    Manage your duties, test allotments, and student interactions — all in one unified panel.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <a href="/duties"
+                       class="bg-white text-blue-700 px-8 py-3 rounded-lg font-semibold hover:bg-blue-50">
+                        View Duties
+                    </a>
+                    <a href="/conductedat"
+                       class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700">
+                        Test Allotments
+                    </a>
+                </div>
+            </div>
+
+
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20">
+            <h3 class="text-2xl font-semibold mb-4">Your Profile</h3>
+            <ul class="space-y-2 text-blue-100">
+                <li><strong>Email:</strong> <span th:text="${tpr.email}">tpr@example.com</span></li>
+                <li><strong>Branch:</strong> <span th:text="${tpr.branch}">ECE</span></li>
+                <li><strong>Phone:</strong> <span th:text="${tpr.phoneNumber}">9876543210</span></li>
+                <li><strong>Role:</strong> <span th:text="${tpr.role}">TPR</span></li>
+                <li><strong>Duties Completed:</strong> <span th:text="${tpr.dutyCount}">0</span></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+</section>
+
+<!-- FEATURES SECTION -->
+
+<section class="py-16 bg-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl font-bold text-gray-800 mb-8">Quick Actions</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <a href="/duties" class="card-hover bg-white rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Duties</h3>
+                <p class="text-gray-600 text-sm">View and manage your assigned placement duties.</p>
+            </a>
+            <a href="/conductedat" class="card-hover bg-white rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Test Allotments</h3>
+                <p class="text-gray-600 text-sm">Manage and review your assigned test venues and schedules.</p>
+            </a>
+            <a href="/resolve-tokens" class="card-hover bg-white rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Resolve Tokens</h3>
+                <p class="text-gray-600 text-sm">Address and resolve student placement issues.</p>
+            </a>
+            <a href="noticessample.html" target="_blank" class="card-hover bg-white rounded-2xl shadow-md p-6">
+                <h3 class="text-xl font-semibold text-blue-700 mb-2">Notices</h3>
+                <p class="text-gray-600 text-sm">View latest placement and company announcements.</p>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+
+<footer class="bg-gray-900 text-white py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div class="col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold">IIT BHU TPC</h3>
+                        <p class="text-gray-400 text-sm">Training & Placement Cell - TPR Portal</p>
+                    </div>
+                </div>
+                <p class="text-gray-400 mb-4 max-w-md">
+                    Empowering TPRs to manage placements, test allotments, and company logistics effectively.
+                </p>
+            </div>
+
+        <div>
+            <h4 class="font-semibold mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-gray-400">
+                <li><a href="/tprhomepage" class="hover:text-white">Home</a></li>
+                <li><a href="/duties" class="hover:text-white">Duties</a></li>
+                <li><a href="/conductedat" class="hover:text-white">Test Allotments</a></li>
+                <li><a href="/resolve-tokens" class="hover:text-white">Resolve Tokens</a></li>
+                <li><a href="noticessample.html" target="_blank" class="hover:text-white">Notices</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 class="font-semibold mb-4">Support</h4>
+            <ul class="space-y-2 text-gray-400">
+                <li><a href="#" class="hover:text-white">Documentation</a></li>
+                <li><a href="#" class="hover:text-white">Help Center</a></li>
+                <li><a href="#" class="hover:text-white">Privacy Policy</a></li>
+                <li><a href="#" class="hover:text-white">Terms of Service</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2025 IIT BHU Training & Placement Cell. All rights reserved.</p>
+    </div>
+</div>
+
+
+</footer>
+
+</body>
+</html>

@@ -56,44 +56,68 @@
 <body class="bg-gray-50">
     <!-- Navigation Header -->
      <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 min-w-0">
-                <div class="flex items-center space-x-3 flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
-                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
-                    </div>
-                </div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
 
-                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
-                    
-                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
-                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
-                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
-                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
-                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
-                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
-                    <!-- </div> -->
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                    </svg>
                 </div>
-
-                <div class="flex-shrink-0">
-                    <a id="login-button" href="/profile" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-                        Profile
-                    </a>
-                    <button id="logout-button" class="hidden bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
-                        Logout
-                    </button>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell</p>
                 </div>
             </div>
+
+            <!-- Center Nav Links -->
+            <div class="flex items-center space-x-6">
+
+                <!-- ✅ Home Button -->
+                <a href="/homepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+
+                <!-- Shared Links (for everyone logged in) -->
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+
+                <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
+                
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+
+                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+
+                <!-- TPR-specific links -->
+                <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+                <a th:if="${tpr != null}" href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+                <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
+
+            </div>
+
+            <!-- Right Profile / Login buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- For logged-in Student -->
+                <a th:if="${student != null}" href="/profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                
+
+                <!-- For logged-in TPR -->
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+
+                <!-- For guests -->
+                <a th:if="${tpr == null and student == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+            </div>
+
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- Students Header -->
     <div class="gradient-bg py-8">

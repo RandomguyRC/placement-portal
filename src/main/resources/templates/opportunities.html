@@ -1,551 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Opportunities - Training & Placement Cell</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
-        }
-        .card-hover {
-            transition: all 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .status-open {
-            background: linear-gradient(135deg, #10b981, #059669);
-        }
-        .status-applied {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%); }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,0.1); }
+        .status-open { background: linear-gradient(135deg, #10b981, #059669); }
+        .status-applied { background: linear-gradient(135deg, #3b82f6, #2563eb); }
     </style>
 </head>
 <body class="bg-gray-50">
-    <!-- Navigation Header -->
-    <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 min-w-0">
-                <div class="flex items-center space-x-3 flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
-                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
-                    </div>
-                </div>
 
-                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
-                    
-                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
-                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
-                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
-                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
-                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
-                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
-                    <!-- </div> -->
-                </div>
+<!-- 🔹 ORIGINAL NAVBAR RESTORED -->
+<nav class="bg-white shadow-lg sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
 
-                <div class="flex-shrink-0">
-                    <a id="login-button" href="/profile" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-                        Profile
-                    </a>
-                    <button id="logout-button" class="hidden bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700 transition-colors text-sm">
-                        Logout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Header Section -->
-    <section class="gradient-bg text-white py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4">My Opportunities</h1>
-                <p class="text-xl text-blue-100 mb-6">Companies where you meet the eligibility criteria</p>
-                
-                <!-- Student Profile Summary -->
-                <div class="bg-white/10 backdrop-blur-sm rounded-xl p-6 max-w-4xl mx-auto">
-                    <div class="grid md:grid-cols-4 gap-4 text-center">
-                        <div>
-                            <p class="text-blue-100 text-sm">CGPA</p>
-                            <p class="text-2xl font-bold">8.2</p>
-                        </div>
-                        <div>
-                            <p class="text-blue-100 text-sm">Course</p>
-                            <p class="text-lg font-semibold">B.Tech CSE</p>
-                        </div>
-                        <div>
-                            <p class="text-blue-100 text-sm">Eligible Companies</p>
-                            <p class="text-2xl font-bold">12</p>
-                        </div>
-                        <div>
-                            <p class="text-blue-100 text-sm">Applications</p>
-                            <p class="text-2xl font-bold">3</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Filter Buttons -->
-                <div class="flex flex-wrap justify-center gap-4 mt-8">
-                    <button class="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-colors" onclick="filterOpportunities('all')">
-                        All Opportunities
-                    </button>
-                    <!-- <button class="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-colors" onclick="filterOpportunities('internship')">
-                        Internships
-                    </button>
-                    <button class="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-colors" onclick="filterOpportunities('placement')">
-                        Placements
-                    </button> -->
-                    <button class="bg-white/20 backdrop-blur-sm text-white px-6 py-2 rounded-lg border border-white/30 hover:bg-white/30 transition-colors" onclick="filterOpportunities('applied')">
-                        Applied
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Opportunities List -->
-    <section class="py-12">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="space-y-6" id="opportunities-container">
-                
-                <!-- Google -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover opportunity-card" data-type="internship" data-status="open">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-red-500 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                    G
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Google</h2>
-                                    <p class="text-lg text-gray-600">Software Engineering Intern</p>
-                                    <p class="text-blue-600 font-semibold">Summer Internship 2024</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
-                                    ✅ Eligible
-                                </span>
-                                <p class="text-sm text-gray-500 mt-2">Deadline: 15 days left</p>
-                            </div>
-                        </div>
-
-                        <div class="grid lg:grid-cols-3 gap-6">
-                            <!-- Quick Info -->
-                            <div class="lg:col-span-2">
-                                <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Compensation</h4>
-                                        <p class="text-2xl font-bold text-green-600">₹1,20,000/month</p>
-                                        <p class="text-sm text-gray-600">+ Benefits & Perks</p>
-                                    </div>
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Duration & Location</h4>
-                                        <p class="text-gray-700">3 months</p>
-                                        <p class="text-sm text-gray-600">Bangalore, Hyderabad</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-blue-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-gray-900 mb-2">Why You're Eligible</h4>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">CGPA: 8.2 ≥ 7.5</span>
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">CSE Department ✓</span>
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">No Backlogs ✓</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="space-y-4">
-                                <button onclick="openWillingnessModal('Google')" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                    Fill Willingness Form
-                                </button>
-                                <button onclick="openResumeModal('Google')" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                                    Upload Resume
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Microsoft - Applied -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover opportunity-card" data-type="placement" data-status="applied">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                    MS
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Microsoft</h2>
-                                    <p class="text-lg text-gray-600">Software Engineer</p>
-                                    <p class="text-blue-600 font-semibold">Campus Placement 2024</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="status-applied text-white px-4 py-2 rounded-full text-sm font-medium">
-                                    ✅ Applied
-                                </span>
-                                <p class="text-sm text-gray-500 mt-2">Applied on: 12 Mar 2024</p>
-                            </div>
-                        </div>
-
-                        <div class="grid lg:grid-cols-3 gap-6">
-                            <!-- Quick Info -->
-                            <div class="lg:col-span-2">
-                                <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Compensation</h4>
-                                        <p class="text-2xl font-bold text-green-600">₹28 LPA</p>
-                                        <p class="text-sm text-gray-600">Base + Variable + Benefits</p>
-                                    </div>
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Location</h4>
-                                        <p class="text-gray-700">Bangalore, Hyderabad</p>
-                                        <p class="text-sm text-gray-600">Full-time Position</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-green-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-gray-900 mb-2">Application Status</h4>
-                                    <p class="text-green-800 font-medium">Application Submitted Successfully</p>
-                                    <p class="text-sm text-gray-600 mt-2">Next: Online Assessment (Expected: 20 Mar 2024)</p>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="space-y-4">
-                                <button disabled class="w-full bg-gray-300 text-gray-500 py-3 px-6 rounded-lg font-semibold cursor-not-allowed">
-                                    Application Submitted
-                                </button>
-                                <button class="w-full bg-blue-100 text-blue-700 py-3 px-6 rounded-lg font-semibold hover:bg-blue-200 transition-colors">
-                                    Track Application
-                                </button>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Amazon -->
-                <div class="bg-white rounded-xl shadow-lg overflow-hidden card-hover opportunity-card" data-type="placement" data-status="open">
-                    <div class="p-6">
-                        <div class="flex items-start justify-between mb-4">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-16 h-16 bg-orange-500 rounded-xl flex items-center justify-center text-white font-bold text-xl">
-                                    A
-                                </div>
-                                <div>
-                                    <h2 class="text-2xl font-bold text-gray-900">Amazon</h2>
-                                    <p class="text-lg text-gray-600">SDE-1</p>
-                                    <p class="text-blue-600 font-semibold">Campus Placement 2024</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
-                                    ✅ Eligible
-                                </span>
-                                <p class="text-sm text-gray-500 mt-2">Deadline: 18 Mar 2024</p>
-                            </div>
-                        </div>
-
-                        <div class="grid lg:grid-cols-3 gap-6">
-                            <!-- Quick Info -->
-                            <div class="lg:col-span-2">
-                                <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Compensation</h4>
-                                        <p class="text-2xl font-bold text-green-600">₹44 LPA</p>
-                                        <p class="text-sm text-gray-600">Including Stock Options</p>
-                                    </div>
-                                    <div class="bg-gray-50 rounded-lg p-4">
-                                        <h4 class="font-semibold text-gray-900 mb-2">Location</h4>
-                                        <p class="text-gray-700">Bangalore, Chennai</p>
-                                        <p class="text-sm text-gray-600">Full-time Position</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="bg-blue-50 rounded-lg p-4">
-                                    <h4 class="font-semibold text-gray-900 mb-2">Why You're Eligible</h4>
-                                    <div class="flex flex-wrap gap-2">
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">CGPA: 8.2 ≥ 7.0</span>
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">CSE Department ✓</span>
-                                        <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">No Backlogs ✓</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Action Buttons -->
-                            <div class="space-y-4">
-                                <button onclick="openWillingnessModal('Amazon')" class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                                    Fill Willingness Form
-                                </button>
-                                <button onclick="openResumeModal('Amazon')" class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                                    Upload Resume
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Willingness Form Modal -->
-    <div id="willingnessModal" class="modal">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Willingness Form</h2>
-                    <button onclick="closeModal('willingnessModal')" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <p class="text-gray-600 mt-2">Express your interest for <span id="companyNameWillingness" class="font-semibold"></span></p>
-            </div>
-            
-            <form class="p-6 space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Are you willing to appear for this company?</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center">
-                            <input type="radio" name="willingness" value="yes" class="mr-2">
-                            <span>Yes, I am interested</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="radio" name="willingness" value="no" class="mr-2">
-                            <span>No, I am not interested</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Preferred Location (if multiple available)</label>
-                    <select class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                        <option>Bangalore</option>
-                        <option>Hyderabad</option>
-                        <option>Chennai</option>
-                        <option>No Preference</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Additional Comments (Optional)</label>
-                    <textarea class="w-full border border-gray-300 rounded-lg px-3 py-2 h-24" placeholder="Any specific preferences or comments..."></textarea>
-                </div>
-
-                <div class="flex space-x-4">
-                    <button type="button" onclick="submitWillingness()" class="flex-1 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                        Submit Willingness
-                    </button>
-                    <button type="button" onclick="closeModal('willingnessModal')" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors">
-                        Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Resume Upload Modal -->
-    <div id="resumeModal" class="modal">
-        <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full mx-4">
-            <div class="p-6 border-b border-gray-200">
-                <div class="flex justify-between items-center">
-                    <h2 class="text-2xl font-bold text-gray-900">Upload Resume</h2>
-                    <button onclick="closeModal('resumeModal')" class="text-gray-500 hover:text-gray-700">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <p class="text-gray-600 mt-2">Upload your resume for <span id="companyNameResume" class="font-semibold"></span></p>
-            </div>
-            
-            <div class="p-6 space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Select Resume Version</label>
-                    <div class="space-y-2">
-                        <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <input type="radio" name="resume" value="default" class="mr-3">
-                            <div class="flex-1">
-                                <p class="font-medium">Default Resume</p>
-                                <p class="text-sm text-gray-600">Last updated: 10 Mar 2024</p>
-                            </div>
-                        </label>
-                        <label class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <input type="radio" name="resume" value="tech" class="mr-3">
-                            <div class="flex-1">
-                                <p class="font-medium">Tech-focused Resume</p>
-                                <p class="text-sm text-gray-600">Last updated: 8 Mar 2024</p>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                    <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                        <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                     </svg>
-                    <div class="mt-4">
-                        <label class="cursor-pointer">
-                            <span class="mt-2 block text-sm font-medium text-gray-900">Upload new resume</span>
-                            <input type="file" class="sr-only" accept=".pdf,.doc,.docx">
-                        </label>
-                        <p class="mt-1 text-xs text-gray-500">PDF, DOC, DOCX up to 5MB</p>
+                </div>
+                <div>
+                    <h1 class="text-lg font-bold text-gray-900">TPC Platform</h1>
+                    <p class="text-xs text-gray-600">Training & Placement Cell</p>
+                </div>
+            </div>
+
+            <!-- Center Nav Links -->
+            <div class="flex items-center space-x-6">
+
+                <!-- ✅ Home Button -->
+                <a href="/homepage" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+
+                <!-- Shared Links (for everyone logged in) -->
+                <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
+
+                <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
+                
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+
+                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
+
+                <!-- TPR-specific links -->
+                <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
+                <a th:if="${tpr != null}" href="/conductedat" class="text-gray-700 hover:text-blue-600 font-medium">Test Allotments</a>
+                <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
+
+            </div>
+
+            <!-- Right Profile / Login buttons -->
+            <div class="flex items-center space-x-3">
+                <!-- For logged-in Student -->
+                <a th:if="${student != null}" href="/profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                
+
+                <!-- For logged-in TPR -->
+                <a th:if="${tpr != null}" href="/tpr-profile"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+
+                <!-- For guests -->
+                <a th:if="${tpr == null and student == null}" href="/login"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700">Login</a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<!-- Header -->
+<section class="gradient-bg text-white py-12 text-center">
+    <h1 class="text-4xl font-bold mb-4">My Opportunities</h1>
+    <p class="text-lg text-blue-100">Companies where you meet the eligibility criteria</p>
+</section>
+
+<!-- Opportunities Section -->
+<section class="py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div th:if="${#lists.isEmpty(jobListings)}" class="text-center text-gray-500 text-lg">
+            No eligible job listings found.
+        </div>
+
+        <div th:each="job : ${jobListings}"
+             class="bg-white rounded-xl shadow-md overflow-hidden card-hover mb-8 border border-gray-100"
+             th:attr="data-status=${appliedMap[job.listingId] ? 'applied' : 'open'}">
+
+            <div class="p-6">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-blue-600 text-white flex items-center justify-center rounded-lg text-2xl font-bold"
+                             th:text="${#strings.substring(job.company.companyName,0,2)}">CO</div>
+                        <div>
+                            <h2 class="text-2xl font-semibold text-gray-900" th:text="${job.company.companyName}">Company Name</h2>
+                            <p class="text-gray-600 text-lg" th:text="${job.jobRole}">Job Role</p>
+                            <p class="text-blue-600 font-medium text-sm" th:text="${job.modeOfHiring}">Mode</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span th:classappend="${appliedMap[job.listingId]} ? 'status-applied' : 'status-open'"
+                              class="text-white px-4 py-2 rounded-full text-sm font-medium"
+                              th:text="${appliedMap[job.listingId]} ? '✅ Applied' : '✅ Eligible'">
+                        </span>
+                        <p class="text-sm text-gray-500 mt-2">
+                            Deadline:
+                            <span th:text="${job.deadline != null ? #temporals.format(job.deadline, 'dd MMM yyyy HH:mm') : 'TBA'}">Deadline</span>
+                        </p>
                     </div>
                 </div>
 
-                <div class="flex space-x-4">
-                    <button type="button" onclick="submitResume()" class="flex-1 bg-green-600 text-white py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
-                        Upload Resume
-                    </button>
-                    <button type="button" onclick="closeModal('resumeModal')" class="flex-1 bg-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-400 transition-colors">
-                        Cancel
-                    </button>
+                <div class="grid lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2">
+                        <div class="grid md:grid-cols-2 gap-4 mb-4">
+                            <div class="bg-gray-50 rounded-lg p-4">
+                                <h4 class="font-semibold text-gray-800 mb-1">Compensation</h4>
+                                <p class="text-2xl font-bold text-green-600" th:text="'₹' + ${job.ctc}">₹---</p>
+                            </div>
+                            
+                        </div>
+                        <div class="bg-blue-50 rounded-lg p-4">
+                            <h4 class="font-semibold text-gray-900 mb-1">Eligibility</h4>
+                            <p class="text-sm text-gray-700">You meet the eligibility criteria for this role.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <button 
+                            th:if="${!appliedMap[job.listingId]}"
+                            th:attr="data-listing-id=${job.listingId}"
+                            onclick="applyForJob(this.getAttribute('data-listing-id'), this)"
+                            class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+                            Apply
+                        </button>
+
+                        <button 
+                            th:if="${appliedMap[job.listingId]}"
+                            disabled
+                            class="w-full bg-gray-300 text-gray-600 py-3 px-6 rounded-lg font-semibold cursor-not-allowed">
+                            Application Submitted
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Success Modal -->
-    <div id="successModal" class="modal">
-        <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 text-center p-8">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-            </div>
-            <h3 class="text-xl font-bold text-gray-900 mb-2">Success!</h3>
-            <p id="successMessage" class="text-gray-600 mb-6"></p>
-            <button onclick="closeModal('successModal')" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
-                Continue
-            </button>
-        </div>
-    </div>
+<!-- Floating Message Box -->
+<div id="messageBox" class="fixed bottom-6 right-6 hidden px-4 py-3 rounded shadow text-white"></div>
 
-    <script>
-        // Filter opportunities
-        function filterOpportunities(filter) {
-            const opportunities = document.querySelectorAll('.opportunity-card');
-            const buttons = document.querySelectorAll('button[onclick^="filterOpportunities"]');
-            
-            // Update button styles
-            buttons.forEach(btn => {
-                btn.classList.remove('bg-white', 'text-blue-600');
-                btn.classList.add('bg-white/20', 'text-white');
+<script>
+    function showMessage(text, isError=false) {
+        const box = document.getElementById('messageBox');
+        box.textContent = text;
+        box.classList.remove('hidden');
+        box.style.backgroundColor = isError ? '#dc2626' : '#16a34a';
+        setTimeout(() => box.classList.add('hidden'), 3000);
+    }
+
+    async function applyForJob(listingId, btn) {
+        try {
+            const res = await fetch(`/opportunities/apply/${listingId}`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' }
             });
-            
-            event.target.classList.remove('bg-white/20', 'text-white');
-            event.target.classList.add('bg-white', 'text-blue-600');
-            
-            opportunities.forEach(opportunity => {
-                const type = opportunity.getAttribute('data-type');
-                const status = opportunity.getAttribute('data-status');
-                
-                if (filter === 'all') {
-                    opportunity.style.display = 'block';
-                } else if (filter === 'applied' && status === 'applied') {
-                    opportunity.style.display = 'block';
-                } else if (filter === type) {
-                    opportunity.style.display = 'block';
-                } else {
-                    opportunity.style.display = 'none';
-                }
-            });
-        }
-
-        // Modal functions
-        function openWillingnessModal(companyName) {
-            document.getElementById('companyNameWillingness').textContent = companyName;
-            document.getElementById('willingnessModal').classList.add('show');
-        }
-
-        function openResumeModal(companyName) {
-            document.getElementById('companyNameResume').textContent = companyName;
-            document.getElementById('resumeModal').classList.add('show');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('show');
-        }
-
-        function submitWillingness() {
-            const willingness = document.querySelector('input[name="willingness"]:checked');
-            if (!willingness) {
-                alert('Please select your willingness status');
-                return;
+            if (res.ok) {
+                showMessage('Application submitted successfully!');
+                btn.textContent = 'Application Submitted';
+                btn.disabled = true;
+                btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                btn.classList.add('bg-gray-300', 'text-gray-600', 'cursor-not-allowed');
+            } else {
+                showMessage('Error submitting application', true);
             }
-            
-            closeModal('willingnessModal');
-            document.getElementById('successMessage').textContent = 'Your willingness has been recorded successfully!';
-            document.getElementById('successModal').classList.add('show');
+        } catch (e) {
+            showMessage('Network error', true);
         }
+    }
+</script>
 
-        function submitResume() {
-            const resume = document.querySelector('input[name="resume"]:checked');
-            if (!resume) {
-                alert('Please select a resume version');
-                return;
-            }
-            
-            closeModal('resumeModal');
-            document.getElementById('successMessage').textContent = 'Your resume has been uploaded successfully!';
-            document.getElementById('successModal').classList.add('show');
-        }
-
-        // Initialize with all opportunities visible
-        document.addEventListener('DOMContentLoaded', function() {
-            const firstButton = document.querySelector('button[onclick="filterOpportunities(\'all\')"]');
-            if (firstButton) {
-                firstButton.classList.remove('bg-white/20', 'text-white');
-                firstButton.classList.add('bg-white', 'text-blue-600');
-            }
-        });
-
-        // Close modals when clicking outside
-        window.addEventListener('click', function(event) {
-            const modals = document.querySelectorAll('.modal');
-            modals.forEach(modal => {
-                if (event.target === modal) {
-                    modal.classList.remove('show');
-                }
-            });
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980240007250c51e',t:'MTc1ODA0NTQ4Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

@@ -124,96 +124,101 @@
             <div class="space-y-8" id="companies-container">
 
     <div th:each="job : ${jobListings}"
-         class="bg-white rounded-xl shadow-lg overflow-hidden card-hover company-card"
-         data-type="placement" data-status="open">
+     class="bg-white rounded-xl shadow-lg overflow-hidden card-hover company-card"
+     data-type="placement" data-status="open">
 
-        <div class="p-8">
-            <div class="flex items-start justify-between mb-6">
-                <div class="flex items-center space-x-4">
-                    <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl"
-                         th:text="${#strings.substring(job.company.companyName, 0, 2)}">
-                        AB
-                    </div>
-                    <div>
-                        <h2 class="text-2xl font-bold text-gray-900" th:text="${job.company.companyName}">Company Name</h2>
-                        <p class="text-lg text-gray-600" th:text="${job.jobRole}">Job Role</p>
-                        <p class="text-blue-600 font-semibold" th:text="'Placement ' + ${#temporals.format(job.deadline, 'yyyy')}">Placement Year</p>
+    <div class="p-8">
+        <div class="flex items-start justify-between mb-6">
+            <div class="flex items-center space-x-4">
+                <div class="w-16 h-16 bg-blue-600 rounded-xl flex items-center justify-center text-white font-bold text-xl"
+                     th:text="${#strings.substring(job.company.companyName, 0, 2)}">
+                    AB
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-900" th:text="${job.company.companyName}">Company Name</h2>
+                    <p class="text-lg text-gray-600" th:text="${job.jobRole}">Job Role</p>
+                    <p class="text-blue-600 font-semibold" th:text="'Placement ' + ${#temporals.format(job.deadline, 'yyyy')}">Placement Year</p>
+                </div>
+            </div>
+            <div class="text-right">
+                <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
+                    Open for Willingness
+                </span>
+                <p class="text-sm text-gray-500 mt-2"
+                   th:text="'Deadline: ' + ${#temporals.format(job.deadline, 'EEE, dd MMM yyyy | hh:mm a')}"></p>
+            </div>
+        </div>
 
+        <div class="grid lg:grid-cols-2 gap-8">
+            <!-- Left Column -->
+            <div class="space-y-6">
+                <!-- Details -->
+                <div class="bg-blue-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex justify-between">
+                            <span class="font-medium text-gray-700">Mode of Hiring:</span>
+                            <span class="text-gray-600" th:text="${job.modeOfHiring}">Online</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="font-medium text-gray-700">Deadline:</span>
+                            <span class="text-gray-600" th:text="${#temporals.format(job.deadline, 'dd MMM yyyy hh:mm a')}">TBA</span>
+                        </div>
                     </div>
                 </div>
-                <div class="text-right">
-                    <span class="status-open text-white px-4 py-2 rounded-full text-sm font-medium">
-                        Open for Willingness
-                    </span>
-                    <p class="text-sm text-gray-500 mt-2" th:text="'Deadline: ' + ${#temporals.format(job.deadline, 'EEE, dd MMM yyyy | hh:mm a')}"></p>
 
+                <!-- ✅ Enhanced Eligibility Section -->
+                <div class="bg-gray-50 rounded-lg p-6 mt-6" th:if="${job.formattedEligibility != null}">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Eligibility Criteria</h3>
+                    <div class="text-sm text-gray-700 leading-relaxed"
+                         th:utext="${job.formattedEligibility}">
+                        <!-- Example fallback -->
+                        <p>No eligibility criteria available.</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="grid lg:grid-cols-2 gap-8">
-                <!-- Left Column -->
-                <div class="space-y-6">
-                    <!-- Details -->
-                    <div class="bg-blue-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="font-medium text-gray-700">Mode of Hiring:</span>
-                                <span class="text-gray-600" th:text="${job.modeOfHiring}">Online</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="font-medium text-gray-700">Deadline:</span>
-                                <span class="text-gray-600" th:text="${#temporals.format(job.deadline, 'dd MMM yyyy hh:mm a')}">TBA</span>
-
-                            </div>
-                        </div>
-                    </div>
+            <!-- Right Column -->
+            <div class="space-y-6">
+                <!-- Compensation -->
+                <div class="bg-green-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Compensation</h3>
+                    <table class="w-full text-sm">
+                        <thead>
+                        <tr class="border-b border-green-200">
+                            <th class="text-left py-2 font-medium text-gray-700">Course</th>
+                            <th class="text-left py-2 font-medium text-gray-700">CTC</th>
+                            <th class="text-left py-2 font-medium text-gray-700">Take Home</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="border-b border-green-100">
+                            <td class="py-2 text-gray-600">B.Tech</td>
+                            <td class="py-2 text-gray-900 font-medium" th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                            <td class="py-2 text-gray-900 font-medium" th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                        </tr>
+                        <tr>
+                            <td class="py-2 text-gray-600">IDD/IMD</td>
+                            <td class="py-2 text-gray-900 font-medium" th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                            <td class="py-2 text-gray-900 font-medium" th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
-                <!-- Right Column -->
-                <div class="space-y-6">
-                    <!-- Compensation -->
-                    <div class="bg-green-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Compensation</h3>
-                        <table class="w-full text-sm">
-                            <thead>
-                            <tr class="border-b border-green-200">
-                                <th class="text-left py-2 font-medium text-gray-700">Course</th>
-                                <th class="text-left py-2 font-medium text-gray-700">CTC</th>
-                                <th class="text-left py-2 font-medium text-gray-700">Take Home</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="border-b border-green-100">
-                                <td class="py-2 text-gray-600">B.Tech</td>
-                                <td class="py-2 text-gray-900 font-medium"
-                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
-                                <td class="py-2 text-gray-900 font-medium"
-                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
-                            </tr>
-                            <tr>
-                                <td class="py-2 text-gray-600">IDD/IMD</td>
-                                <td class="py-2 text-gray-900 font-medium"
-                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
-                                <td class="py-2 text-gray-900 font-medium"
-                                    th:text="'INR ' + ${job.ctc} + ' LPA'">CTC</td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Job Description -->
-                    <div class="bg-purple-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Description</h3>
-                        <div class="space-y-3 text-sm text-gray-700">
-                            <p th:text="${job.jobDescription}">Job details here</p>
-                            <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
-                        </div>
+                <!-- Job Description -->
+                <div class="bg-purple-50 rounded-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Job Description</h3>
+                    <div class="space-y-3 text-sm text-gray-700">
+                        <p th:text="${job.jobDescription}">Job details here</p>
+                        <button class="text-blue-600 hover:text-blue-800 font-medium">Read More</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 
 </div>
 

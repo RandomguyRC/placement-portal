@@ -69,10 +69,10 @@ public class PageController {
     //     return "opportunities"; // opportunities.html
     // }
 
-    @GetMapping("/preferences")
-    public String preferences() {
-        return "preferences"; // preferences.html
-    }
+    // @GetMapping("/preferences")
+    // public String preferences() {
+    //     return "preferences"; // preferences.html
+    // }
 
     // @GetMapping("/resources")
     // public String resources() {

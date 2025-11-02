@@ -1,5 +1,6 @@
 package com.placementportal.placement_website.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.List;
 
@@ -23,8 +24,9 @@ public class Company {
     @Column(name = "contact_email")
     private String contactEmail;
 
-    // ✅ Each company can have many job listings
+    // ✅ Prevent infinite recursion in JSON
     @OneToMany(mappedBy = "company", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private List<JobListing> jobListings;
 
     // 🔹 Constructors

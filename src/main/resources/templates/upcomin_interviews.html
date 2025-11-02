@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Upcoming Interviews</title>
+    <style>
+        body { background-color: #121212; color: #fff; font-family: Arial, sans-serif; }
+        table { width: 80%; margin: 30px auto; border-collapse: collapse; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #444; }
+        th { background-color: #1f1f1f; }
+        tr:hover { background-color: #333; }
+    </style>
+</head>
+<body>
+<h2 style="text-align:center;">Upcoming Interviews for <span th:text="${selectedDate}"></span></h2>
+
+<table>
+    <tr>
+        <th>Assessment ID</th>
+        <th>Job Role</th>
+        <th>Company</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+    </tr>
+
+    <tr th:each="a : ${interviews}">
+        <td th:text="${a.assessmentId}"></td>
+        <td th:text="${a.jobListing.jobRole}"></td>
+        <td th:text="${a.jobListing.company.companyName}"></td>
+        <td th:text="${#temporals.format(a.startTime, 'HH:mm')}"></td>
+        <td th:text="${#temporals.format(a.endTime, 'HH:mm')}"></td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(interviews)}">
+        <td colspan="5" style="text-align:center;">No interviews scheduled for this date</td>
+    </tr>
+</table>
+</body>
+</html>

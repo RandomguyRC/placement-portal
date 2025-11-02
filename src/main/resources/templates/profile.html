@@ -219,6 +219,89 @@
                     </div>
                 </div>
             </div>
+<!-- ==================== RESUME SECTION ==================== -->
+<div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">My Resumes</h3>
+
+    <!-- Upload Form -->
+    <form id="resumeForm" class="flex space-x-2 mb-4">
+        <input type="url" id="resumeUrl" placeholder="Enter resume URL"
+            class="flex-grow px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            required>
+        <button type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+            Upload
+        </button>
+    </form>
+
+    <!-- Resume List -->
+    <ul id="resumeList" class="space-y-2"></ul>
+</div>
+
+<script>
+async function loadResumes() {
+    try {
+        const res = await fetch('/api/resume/all', { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to load resumes');
+
+        const resumes = await res.json();
+        const list = document.getElementById('resumeList');
+        list.innerHTML = '';
+
+        if (resumes.length === 0) {
+            list.innerHTML = '<p class="text-gray-500 text-sm">No resumes uploaded yet.</p>';
+            return;
+        }
+
+        resumes.forEach(r => {
+            const li = document.createElement('li');
+            li.className = 'flex justify-between items-center p-2 bg-gray-50 rounded-md border';
+
+            const resumeUrl = r.resumeFile || '#';
+            const resumeName = r.resumeId || resumeUrl.split('/').pop() || 'Unnamed Resume';
+            const resumeStatus = r.status || 'UNVERIFIED';
+
+            li.innerHTML = `
+                <a href="${resumeUrl}" target="_blank" class="text-blue-600 hover:underline truncate">${resumeName}</a>
+                <span class="text-xs font-semibold ${resumeStatus === 'VERIFIED' ? 'text-green-600' : 'text-yellow-600'}">
+                    ${resumeStatus}
+                </span>
+            `;
+            list.appendChild(li);
+        });
+    } catch (err) {
+        console.error(err);
+        document.getElementById('resumeList').innerHTML = '<p class="text-red-500 text-sm">Error loading resumes.</p>';
+    }
+}
+
+// ✅ Handle resume upload
+document.getElementById('resumeForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('resumeUrl').value.trim();
+    if (!url) return;
+
+    const res = await fetch('/api/resume/upload', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ resumeFile: url })
+    });
+
+    if (res.ok) {
+        document.getElementById('resumeUrl').value = '';
+        await loadResumes();
+    } else {
+        alert('Failed to upload resume');
+    }
+});
+
+// ✅ Load resumes when page opens
+window.addEventListener('DOMContentLoaded', loadResumes);
+</script>
+<!-- ==================== END RESUME SECTION ==================== -->
+
+
 
             <!-- Quick Stats & Recent Activity can stay hardcoded or be dynamically loaded later -->
         </div>

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Comparator;
+
 
 @Controller
 @SessionAttributes({"student", "tpr"})
@@ -36,7 +38,11 @@ public class NoticeController {
             return "redirect:/login";
         }
 
-        List<Notice> notices = noticeRepository.findAll();
+        List<Notice> notices = noticeRepository.findAll()
+        .stream()
+        .sorted(Comparator.comparing(Notice::getPostedAt).reversed())
+        .toList();
+
 
         // Fetch the TPR name or email for display
         for (Notice notice : notices) {

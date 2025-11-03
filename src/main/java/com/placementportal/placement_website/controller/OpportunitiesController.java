@@ -72,6 +72,41 @@ public class OpportunitiesController {
         model.addAttribute("jobListings", eligible);
         model.addAttribute("appliedMap", appliedMap);
         model.addAttribute("notLoggedIn", false);
+        Map<String, String> eligibilityMap = new HashMap<>();
+for (JobListing job : eligible) {
+    String json = job.getEligibilityCriteria();
+    StringBuilder display = new StringBuilder();
+
+    if (json != null && !json.trim().isEmpty()) {
+        try {
+            JsonNode root = objectMapper.readTree(json);
+
+            if (root.has("cpi")) {
+                display.append("Min CPI: ").append(root.get("cpi").asDouble()).append("<br>");
+            }
+
+            if (root.has("branch")) {
+                JsonNode branches = root.get("branch");
+                if (branches.isArray() && branches.size() > 0) {
+                    List<String> branchList = new ArrayList<>();
+                    for (JsonNode b : branches) {
+                        branchList.add(b.asText());
+                    }
+                    display.append("Allowed Branches: ").append(String.join(", ", branchList)).append("<br>");
+                }
+            }
+
+        } catch (Exception e) {
+            display.append("Eligibility data unavailable.");
+        }
+    } else {
+        display.append("Open to all branches and CPIs.");
+    }
+
+    eligibilityMap.put(job.getListingId(), display.toString());
+}
+
+model.addAttribute("eligibilityMap", eligibilityMap);
 
         return "opportunities";
     }

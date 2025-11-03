@@ -64,7 +64,7 @@
                 
                 <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
 
-                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+                <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
 
                 <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
 
@@ -152,22 +152,14 @@
 
             <div class="grid lg:grid-cols-2 gap-8">
                 <!-- Left Column -->
-                <div class="space-y-6">
-                    <!-- Details -->
-                    <div class="bg-blue-50 rounded-lg p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Details</h3>
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between">
-                                <span class="font-medium text-gray-700">Mode of Hiring:</span>
-                                <span class="text-gray-600" th:text="${job.modeOfHiring}">Online</span>
-                            </div>
-                            <div class="flex justify-between">
-                                <span class="font-medium text-gray-700">Deadline:</span>
-                                <span class="text-gray-600" th:text="${#temporals.format(job.deadline, 'dd MMM yyyy hh:mm a')}">TBA</span>
+                <!-- Eligibility Criteria -->
+<div class="bg-yellow-50 rounded-lg p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Eligibility Criteria</h3>
+    <div class="text-sm text-gray-700" th:utext="${eligibilityMap[job.listingId]}">
+        Eligibility details unavailable.
+    </div>
+</div>
 
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Right Column -->

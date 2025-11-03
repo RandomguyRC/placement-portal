@@ -56,4 +56,25 @@ public class StudentController {
         Object tpr = session.getAttribute("tpr");
         return student != null || tpr != null;
     }
+
+    // ✅ Update student profile status (only accessible by TPR)
+@PutMapping("/{enrollmentNumber}/status")
+public ResponseEntity<?> updateProfileStatus(
+        @PathVariable String enrollmentNumber,
+        @RequestParam String profileStat,
+        HttpSession session) {
+
+    Object tpr = session.getAttribute("tpr");
+    if (tpr == null) {
+        return ResponseEntity.status(403).body("Access denied. Only TPRs can change student status.");
+    }
+
+    int rows = studentRepository.updateProfileStatus(enrollmentNumber, profileStat);
+    if (rows > 0) {
+        return ResponseEntity.ok("Profile status updated successfully.");
+    } else {
+        return ResponseEntity.status(404).body("Student not found.");
+    }
+}
+
 }

@@ -44,13 +44,16 @@
 
                 <!-- Shared Links (for everyone logged in) -->
                 <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium">Company Listing</a>
-                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
-                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
-                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
 
-                <!-- Student-specific links -->
                 <a th:if="${student != null}" href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium">Opportunities</a>
-                <a th:if="${student != null}" href="/students" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+                
+                <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
+
+                <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+
+                <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
+
+                <a th:if="${student != null}" href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium">Schedule</a>
 
                 <!-- TPR-specific links -->
                 <a th:if="${tpr != null}" href="/duties" class="text-gray-700 hover:text-blue-600 font-medium">Duties</a>
@@ -69,7 +72,6 @@
                 <!-- For logged-in TPR -->
                 <a th:if="${tpr != null}" href="/tpr-profile"
                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
-                
 
                 <!-- For guests -->
                 <a th:if="${tpr == null and student == null}" href="/login"

@@ -86,7 +86,7 @@
                 
                 <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
 
-                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+                <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
 
                 <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
 
@@ -189,51 +189,115 @@
                 </div>
             </div>
         </div>
-
-        <!-- Students List -->
+                <!-- Students List -->
         <div id="studentsList" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Students will be populated here -->
         </div>
     </div>
 
     <!-- Student Detail Modal -->
-<div id="studentModal" class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
-    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+<div id="studentModal"
+    class="fixed inset-0 bg-black bg-opacity-50 modal-backdrop hidden z-50 flex items-center justify-center p-4">
+    <div
+        class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0"
+        id="modalContent">
         <div class="p-6">
-            <div class="flex justify-between items-start mb-6">
+            <div class="flex justify-between items-start mb-6 border-b pb-4">
                 <div class="flex items-center space-x-4">
-                    <div id="modalAvatar" class="student-avatar w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold">
+                    <div id="modalAvatar"
+                        class="student-avatar w-16 h-16 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-md">
                         AS
                     </div>
                     <div>
                         <h2 id="modalName" class="text-2xl font-bold text-gray-900">Student Name</h2>
-                        <p id="modalEnrollment" class="text-gray-600">Enrollment Number</p>
+                        <p id="modalEnrollment" class="text-gray-600 text-sm">Enrollment Number</p>
                         <p id="modalBranch" class="text-blue-600 font-medium">Branch</p>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-2xl font-bold">&times;</button>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-3xl font-bold">&times;</button>
             </div>
 
-            <!-- Personal Information Only -->
-            <div>
-                <h3 class="text-lg font-semibold text-gray-900 mb-4">Personal Information</h3>
-                <div class="space-y-3">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Email:</span>
-                        <span id="modalEmail" class="font-medium">email@example.com</span>
+            <div class="space-y-4">
+                <h3 class="text-lg font-semibold text-gray-900 mb-2">Personal Information</h3>
+                <div class="grid grid-cols-2 gap-3 text-sm">
+                    <div><span class="text-gray-600">Email:</span><br><span id="modalEmail"
+                            class="font-medium"></span></div>
+                    <div><span class="text-gray-600">Phone:</span><br><span id="modalPhone"
+                            class="font-medium"></span></div>
+                    <div><span class="text-gray-600">DOB:</span><br><span id="modalDOB"
+                            class="font-medium"></span></div>
+                    <div><span class="text-gray-600">CPI:</span><br><span id="modalCPI"
+                            class="font-bold text-blue-600"></span></div>
+                </div>
+
+                <!-- ✅ TPR Controls -->
+                <div id="statusSection" class="mt-6 hidden border-t pt-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">TPR Controls</h3>
+
+                    <!-- Profile Status -->
+                    <label class="text-gray-600 font-semibold mb-1 block">Profile Status</label>
+                    <select id="profileStatusSelect"
+                        class="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-blue-500 mb-3">
+                        <option value="unverified">Unverified</option>
+                        <option value="pending_verification">Pending Verification</option>
+                        <option value="verified">Verified</option>
+                        <option value="blocked">Blocked</option>
+                    </select>
+
+                    <button id="saveStatusBtn"
+                        class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition mb-4 w-full">
+                        💾 Save Status
+                    </button>
+
+                    <!-- 🔹 Resume Verification -->
+                    <label class="text-gray-600 font-semibold mb-1 block">Verify Resume</label>
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-3 sm:space-y-0">
+                        <select id="studentResumeSelect"
+                            class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 w-full">
+                            <option>Loading resumes...</option>
+                        </select>
+
+                        <a id="resumeLink" href="#" target="_blank"
+                            class="text-blue-600 hover:underline hidden text-sm font-medium">📄 Open Resume</a>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Phone:</span>
-                        <span id="modalPhone" class="font-medium">+91 9876543210</span>
+
+                    <div class="mt-3 flex items-center space-x-3">
+                        <select id="resumeStatusSelect"
+                            class="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 flex-1">
+                            <option value="UNVERIFIED">Unverified</option>
+                            <option value="VERIFIED">Verified</option>
+                            <option value="REJECTED">Rejected</option>
+                        </select>
+
+                        <button id="updateResumeStatusBtn"
+                            class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">
+                            ✅ Update
+                        </button>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Date of Birth:</span>
-                        <span id="modalDOB" class="font-medium">15/05/2003</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Current CPI:</span>
-                        <span id="modalCPI" class="font-bold text-blue-600">8.75</span>
-                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- ✅ Profile Status Dropdown (only visible to TPRs) -->
+<div id="statusSection" class="mt-4 hidden">
+    <label class="text-gray-600 font-semibold mb-2 block">Profile Status</label>
+    <select id="profileStatusSelect" class="border border-gray-300 rounded-lg p-2 w-full focus:ring-2 focus:ring-blue-500">
+        <option value="unverified">Unverified</option>
+        <option value="pending_verification">Pending Verification</option>
+        <option value="verified">Verified</option>
+        <option value="blocked">Blocked</option>
+    </select>
+
+    <button id="saveStatusBtn" 
+        class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+        Save Status
+    </button>
+</div>
+
+
                 </div>
             </div>
         </div>
@@ -412,6 +476,32 @@ function filterAndRender() {
     studentCount.textContent = filteredStudents.length;
 }
 
+    async function saveStatus(enrollmentNumber) {
+    const newStatus = document.getElementById("profileStatusSelect").value;
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/students/${enrollmentNumber}/status?profileStat=${newStatus}`, {
+            method: "PUT",
+            credentials: "include"
+        });
+
+        if (response.ok) {
+            alert("Status updated successfully!");
+            // Refresh list after update
+            allStudents = await (await fetch("http://localhost:8080/api/students")).json();
+            filterAndRender();
+            closeModal();
+        } else {
+            const text = await response.text();
+            alert("Error: " + text);
+        }
+    } catch (error) {
+        console.error("Error updating status:", error);
+        alert("Failed to update status");
+    }
+}
+
+
 function searchStudents() {
     filterAndRender();
 }
@@ -443,8 +533,18 @@ function selectYear(year) {
     filterAndRender();
 }
 
-function openModal(student) {
-    document.getElementById("studentModal").classList.remove("hidden");
+async function openModal(student) {
+    const modal = document.getElementById("studentModal");
+    const modalContent = document.getElementById("modalContent");
+
+    modal.classList.remove("hidden");
+    requestAnimationFrame(() => {
+  modalContent.classList.remove("scale-95", "opacity-0");
+  modalContent.classList.add("scale-100", "opacity-100");
+});
+
+
+    // Fill basic info
     document.getElementById("modalName").textContent = student.studentName;
     document.getElementById("modalEnrollment").textContent = student.enrollmentNumber;
     document.getElementById("modalBranch").textContent = student.branch;
@@ -452,12 +552,166 @@ function openModal(student) {
     document.getElementById("modalPhone").textContent = student.phoneNumber || "N/A";
     document.getElementById("modalDOB").textContent = student.dob || "N/A";
     document.getElementById("modalCPI").textContent = student.cpi ?? "N/A";
-    document.getElementById("modalAvatar").textContent = student.studentName.split(" ").map(n => n[0]).join("").slice(0,2).toUpperCase();
+    document.getElementById("modalAvatar").textContent = student.studentName
+        .split(" ")
+        .map(n => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase();
+
+    const statusSection = document.getElementById("statusSection");
+
+    if (window.isTPR === true) {
+        statusSection.classList.remove("hidden");
+        document.getElementById("profileStatusSelect").value = student.profileStat || "unverified";
+
+        document.getElementById("saveStatusBtn").onclick = () =>
+            saveStatus(student.enrollmentNumber);
+
+        // 🎯 Load student resumes dynamically
+        const dropdown = document.getElementById("studentResumeSelect");
+        const resumeLink = document.getElementById("resumeLink");
+
+        dropdown.innerHTML = `<option>Loading...</option>`;
+        resumeLink.classList.add("hidden");
+
+        try {
+            const res = await fetch(`http://localhost:8080/api/resume/admin/resumes?studentId=${student.enrollmentNumber}`, {
+    credentials: "include",
+});
+
+            if (!res.ok) throw new Error("Failed to fetch resumes");
+
+            const resumes = await res.json();
+            dropdown.innerHTML = `<option value="">Select Resume</option>`;
+            if (resumes.length === 0) {
+                dropdown.innerHTML += `<option disabled>No resumes found</option>`;
+            } else {
+                resumes.forEach(r => {
+                    const opt = document.createElement("option");
+                    opt.value = r.resumeId;
+                    opt.textContent = `${r.resumeId} (${r.status})`;
+                    opt.dataset.link = r.resumeFile;
+                    dropdown.appendChild(opt);
+                });
+            }
+
+            dropdown.addEventListener("change", e => {
+                const selected = e.target.selectedOptions[0];
+                if (selected && selected.dataset.link) {
+                    resumeLink.href = selected.dataset.link;
+                    resumeLink.classList.remove("hidden");
+                } else {
+                    resumeLink.classList.add("hidden");
+                }
+            });
+
+            document
+                .getElementById("updateResumeStatusBtn")
+                .addEventListener("click", async () => {
+                    const resumeId = dropdown.value;
+                    const newStatus =
+                        document.getElementById("resumeStatusSelect").value;
+                    if (!resumeId) return alert("Select a resume first!");
+
+                    const resp = await fetch(
+                        `http://localhost:8080/api/resume/verify/${resumeId}?status=${newStatus}`,
+                        { method: "PUT", credentials: "include" }
+                    );
+                    if (resp.ok) {
+                        alert("Resume status updated!");
+                        openModal(student); // refresh modal
+                    } else {
+                        alert("Failed to update resume status");
+                    }
+                });
+        } catch (err) {
+            console.error(err);
+            dropdown.innerHTML = `<option disabled>Error loading resumes</option>`;
+        }
+    } else {
+        statusSection.classList.add("hidden");
+    }
 }
+
+
 
 function closeModal() {
     document.getElementById("studentModal").classList.add("hidden");
 }
 </script>
+<!-- ✅ Thymeleaf correctly sets this flag -->
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    window.isTPR = [[${tpr != null}]];
+    console.log("TPR flag:", window.isTPR);
+    /*]]>*/
+
+    // ✅ Resume Verification Logic for TPRs
+document.addEventListener("DOMContentLoaded", async () => {
+  if (window.isTPR === true) {
+      document.getElementById("verifySection").classList.remove("hidden");
+      await loadAllResumes();
+  }
+});
+
+async function loadAllResumes() {
+  try {
+      const res = await fetch("http://localhost:8080/api/admin/resumes", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to fetch resumes");
+
+      const resumes = await res.json();
+      const dropdown = document.getElementById("studentResumeSelect");
+      dropdown.innerHTML = `<option value="">Select a Student</option>`;
+
+      resumes.forEach(r => {
+          const option = document.createElement("option");
+          option.value = r.resumeId;
+          option.textContent = `${r.studentId} - ${r.resumeId} (${r.status})`;
+          option.dataset.link = r.resumeFile;
+          dropdown.appendChild(option);
+      });
+
+      dropdown.addEventListener("change", e => {
+          const selectedOption = e.target.selectedOptions[0];
+          const resumeLink = document.getElementById("resumeLink");
+          if (selectedOption && selectedOption.dataset.link) {
+              resumeLink.href = selectedOption.dataset.link;
+              resumeLink.classList.remove("hidden");
+          } else {
+              resumeLink.classList.add("hidden");
+          }
+      });
+
+      document.getElementById("updateResumeStatusBtn").addEventListener("click", async () => {
+          const resumeId = dropdown.value;
+          const newStatus = document.getElementById("resumeStatusSelect").value;
+          if (!resumeId) {
+              alert("Please select a student resume first");
+              return;
+          }
+
+          const resp = await fetch(`http://localhost:8080/api/resume/verify/${resumeId}?status=${newStatus}`, {
+              method: "PUT",
+              credentials: "include"
+          });
+
+          if (resp.ok) {
+              alert("Resume status updated successfully!");
+              await loadAllResumes(); // refresh list
+          } else {
+              alert("Failed to update status");
+          }
+      });
+
+  } catch (err) {
+      console.error(err);
+      alert("Error loading resumes");
+  }
+}
+
+</script>
+
+
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9802528156918e81',t:'MTc1ODA0NjI0NC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

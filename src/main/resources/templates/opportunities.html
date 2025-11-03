@@ -86,6 +86,23 @@
     <h1 class="text-4xl font-bold mb-4">My Opportunities</h1>
     <p class="text-lg text-blue-100">Companies where you meet the eligibility criteria</p>
 </section>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 flex justify-between">
+    <!-- 🔹 Manage Preferences Button -->
+    <a href="/preferences"
+       class="bg-indigo-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-indigo-700 transition-transform transform hover:-translate-y-0.5 flex items-center space-x-2">
+        <span>⚙️</span>
+        <span>Manage Preferences</span>
+    </a>
+
+    <!-- 🔹 Give Feedback Button -->
+    <a href="/feedback"
+       class="bg-blue-600 text-white font-semibold py-2 px-5 rounded-lg shadow-md hover:bg-blue-700 transition-transform transform hover:-translate-y-0.5 flex items-center space-x-2">
+        <span>💬</span>
+        <span>Give Feedback</span>
+    </a>
+</div>
+
+
 
 <!-- Opportunities Section -->
 <section class="py-12">
@@ -132,9 +149,14 @@
                             
                         </div>
                         <div class="bg-blue-50 rounded-lg p-4">
-                            <h4 class="font-semibold text-gray-900 mb-1">Eligibility</h4>
-                            <p class="text-sm text-gray-700">You meet the eligibility criteria for this role.</p>
-                        </div>
+    <h4 class="font-semibold text-gray-900 mb-1">Eligibility Criteria</h4>
+    <div class="text-sm text-gray-700" 
+         th:utext="${eligibilityMap[job.listingId]}">
+        Eligibility details unavailable.
+    </div>
+    <p class="text-green-700 font-medium mt-2">✅ You meet the eligibility criteria for this role.</p>
+</div>
+
                     </div>
 
                     <div class="flex flex-col justify-center">
@@ -161,6 +183,7 @@
 
 <!-- Floating Message Box -->
 <div id="messageBox" class="fixed bottom-6 right-6 hidden px-4 py-3 rounded shadow text-white"></div>
+
 
 <script>
     function showMessage(text, isError=false) {

@@ -69,10 +69,29 @@ public class PageController {
     //     return "opportunities"; // opportunities.html
     // }
 
+    // @GetMapping("/preferences")
+    // public String preferences() {
+    //     return "preferences"; // preferences.html
+    // }
+
     @GetMapping("/preferences")
-    public String preferences() {
-        return "preferences"; // preferences.html
+public String preferences(HttpSession session, Model model) {
+    Object student = session.getAttribute("student");
+    Object tpr = session.getAttribute("tpr");
+
+    // 🔒 Redirect if not logged in as either student or TPR
+    if (student == null && tpr == null) {
+        return "redirect:/login";
     }
+
+    // ✅ Add them to the model for Thymeleaf to use
+    model.addAttribute("student", student);
+    model.addAttribute("tpr", tpr);
+
+    return "preferences"; // preferences.html
+}
+
+
 
     // @GetMapping("/resources")
     // public String resources() {

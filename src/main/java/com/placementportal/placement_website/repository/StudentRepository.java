@@ -87,7 +87,11 @@ public class StudentRepository {
             student.setLocalAddress(rs.getString("local_address"));
             student.setSex(rs.getString("sex"));
             student.setCpi(rs.getDouble("cpi"));
-            if(rs.getTimestamp("dob") != null) {
+
+            // ✅ add this line
+            student.setProfileStat(rs.getString("profile_stat"));
+
+            if (rs.getTimestamp("dob") != null) {
                 student.setDob(rs.getTimestamp("dob").toLocalDateTime().toLocalDate().toString());
             }
             student.setPassword(rs.getString("password"));
@@ -97,6 +101,7 @@ public class StudentRepository {
 
     return students.isEmpty() ? null : students.get(0);
 }
+
 
 public List<Student> findAll() {
     String sql = "SELECT * FROM student_details";
@@ -134,6 +139,10 @@ private Student mapRowToStudent(ResultSet rs) throws SQLException {
     return student;
 }
 
+public int updateProfileStatus(String enrollmentNumber, String profileStat) {
+    String sql = "UPDATE student_details SET profile_stat = ? WHERE enrollment_number = ?";
+    return jdbcTemplate.update(sql, profileStat, enrollmentNumber);
+}
 
 
 }

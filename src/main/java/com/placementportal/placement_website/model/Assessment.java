@@ -1,5 +1,7 @@
 package com.placementportal.placement_website.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,4 +14,5 @@ public class Assessment {
     @ManyToOne
     @JoinColumn(name="listing_id")
     private JobListing jobListing;
+
 }

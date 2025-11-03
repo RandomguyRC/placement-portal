@@ -1,390 +1,739 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>TPC Platform — OA Schedule</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; }
-    .card-hover { transition: transform .25s ease, box-shadow .25s ease; }
-    .card-hover:hover { transform: translateY(-3px); box-shadow: 0 16px 40px rgba(0,0,0,.08); }
-    .status-dot { width: 10px; height: 10px; border-radius: 9999px; display: inline-block; }
-    .badge { padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;}
-    .badge-upcoming { background:#ecfeff; color:#0e7490; border:1px solid #a5f3fc; }
-    .dot-upcoming { background:#06b6d4; }
-    .badge-ongoing { background:#f0fdf4; color:#166534; border:1px solid #bbf7d0; }
-    .dot-ongoing { background:#22c55e; }
-    .badge-completed { background:#f8fafc; color:#334155; border:1px solid #cbd5e1; }
-    .dot-completed { background:#64748b; }
-    .table-head { background: #f8fafc; }
-    .pill { border: 1px solid rgba(0,0,0,.08); background: white; }
-  </style>
-</head>
-<body class="bg-gray-50 text-gray-800">
-  <!-- Navigation Header (reused) -->
-  <nav class="bg-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16 min-w-0">
-                <div class="flex items-center space-x-3 flex-shrink-0">
-                    <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-                        </svg>
-                    </div>
-                    <div class="hidden sm:block">
-                        <h1 class="text-lg font-bold text-gray-900 leading-tight">TPC Platform</h1>
-                        <p class="text-xs text-gray-600 leading-tight">Training & Placement Cell</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0">
-                    <a href="/" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Home</a>
-                    
-                    <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
-                        <a href="/companies" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Company Listing</a>
-                        <a href="/opportunities" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Opportunities</a>
-                        <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Notices</a>
-                        <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Students</a>
-                        <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Resources</a>
-                        <a href="/schedule" class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap">Schedule</a>
-                    <!-- </div> -->
-                </div>
-
-                <!-- Example nav buttons -->
-<div class="flex-shrink-0 flex items-center space-x-2">
-    <!-- Profile link (Student) -->
-    <a th:if="${student != null}" href="/profile"
-       class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-       Profile
-    </a>
-
-    <!-- Profile link (TPR) -->
-    <a th:if="${tpr != null}" href="/tpr-profile"
-       class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">
-       Profile
-    </a>
-
-</div>
-
+  <head>
+    <meta charset="UTF-8" />
+    <title>TPC Platform — OA Schedule</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto,
+          Helvetica, Arial, sans-serif;
+      }
+      .card-hover {
+        transition: transform 0.25s ease, box-shadow 0.25s ease;
+      }
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+      }
+      .status-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 9999px;
+        display: inline-block;
+      }
+      .badge {
+        padding: 2px 8px;
+        border-radius: 9999px;
+        font-size: 12px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
+      }
+      .badge-upcoming {
+        background: #ecfeff;
+        color: #0e7490;
+        border: 1px solid #a5f3fc;
+      }
+      .dot-upcoming {
+        background: #06b6d4;
+      }
+      .badge-ongoing {
+        background: #f0fdf4;
+        color: #166534;
+        border: 1px solid #bbf7d0;
+      }
+      .dot-ongoing {
+        background: #22c55e;
+      }
+      .badge-completed {
+        background: #f8fafc;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+      }
+      .dot-completed {
+        background: #64748b;
+      }
+      .table-head {
+        background: #f8fafc;
+      }
+      .pill {
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        background: white;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Header (reused) -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16 min-w-0">
+          <div class="flex items-center space-x-3 flex-shrink-0">
+            <div
+              class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-white"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                ></path>
+              </svg>
             </div>
-        </div>
-    </nav>
+            <div class="hidden sm:block">
+              <h1 class="text-lg font-bold text-gray-900 leading-tight">
+                TPC Platform
+              </h1>
+              <p class="text-xs text-gray-600 leading-tight">
+                Training & Placement Cell
+              </p>
+            </div>
+          </div>
 
-  <!-- Page Header -->
-  <header class="gradient-bg text-white">
-    <div class="max-w-7xl mx-auto px-6 py-10">
-      <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
-        <div>
-          <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">OA Schedule</h2>
-          <p class="mt-2 text-white/90 max-w-2xl">View all Online Assessments that are upcoming or completed. Manage attendance for each OA with one click.</p>
-        </div>
-      </div>
-    </div>
-  </header>
+          <div
+            class="flex items-center space-x-4 lg:space-x-6 xl:space-x-8 flex-shrink min-w-0"
+          >
+            <a
+              href="/"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Home</a
+            >
 
-  <!-- Controls -->
-  <section class="max-w-7xl mx-auto px-6 -mt-6 relative z-10">
-    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-5 card-hover">
-      <div class="flex flex-col md:flex-row gap-4 md:items-center">
-        <div class="flex-1">
-          <label class="sr-only" for="search">Search</label>
-          <div class="relative">
-            <input id="search" type="text" placeholder="Search OA by title or company..." class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600">
-            <svg class="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none">
-              <path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
+            <!-- <div id="protected-nav-links" class="hidden items-center space-x-4 lg:space-x-6 xl:space-x-8"> -->
+            <a
+              href="/companies"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Company Listing</a
+            >
+            <a
+              href="/opportunities"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Opportunities</a
+            >
+            <a
+              href="/notices"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Notices</a
+            >
+            <a
+              href="/student"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Students</a
+            >
+            <a
+              href="/resources"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Resources</a
+            >
+            <a
+              href="/schedule"
+              class="text-gray-700 hover:text-blue-600 font-medium transition-colors text-sm lg:text-base whitespace-nowrap"
+              >Schedule</a
+            >
+            <!-- </div> -->
+          </div>
+
+          <!-- Example nav buttons -->
+          <div class="flex-shrink-0 flex items-center space-x-2">
+            <!-- Profile link (Student) -->
+            <a
+              th:if="${student != null}"
+              href="/profile"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+            >
+              Profile
+            </a>
+
+            <!-- Profile link (TPR) -->
+            <a
+              th:if="${tpr != null}"
+              href="/tpr-profile"
+              class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm"
+            >
+              Profile
+            </a>
           </div>
         </div>
-        <div class="flex gap-3 flex-wrap">
-          <select id="statusFilter" class="pill rounded-lg px-3 py-2 text-sm">
-            <option value="all">All statuses</option>
-            <option value="upcoming">Upcoming</option>
-            <option value="ongoing">Ongoing</option>
-            <option value="completed">Completed</option>
-          </select>
-          <select id="venueFilter" class="pill rounded-lg px-3 py-2 text-sm">
-            <option value="all">All venues</option>
-          </select>
-          <button id="resetFilters" class="rounded-lg px-3 py-2 text-sm border border-gray-300 bg-white hover:bg-gray-50">Reset</button>
+      </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="gradient-bg text-white">
+      <div class="max-w-7xl mx-auto px-6 py-10">
+        <div class="flex flex-col md:flex-row md:items-end gap-4 md:gap-6">
+          <div>
+            <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight">
+              OA Schedule
+            </h2>
+            <p class="mt-2 text-white/90 max-w-2xl">
+              View all Online Assessments that are upcoming or completed. Manage
+              attendance for each OA with one click.
+            </p>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Table -->
-  <main class="max-w-7xl mx-auto px-6 py-8">
-    <div class="overflow-hidden bg-white rounded-2xl border border-gray-200 shadow-sm">
-      <div class="overflow-x-auto">
-        <table class="min-w-full whitespace-nowrap">
-          <thead class="table-head">
-            <tr>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">OA</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Date</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Time</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Venue</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Registered</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Status</th>
-              <th class="text-right px-6 py-3 text-xs font-semibold text-gray-500">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="oaBody" class="divide-y divide-gray-100">
-            <!-- Rows injected by JS -->
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Empty state -->
-      <div id="emptyState" class="hidden p-10 text-center text-gray-600">
-        <div class="mx-auto w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-3">
-          <svg class="w-6 h-6 text-gray-500" viewBox="0 0 24 24" fill="none">
-            <path d="M3 7h18M3 12h18M3 17h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <p class="font-semibold">No OAs found</p>
-        <p class="text-sm">Try adjusting filters or clearing the search.</p>
-      </div>
-    </div>
-
-    <!-- Legend -->
-    <div class="mt-4 text-sm text-gray-600 flex flex-wrap items-center gap-3">
-      <span class="badge badge-upcoming"><span class="status-dot dot-upcoming"></span> Upcoming</span>
-      <span class="badge badge-ongoing"><span class="status-dot dot-ongoing"></span> Ongoing</span>
-      <span class="badge badge-completed"><span class="status-dot dot-completed"></span> Completed</span>
-    </div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-white border-t">
-    <div class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
-      <div class="flex items-center space-x-3">
-        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
-          </svg>
-        </div>
-        <div>
-          <p class="font-semibold text-gray-900">TPC Platform</p>
-          <p class="text-xs text-gray-600">OA Schedule</p>
+    <!-- Controls -->
+    <section class="max-w-7xl mx-auto px-6 -mt-6 relative z-10">
+      <div
+        class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4 md:p-5 card-hover"
+      >
+        <div class="flex flex-col md:flex-row gap-4 md:items-center">
+          <div class="flex-1">
+            <label class="sr-only" for="search">Search</label>
+            <div class="relative">
+              <input
+                id="search"
+                type="text"
+                placeholder="Search OA by title or company..."
+                class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-600"
+              />
+              <svg
+                class="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </div>
+          </div>
+          <div class="flex gap-3 flex-wrap">
+            <select id="statusFilter" class="pill rounded-lg px-3 py-2 text-sm">
+              <option value="all">All statuses</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="completed">Completed</option>
+            </select>
+            <select id="venueFilter" class="pill rounded-lg px-3 py-2 text-sm">
+              <option value="all">All venues</option>
+            </select>
+            <button
+              id="resetFilters"
+              class="rounded-lg px-3 py-2 text-sm border border-gray-300 bg-white hover:bg-gray-50"
+            >
+              Reset
+            </button>
+          </div>
         </div>
       </div>
-      <div class="text-sm text-gray-600">© <span id="year"></span> All rights reserved.</div>
-    </div>
-  </footer>
+    </section>
 
-  <script>
-    // Global UI
-    document.getElementById('year').textContent = new Date().getFullYear();
-    // document.getElementById('loginBtn').addEventListener('click', () => {
-    //   alert('Navigate to Login page');
-    // });
+    <!-- Table -->
+    <main class="max-w-7xl mx-auto px-6 py-8">
+      <div
+        class="overflow-hidden bg-white rounded-2xl border border-gray-200 shadow-sm"
+      >
+        <div class="overflow-x-auto">
+          <table class="min-w-full whitespace-nowrap">
+            <thead class="table-head">
+              <tr>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  OA
+                </th>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Date
+                </th>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Time
+                </th>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Venue
+                </th>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Registered
+                </th>
+                <th
+                  class="text-left px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Status
+                </th>
+                <th
+                  class="text-right px-6 py-3 text-xs font-semibold text-gray-500"
+                >
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody id="oaBody" class="divide-y divide-gray-100">
+              <!-- Rows injected by JS -->
+            </tbody>
+          </table>
+        </div>
 
-    // Sample OA data (small set)
-    let oaData = [];
+        <!-- Empty state -->
+        <div id="emptyState" class="hidden p-10 text-center text-gray-600">
+          <div
+            class="mx-auto w-12 h-12 rounded-xl bg-gray-100 flex items-center justify-center mb-3"
+          >
+            <svg class="w-6 h-6 text-gray-500" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M3 7h18M3 12h18M3 17h18"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </div>
+          <p class="font-semibold">No OAs found</p>
+          <p class="text-sm">Try adjusting filters or clearing the search.</p>
+        </div>
+      </div>
 
-async function loadOAs() {
-  try {
-    const res = await fetch('/api/schedule/student');
-    if (!res.ok) throw new Error("Unable to fetch data");
+      <!-- Legend -->
+      <div class="mt-4 text-sm text-gray-600 flex flex-wrap items-center gap-3">
+        <span class="badge badge-upcoming"
+          ><span class="status-dot dot-upcoming"></span> Upcoming</span
+        >
+        <span class="badge badge-ongoing"
+          ><span class="status-dot dot-ongoing"></span> Ongoing</span
+        >
+        <span class="badge badge-completed"
+          ><span class="status-dot dot-completed"></span> Completed</span
+        >
+      </div>
+    </main>
 
-    const data = await res.json();
+    <!-- Footer -->
+    <footer class="bg-white border-t">
+      <div
+        class="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between"
+      >
+        <div class="flex items-center space-x-3">
+          <div
+            class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center"
+          >
+            <svg
+              class="w-6 h-6 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+              ></path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-semibold text-gray-900">TPC Platform</p>
+            <p class="text-xs text-gray-600">OA Schedule</p>
+          </div>
+        </div>
+        <div class="text-sm text-gray-600">
+          © <span id="year"></span> All rights reserved.
+        </div>
+      </div>
+    </footer>
 
-    oaData = data.map(item => ({
-      id: item.id,
-      title: item.title,
-      company: item.company,
-      date: item.start_time.split('T')[0],
-      time: formatTimeRange(item.start_time, item.end_time),
-      venue: item.venue || 'Online',
-      registered: '-', // or fill later if needed
-      status: computeStatus(item.start_time, item.end_time)
-    }));
+    <script>
+      // Global UI
+      document.getElementById("year").textContent = new Date().getFullYear();
+      // document.getElementById('loginBtn').addEventListener('click', () => {
+      //   alert('Navigate to Login page');
+      // });
 
-    // build venues dynamically
-    const venueFilter = document.getElementById('venueFilter');
-    const venues = Array.from(new Set(oaData.map(o => o.venue)));
-    venues.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = v;
-      venueFilter.appendChild(opt);
-    });
+      // Sample OA data (small set)
+      let oaData = [];
 
-    applyFilters();
-  } catch (err) {
-    console.error(err);
-    alert("Error loading schedule data.");
-  }
-}
+      async function loadOAs() {
+        try {
+          const res = await fetch("/api/schedule/student");
+          if (!res.ok) throw new Error("Unable to fetch data");
 
-function computeStatus(start, end) {
-  const now = new Date();
-  const s = new Date(start);
-  const e = new Date(end);
-  if (now < s) return 'upcoming';
-  if (now >= s && now <= e) return 'ongoing';
-  return 'completed';
-}
+          const data = await res.json();
 
-function formatTimeRange(start, end) {
-  const s = new Date(start);
-  const e = new Date(end);
-  return `${s.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})} – ${e.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}`;
-}
+          oaData = data.map((item) => ({
+            id: item.id,
+            title: item.title,
+            company: item.company,
+            date: item.start_time.split("T")[0],
+            time: formatTimeRange(item.start_time, item.end_time),
+            venue: item.venue || "Online",
+            registered: "-", // or fill later if needed
+            status: computeStatus(item.start_time, item.end_time),
+          }));
 
-// Load OAs on page load
-loadOAs();
+          // build venues dynamically
+          const venueFilter = document.getElementById("venueFilter");
+          const venues = Array.from(new Set(oaData.map((o) => o.venue)));
+          venues.forEach((v) => {
+            const opt = document.createElement("option");
+            opt.value = v;
+            opt.textContent = v;
+            venueFilter.appendChild(opt);
+          });
 
-
-    // Build venue filter options
-    const venueFilter = document.getElementById('venueFilter');
-    const venues = Array.from(new Set(oaData.map(o => o.venue)));
-    venues.forEach(v => {
-      const opt = document.createElement('option');
-      opt.value = v;
-      opt.textContent = v;
-      venueFilter.appendChild(opt);
-    });
-
-    // Helpers for status UI
-    function statusBadge(status){
-      if(status === 'upcoming'){
-        return '<span class="badge badge-upcoming"><span class="status-dot dot-upcoming"></span>Upcoming</span>';
+          applyFilters();
+        } catch (err) {
+          console.error(err);
+          alert("Error loading schedule data.");
+        }
       }
-      if(status === 'ongoing'){
-        return '<span class="badge badge-ongoing"><span class="status-dot dot-ongoing"></span>Ongoing</span>';
+
+      function computeStatus(start, end) {
+        const now = new Date();
+        const s = new Date(start);
+        const e = new Date(end);
+        if (now < s) return "upcoming";
+        if (now >= s && now <= e) return "ongoing";
+        return "completed";
       }
-      return '<span class="badge badge-completed"><span class="status-dot dot-completed"></span>Completed</span>';
-    }
 
-    // Render rows with selective updates
-    const tbody = document.getElementById('oaBody');
-    function renderRows(rows){
-  const existing = new Map(Array.from(tbody.children).map(tr => [tr.dataset.id, tr]));
-  rows.forEach(item => {
-    const tr = existing.get(item.id) || document.createElement('tr');
-    tr.dataset.id = item.id;
-    tr.innerHTML = `
-      <td class="px-6 py-4">
-        <div class="min-w-[220px]">
-          <p class="font-semibold text-gray-900">${item.title}</p>
-          <p class="text-xs text-gray-500">${item.company}</p>
-        </div>
-      </td>
-      <td class="px-6 py-4 text-sm">${formatDate(item.date)}</td>
-      <td class="px-6 py-4 text-sm">${item.time}</td>
-      <td class="px-6 py-4 text-sm">${item.venue}</td>
-      <td class="px-6 py-4 font-semibold">${item.registered}</td>
-      <td class="px-6 py-4">${statusBadge(item.status)}</td>
-      <td class="px-6 py-4">
-        <div class="flex justify-end gap-2">
-          <!-- Sitting Plan link -->
-          <a href="/sittingplan?oa=${item.id}" 
-             class="px-3 py-2 rounded-lg bg-blue-50 text-blue-600 text-sm font-semibold hover:bg-blue-100 transition">
-            Sitting Plan
-          </a>
+      function formatTimeRange(start, end) {
+        const s = new Date(start);
+        const e = new Date(end);
+        return `${s.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })} – ${e.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        })}`;
+      }
 
-          <!-- Attendance button -->
-          <button data-id="${item.id}" 
-                  class="attendance-btn px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
-            Attendance
-          </button>
-        </div>
-      </td>
-    `;
-    if(!existing.get(item.id)){ tbody.appendChild(tr); }
-  });
+      // Load OAs on page load
+      loadOAs();
 
-  // Remove rows that no longer exist
-  Array.from(tbody.children).forEach(tr => {
-    if(!rows.find(r => r.id === tr.dataset.id)){
-      tbody.removeChild(tr);
-    }
-  });
-
-  // Wire attendance buttons
-  wireAttendanceButtons();
-  toggleEmptyState(rows.length === 0);
-}
-
-
-    function formatDate(iso){
-      const d = new Date(iso + 'T00:00:00');
-      return d.toLocaleDateString(undefined, { weekday:'short', year:'numeric', month:'short', day:'numeric' });
-    }
-
-    function toggleEmptyState(show){
-      document.getElementById('emptyState').classList.toggle('hidden', !show);
-    }
-
-    function wireAttendanceButtons(){
-      document.querySelectorAll('.attendance-btn').forEach(btn => {
-        btn.onclick = () => {
-          const id = btn.getAttribute('data-id');
-          const oa = oaData.find(o => o.id === id);
-          const path = `/attendance/${id}`;
-          // Simulated navigation
-          alert(`Go to Attendance page for:\n${oa.title}\n\nPath: ${path}`);
-          // Replace alert with: window.location.href = path
-        };
-      });
-    }
-
-    // Filters and search
-    const statusFilter = document.getElementById('statusFilter');
-    const searchInput = document.getElementById('search');
-    const resetBtn = document.getElementById('resetFilters');
-
-    function applyFilters(){
-      const term = searchInput.value.trim().toLowerCase();
-      const status = statusFilter.value;
-      const venue = venueFilter.value;
-
-      const filtered = oaData.filter(o => {
-        const matchesTerm = !term || (o.title.toLowerCase().includes(term) || o.company.toLowerCase().includes(term));
-        const matchesStatus = status === 'all' || o.status === status;
-        const matchesVenue = venue === 'all' || o.venue === venue;
-        return matchesTerm && matchesStatus && matchesVenue;
-      });
-
-      renderRows(filtered);
-    }
-
-    searchInput.addEventListener('input', applyFilters);
-    statusFilter.addEventListener('change', applyFilters);
-    venueFilter.addEventListener('change', applyFilters);
-    resetBtn.addEventListener('click', () => {
-      searchInput.value = '';
-      statusFilter.value = 'all';
-      venueFilter.value = 'all';
-      applyFilters();
-    });
-
-    // Initial render
-    applyFilters();
-
-    // Add OA (sample) to show dynamic update
-    document.getElementById('addOA').addEventListener('click', () => {
-      const newOA = {
-        id: 'oa-' + Math.floor(Math.random()*10000),
-        title: 'New Company OA',
-        company: 'New Company',
-        date: new Date().toISOString().slice(0,10),
-        time: '03:00 PM – 04:00 PM',
-        venue: 'Lab 2, Block C',
-        registered: Math.floor(50 + Math.random()*150),
-        status: 'upcoming'
-      };
-      oaData.unshift(newOA);
-      if(!Array.from(venueFilter.options).some(o => o.value === newOA.venue)){
-        const opt = document.createElement('option');
-        opt.value = newOA.venue; opt.textContent = newOA.venue;
+      // Build venue filter options
+      const venueFilter = document.getElementById("venueFilter");
+      const venues = Array.from(new Set(oaData.map((o) => o.venue)));
+      venues.forEach((v) => {
+        const opt = document.createElement("option");
+        opt.value = v;
+        opt.textContent = v;
         venueFilter.appendChild(opt);
+      });
+
+      // Helpers for status UI
+      function statusBadge(status) {
+        if (status === "upcoming") {
+          return '<span class="badge badge-upcoming"><span class="status-dot dot-upcoming"></span>Upcoming</span>';
+        }
+        if (status === "ongoing") {
+          return '<span class="badge badge-ongoing"><span class="status-dot dot-ongoing"></span>Ongoing</span>';
+        }
+        return '<span class="badge badge-completed"><span class="status-dot dot-completed"></span>Completed</span>';
       }
-      applyFilters();
-    });
-  </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'980261d0c3ac5983',t:'MTc1ODA0Njg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
-</html>
+
+      // Render rows with selective updates
+      const tbody = document.getElementById("oaBody");
+      function renderRows(rows) {
+        const existing = new Map(
+          Array.from(tbody.children).map((tr) => [tr.dataset.id, tr])
+        );
+        rows.forEach((item) => {
+          const tr = existing.get(item.id) || document.createElement("tr");
+          tr.dataset.id = item.id;
+          tr.innerHTML = `
+          <td class="px-6 py-4">
+            <div class="min-w-[220px]">
+              <p class="font-semibold text-gray-900">${item.title}</p>
+              <p class="text-xs text-gray-500">${item.company}</p>
+              </div>
+              </td>
+              <td class="px-6 py-4 text-sm">${formatDate(item.date)}</td>
+              <td class="px-6 py-4 text-sm">${item.time}</td>
+              <td class="px-6 py-4 text-sm">${item.venue}</td>
+              <td class="px-6 py-4 font-semibold">${item.registered}</td>
+              <td class="px-6 py-4">${statusBadge(item.status)}</td>
+              <td class="px-6 py-4">
+                <div class="flex justify-end gap-2">
+                  <!-- Sitting Plan link -->
+                  <button 
+                  onclick="openSittingPlan('${item.id}')"
+                  class="px-3 py-2 rounded-lg bg-blue-50 text-blue-600 text-sm font-semibold hover:bg-blue-100">
+                  View Sitting Plan
+                  </button>
+                  
+                  
+                  <!-- Attendance button -->
+                  <button data-id="${item.id}" 
+                  class="attendance-btn px-3 py-2 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition">
+                  Attendance
+                  </button>
+                  </div>
+                  </td>
+                  `;
+                  if (!existing.get(item.id)) {
+                    tbody.appendChild(tr);
+                  }
+                });
+                
+                // Remove rows that no longer exist
+                Array.from(tbody.children).forEach((tr) => {
+                  if (!rows.find((r) => r.id === tr.dataset.id)) {
+                    tbody.removeChild(tr);
+                  }
+                });
+                
+                // Wire attendance buttons
+                wireAttendanceButtons();
+                toggleEmptyState(rows.length === 0);
+              }
+              
+              function formatDate(iso) {
+                const d = new Date(iso + "T00:00:00");
+                return d.toLocaleDateString(undefined, {
+                  weekday: "short",
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                });
+              }
+              
+              function toggleEmptyState(show) {
+                document.getElementById("emptyState").classList.toggle("hidden", !show);
+              }
+              
+              function wireAttendanceButtons() {
+                document.querySelectorAll(".attendance-btn").forEach((btn) => {
+                  btn.onclick = () => {
+                    const id = btn.getAttribute("data-id");
+                    const oa = oaData.find((o) => o.id === id);
+                    const path = `/attendance/${id}`;
+                    // Simulated navigation
+                    alert(`Go to Attendance page for:\n${oa.title}\n\nPath: ${path}`);
+                    // Replace alert with: window.location.href = path
+                  };
+                });
+              }
+              
+              // Filters and search
+              const statusFilter = document.getElementById("statusFilter");
+              const searchInput = document.getElementById("search");
+              const resetBtn = document.getElementById("resetFilters");
+              
+              function applyFilters() {
+                const term = searchInput.value.trim().toLowerCase();
+                const status = statusFilter.value;
+                const venue = venueFilter.value;
+                
+                const filtered = oaData.filter((o) => {
+                  const matchesTerm =
+                  !term ||
+                  o.title.toLowerCase().includes(term) ||
+                  o.company.toLowerCase().includes(term);
+                  const matchesStatus = status === "all" || o.status === status;
+                  const matchesVenue = venue === "all" || o.venue === venue;
+                  return matchesTerm && matchesStatus && matchesVenue;
+                });
+                
+                renderRows(filtered);
+              }
+              
+              searchInput.addEventListener("input", applyFilters);
+              statusFilter.addEventListener("change", applyFilters);
+              venueFilter.addEventListener("change", applyFilters);
+              resetBtn.addEventListener("click", () => {
+                searchInput.value = "";
+                statusFilter.value = "all";
+                venueFilter.value = "all";
+                applyFilters();
+              });
+              
+              // Initial render
+              applyFilters();
+              
+              // Add OA (sample) to show dynamic update
+              document.getElementById("addOA").addEventListener("click", () => {
+                const newOA = {
+                  id: "oa-" + Math.floor(Math.random() * 10000),
+                  title: "New Company OA",
+                  company: "New Company",
+                  date: new Date().toISOString().slice(0, 10),
+                  time: "03:00 PM – 04:00 PM",
+                  venue: "Lab 2, Block C",
+                  registered: Math.floor(50 + Math.random() * 150),
+                  status: "upcoming",
+                };
+                oaData.unshift(newOA);
+                if (
+                  !Array.from(venueFilter.options).some((o) => o.value === newOA.venue)
+                ) {
+                  const opt = document.createElement("option");
+                  opt.value = newOA.venue;
+                  opt.textContent = newOA.venue;
+                  venueFilter.appendChild(opt);
+                }
+                applyFilters();
+              });
+              </script>
+    <script>
+      (function () {
+        function c() {
+          var b = a.contentDocument || a.contentWindow.document;
+          if (b) {
+            var d = b.createElement("script");
+            d.innerHTML =
+            "window.__CF$cv$params={r:'980261d0c3ac5983',t:'MTc1ODA0Njg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+            b.getElementsByTagName("head")[0].appendChild(d);
+          }
+        }
+        if (document.body) {
+          var a = document.createElement("iframe");
+          a.height = 1;
+          a.width = 1;
+          a.style.position = "absolute";
+          a.style.top = 0;
+          a.style.left = 0;
+          a.style.border = "none";
+          a.style.visibility = "hidden";
+          document.body.appendChild(a);
+          if ("loading" !== document.readyState) c();
+          else if (window.addEventListener)
+          document.addEventListener("DOMContentLoaded", c);
+        else {
+          var e = document.onreadystatechange || function () {};
+          document.onreadystatechange = function (b) {
+            e(b);
+            "loading" !== document.readyState &&
+            ((document.onreadystatechange = e), c());
+          };
+        }
+      }
+    })();
+    </script>
+  <!-- Sitting Plan Modal -->
+  <div id="sittingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white rounded-2xl shadow-lg w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto p-6 relative">
+      <button onclick="closeSittingModal()" 
+              class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
+      <h3 class="text-xl font-bold mb-4">Sitting Plan</h3>
+      <div id="sittingContent" class="space-y-4"></div>
+    </div>
+  </div>
+
+
+<script>
+  // async function openSittingPlan(oaId) {
+  //   const modal = document.getElementById("sittingModal");
+  //   const content = document.getElementById("sittingContent");
+  //   modal.classList.remove("hidden");
+
+  //   content.innerHTML = "<p class='text-gray-500'>Loading sitting plan...</p>";
+
+  //   try {
+  //     const response = await fetch(`http://localhost:8080/api/sitting-plan/${oaId}`);
+  //     const data = await response.json();
+
+  //     if (data.length === 0) {
+  //       content.innerHTML = "<p class='text-red-500'>No sitting plan available.</p>";
+  //       return;
+  //     }
+
+  //     // Build table
+  //     let table = `
+  //       <table class="min-w-full border-collapse border border-gray-300 text-sm text-left">
+  //         <thead class="bg-gray-100">
+  //           <tr>
+  //             <th class="border p-2">Name</th>
+  //             <th class="border p-2">Roll No</th>
+  //             <th class="border p-2">Room</th>
+  //             <th class="border p-2">Seat No</th>
+  //           </tr>
+  //         </thead>
+  //         <tbody>
+  //     `;
+
+  //     data.forEach(entry => {
+  //       table += `
+  //         <tr>
+  //           <td class="border p-2">${entry.studentName}</td>
+  //           <td class="border p-2">${entry.rollNumber}</td>
+  //           <td class="border p-2">${entry.room}</td>
+  //           <td class="border p-2">${entry.seatNumber}</td>
+  //         </tr>
+  //       `;
+  //     });
+
+  //     table += "</tbody></table>";
+  //     content.innerHTML = table;
+
+  //   } catch (error) {
+  //     content.innerHTML = "<p class='text-red-500'>Error loading sitting plan.</p>";
+  //     console.error(error);
+  //   }
+  // }
+
+  async function openSittingPlan(assessmentId) {
+    const modal = document.getElementById("sittingModal");
+    const content = document.getElementById("sittingContent");
+    modal.classList.remove("hidden");
+    content.innerHTML = "<p class='text-gray-500'>Loading sitting plan...</p>";
+    
+    try {
+      // use POST to generate-and-save:
+      const res = await fetch(`/api/sitting-plan/generate/${assessmentId}`, { method: 'POST' });
+      if (!res.ok) throw new Error("Sitting plan generation failed");
+      const plan = await res.json();
+      
+      if (!plan.venues || plan.venues.length === 0) {
+        content.innerHTML = "<p class='text-red-500'>No venues or applicants found for this assessment.</p>";
+        return;
+      }
+      
+      // Build UI for each venue
+      content.innerHTML = '';
+      plan.venues.forEach(v => {
+        const venueBlock = document.createElement('div');
+        venueBlock.className = 'mb-4';
+        let html = `<h4 class="font-semibold mb-2">${v.venueId} — ${v.venueLocation}</h4>`;
+        html += `<table class="border-collapse">`;
+          v.layout.forEach(row => {
+            html += `<tr>`;
+              row.forEach(seatId => {
+                const student = seatId ? (v.seatStudentMap && v.seatStudentMap[seatId] ? v.seatStudentMap[seatId] : '') : '';
+                html += `<td class="border p-2 text-sm text-center">${seatId ? seatId + '<br/><span class="text-xs text-gray-600">' + student + '</span>' : '-'}</td>`;
+              });
+              html += `</tr>`;
+            });
+            html += `</table>`;
+            venueBlock.innerHTML = html;
+            content.appendChild(venueBlock);
+          });
+          
+        } catch (err) {
+          console.error(err);
+          content.innerHTML = `<p class='text-red-500'>Error loading sitting plan.</p>`;
+        }
+      }
+      
+      function closeSittingModal() {
+        document.getElementById("sittingModal").classList.add("hidden");
+      }
+</script>
+
+</body>
+  </html>

@@ -10,4 +10,7 @@ import java.util.List;
 public interface ApplicationRepository extends JpaRepository<Application, String> {
     boolean existsByStudentIdAndListingId(String studentId, String listingId);
     List<Application> findByStudentId(String studentId);
+    
+    List<Application> findByListingIdAndWillingnessTrueOrderByAppliedAt(String listingId);
+    List<Application> findByListingId(String listingId);
 }

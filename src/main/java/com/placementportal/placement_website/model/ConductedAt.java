@@ -12,7 +12,8 @@ import lombok.Setter;
 public class ConductedAt {
 
     @EmbeddedId
-    private ConductedAtId id;
+    private ConductedAtId id = new ConductedAtId();
+
 
     @ManyToOne
     @MapsId("assessmentId")

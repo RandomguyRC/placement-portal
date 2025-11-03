@@ -486,110 +486,110 @@
                   </div>
                   </td>
                   `;
-                  if (!existing.get(item.id)) {
-                    tbody.appendChild(tr);
-                  }
-                });
-                
-                // Remove rows that no longer exist
-                Array.from(tbody.children).forEach((tr) => {
-                  if (!rows.find((r) => r.id === tr.dataset.id)) {
-                    tbody.removeChild(tr);
-                  }
-                });
-                
-                // Wire attendance buttons
-                wireAttendanceButtons();
-                toggleEmptyState(rows.length === 0);
-              }
-              
-              function formatDate(iso) {
-                const d = new Date(iso + "T00:00:00");
-                return d.toLocaleDateString(undefined, {
-                  weekday: "short",
-                  year: "numeric",
-                  month: "short",
-                  day: "numeric",
-                });
-              }
-              
-              function toggleEmptyState(show) {
-                document.getElementById("emptyState").classList.toggle("hidden", !show);
-              }
-              
-              function wireAttendanceButtons() {
-                document.querySelectorAll(".attendance-btn").forEach((btn) => {
-                  btn.onclick = () => {
-                    const id = btn.getAttribute("data-id");
-                    const oa = oaData.find((o) => o.id === id);
-                    const path = `/attendance/${id}`;
-                    // Simulated navigation
-                    alert(`Go to Attendance page for:\n${oa.title}\n\nPath: ${path}`);
-                    // Replace alert with: window.location.href = path
-                  };
-                });
-              }
-              
-              // Filters and search
-              const statusFilter = document.getElementById("statusFilter");
-              const searchInput = document.getElementById("search");
-              const resetBtn = document.getElementById("resetFilters");
-              
-              function applyFilters() {
-                const term = searchInput.value.trim().toLowerCase();
-                const status = statusFilter.value;
-                const venue = venueFilter.value;
-                
-                const filtered = oaData.filter((o) => {
-                  const matchesTerm =
-                  !term ||
-                  o.title.toLowerCase().includes(term) ||
-                  o.company.toLowerCase().includes(term);
-                  const matchesStatus = status === "all" || o.status === status;
-                  const matchesVenue = venue === "all" || o.venue === venue;
-                  return matchesTerm && matchesStatus && matchesVenue;
-                });
-                
-                renderRows(filtered);
-              }
-              
-              searchInput.addEventListener("input", applyFilters);
-              statusFilter.addEventListener("change", applyFilters);
-              venueFilter.addEventListener("change", applyFilters);
-              resetBtn.addEventListener("click", () => {
-                searchInput.value = "";
-                statusFilter.value = "all";
-                venueFilter.value = "all";
-                applyFilters();
-              });
-              
-              // Initial render
-              applyFilters();
-              
-              // Add OA (sample) to show dynamic update
-              document.getElementById("addOA").addEventListener("click", () => {
-                const newOA = {
-                  id: "oa-" + Math.floor(Math.random() * 10000),
-                  title: "New Company OA",
-                  company: "New Company",
-                  date: new Date().toISOString().slice(0, 10),
-                  time: "03:00 PM – 04:00 PM",
-                  venue: "Lab 2, Block C",
-                  registered: Math.floor(50 + Math.random() * 150),
-                  status: "upcoming",
-                };
-                oaData.unshift(newOA);
-                if (
-                  !Array.from(venueFilter.options).some((o) => o.value === newOA.venue)
-                ) {
-                  const opt = document.createElement("option");
-                  opt.value = newOA.venue;
-                  opt.textContent = newOA.venue;
-                  venueFilter.appendChild(opt);
-                }
-                applyFilters();
-              });
-              </script>
+          if (!existing.get(item.id)) {
+            tbody.appendChild(tr);
+          }
+        });
+
+        // Remove rows that no longer exist
+        Array.from(tbody.children).forEach((tr) => {
+          if (!rows.find((r) => r.id === tr.dataset.id)) {
+            tbody.removeChild(tr);
+          }
+        });
+
+        // Wire attendance buttons
+        wireAttendanceButtons();
+        toggleEmptyState(rows.length === 0);
+      }
+
+      function formatDate(iso) {
+        const d = new Date(iso + "T00:00:00");
+        return d.toLocaleDateString(undefined, {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        });
+      }
+
+      function toggleEmptyState(show) {
+        document.getElementById("emptyState").classList.toggle("hidden", !show);
+      }
+
+      function wireAttendanceButtons() {
+        document.querySelectorAll(".attendance-btn").forEach((btn) => {
+          btn.onclick = () => {
+            const id = btn.getAttribute("data-id");
+            const oa = oaData.find((o) => o.id === id);
+            const path = `/attendance/${id}`;
+            // Simulated navigation
+            alert(`Go to Attendance page for:\n${oa.title}\n\nPath: ${path}`);
+            // Replace alert with: window.location.href = path
+          };
+        });
+      }
+
+      // Filters and search
+      const statusFilter = document.getElementById("statusFilter");
+      const searchInput = document.getElementById("search");
+      const resetBtn = document.getElementById("resetFilters");
+
+      function applyFilters() {
+        const term = searchInput.value.trim().toLowerCase();
+        const status = statusFilter.value;
+        const venue = venueFilter.value;
+
+        const filtered = oaData.filter((o) => {
+          const matchesTerm =
+            !term ||
+            o.title.toLowerCase().includes(term) ||
+            o.company.toLowerCase().includes(term);
+          const matchesStatus = status === "all" || o.status === status;
+          const matchesVenue = venue === "all" || o.venue === venue;
+          return matchesTerm && matchesStatus && matchesVenue;
+        });
+
+        renderRows(filtered);
+      }
+
+      searchInput.addEventListener("input", applyFilters);
+      statusFilter.addEventListener("change", applyFilters);
+      venueFilter.addEventListener("change", applyFilters);
+      resetBtn.addEventListener("click", () => {
+        searchInput.value = "";
+        statusFilter.value = "all";
+        venueFilter.value = "all";
+        applyFilters();
+      });
+
+      // Initial render
+      applyFilters();
+
+      // Add OA (sample) to show dynamic update
+      document.getElementById("addOA").addEventListener("click", () => {
+        const newOA = {
+          id: "oa-" + Math.floor(Math.random() * 10000),
+          title: "New Company OA",
+          company: "New Company",
+          date: new Date().toISOString().slice(0, 10),
+          time: "03:00 PM – 04:00 PM",
+          venue: "Lab 2, Block C",
+          registered: Math.floor(50 + Math.random() * 150),
+          status: "upcoming",
+        };
+        oaData.unshift(newOA);
+        if (
+          !Array.from(venueFilter.options).some((o) => o.value === newOA.venue)
+        ) {
+          const opt = document.createElement("option");
+          opt.value = newOA.venue;
+          opt.textContent = newOA.venue;
+          venueFilter.appendChild(opt);
+        }
+        applyFilters();
+      });
+    </script>
     <script>
       (function () {
         function c() {
@@ -597,7 +597,7 @@
           if (b) {
             var d = b.createElement("script");
             d.innerHTML =
-            "window.__CF$cv$params={r:'980261d0c3ac5983',t:'MTc1ODA0Njg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
+              "window.__CF$cv$params={r:'980261d0c3ac5983',t:'MTc1ODA0Njg3MS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";
             b.getElementsByTagName("head")[0].appendChild(d);
           }
         }
@@ -613,127 +613,139 @@
           document.body.appendChild(a);
           if ("loading" !== document.readyState) c();
           else if (window.addEventListener)
-          document.addEventListener("DOMContentLoaded", c);
-        else {
-          var e = document.onreadystatechange || function () {};
-          document.onreadystatechange = function (b) {
-            e(b);
-            "loading" !== document.readyState &&
-            ((document.onreadystatechange = e), c());
-          };
+            document.addEventListener("DOMContentLoaded", c);
+          else {
+            var e = document.onreadystatechange || function () {};
+            document.onreadystatechange = function (b) {
+              e(b);
+              "loading" !== document.readyState &&
+                ((document.onreadystatechange = e), c());
+            };
+          }
         }
-      }
-    })();
+      })();
     </script>
-  <!-- Sitting Plan Modal -->
-  <div id="sittingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <!-- Sitting Plan Modal -->
+    <!-- <div id="sittingModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
     <div class="bg-white rounded-2xl shadow-lg w-11/12 md:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto p-6 relative">
       <button onclick="closeSittingModal()" 
               class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
       <h3 class="text-xl font-bold mb-4">Sitting Plan</h3>
       <div id="sittingContent" class="space-y-4"></div>
     </div>
-  </div>
+  </div> -->
+    <div
+      id="sittingModal"
+      class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50"
+    >
+      <div
+        class="bg-white w-11/12 max-w-6xl rounded-2xl shadow-2xl overflow-hidden"
+      >
+        <!-- Modal Header -->
+        <div
+          class="flex justify-between items-center bg-blue-600 text-white px-6 py-4"
+        >
+          <h2 class="text-xl font-semibold">Sitting Plan</h2>
+          <button
+            onclick="closeSittingModal()"
+            class="text-white hover:text-gray-200 transition"
+          >
+            ✖
+          </button>
+        </div>
 
+        <!-- Modal Body -->
+        <div
+          id="sittingContent"
+          class="p-6 space-y-8 max-h-[80vh] overflow-y-auto"
+        >
+          <!-- JS fills this -->
+        </div>
+      </div>
+    </div>
 
-<script>
-  // async function openSittingPlan(oaId) {
-  //   const modal = document.getElementById("sittingModal");
-  //   const content = document.getElementById("sittingContent");
-  //   modal.classList.remove("hidden");
+    <script>
+      async function openSittingPlan(assessmentId) {
+        const modal = document.getElementById("sittingModal");
+        const content = document.getElementById("sittingContent");
+        modal.classList.remove("hidden");
+        content.innerHTML =
+          "<p class='text-gray-500'>Loading sitting plan...</p>";
 
-  //   content.innerHTML = "<p class='text-gray-500'>Loading sitting plan...</p>";
+        try {
+          // use POST to generate-and-save:
+          const res = await fetch(
+            `/api/sitting-plan/generate/${assessmentId}`,
+            { method: "POST" }
+          );
+          if (!res.ok) throw new Error("Sitting plan generation failed");
+          const plan = await res.json();
 
-  //   try {
-  //     const response = await fetch(`http://localhost:8080/api/sitting-plan/${oaId}`);
-  //     const data = await response.json();
+          if (!plan.venues || plan.venues.length === 0) {
+            content.innerHTML =
+              "<p class='text-red-500'>No venues or applicants found for this assessment.</p>";
+            return;
+          }
 
-  //     if (data.length === 0) {
-  //       content.innerHTML = "<p class='text-red-500'>No sitting plan available.</p>";
-  //       return;
-  //     }
-
-  //     // Build table
-  //     let table = `
-  //       <table class="min-w-full border-collapse border border-gray-300 text-sm text-left">
-  //         <thead class="bg-gray-100">
-  //           <tr>
-  //             <th class="border p-2">Name</th>
-  //             <th class="border p-2">Roll No</th>
-  //             <th class="border p-2">Room</th>
-  //             <th class="border p-2">Seat No</th>
-  //           </tr>
-  //         </thead>
-  //         <tbody>
-  //     `;
-
-  //     data.forEach(entry => {
-  //       table += `
-  //         <tr>
-  //           <td class="border p-2">${entry.studentName}</td>
-  //           <td class="border p-2">${entry.rollNumber}</td>
-  //           <td class="border p-2">${entry.room}</td>
-  //           <td class="border p-2">${entry.seatNumber}</td>
-  //         </tr>
-  //       `;
-  //     });
-
-  //     table += "</tbody></table>";
-  //     content.innerHTML = table;
-
-  //   } catch (error) {
-  //     content.innerHTML = "<p class='text-red-500'>Error loading sitting plan.</p>";
-  //     console.error(error);
-  //   }
-  // }
-
-  async function openSittingPlan(assessmentId) {
-    const modal = document.getElementById("sittingModal");
-    const content = document.getElementById("sittingContent");
-    modal.classList.remove("hidden");
-    content.innerHTML = "<p class='text-gray-500'>Loading sitting plan...</p>";
-    
-    try {
-      // use POST to generate-and-save:
-      const res = await fetch(`/api/sitting-plan/generate/${assessmentId}`, { method: 'POST' });
-      if (!res.ok) throw new Error("Sitting plan generation failed");
-      const plan = await res.json();
-      
-      if (!plan.venues || plan.venues.length === 0) {
-        content.innerHTML = "<p class='text-red-500'>No venues or applicants found for this assessment.</p>";
-        return;
-      }
-      
-      // Build UI for each venue
-      content.innerHTML = '';
-      plan.venues.forEach(v => {
-        const venueBlock = document.createElement('div');
-        venueBlock.className = 'mb-4';
-        let html = `<h4 class="font-semibold mb-2">${v.venueId} — ${v.venueLocation}</h4>`;
-        html += `<table class="border-collapse">`;
-          v.layout.forEach(row => {
-            html += `<tr>`;
-              row.forEach(seatId => {
-                const student = seatId ? (v.seatStudentMap && v.seatStudentMap[seatId] ? v.seatStudentMap[seatId] : '') : '';
-                html += `<td class="border p-2 text-sm text-center">${seatId ? seatId + '<br/><span class="text-xs text-gray-600">' + student + '</span>' : '-'}</td>`;
+          // Build UI for each venue
+          content.innerHTML = "";
+          plan.venues.forEach((v) => {
+            const venueBlock = document.createElement("div");
+            venueBlock.className = "mb-4";
+            let html = `<h4 class="font-semibold mb-2">${v.venueId} — ${v.venueLocation}</h4>`;
+            // html += `<table class="border-collapse">`;
+            //   v.layout.forEach(row => {
+            //     html += `<tr>`;
+            //       row.forEach(seatId => {
+            //         const student = seatId ? (v.seatStudentMap && v.seatStudentMap[seatId] ? v.seatStudentMap[seatId] : '') : '';
+            //         html += `<td class="border p-2 text-sm text-center">${seatId ? seatId + '<br/><span class="text-xs text-gray-600">' + student + '</span>' : '-'}</td>`;
+            //       });
+            //       html += `</tr>`;
+            //     });
+            //     html += `</table>`;
+            html += `
+  <div class="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+    <table class="min-w-full border-collapse text-sm">
+      <tbody>
+`;
+            v.layout.forEach((row) => {
+              html += `<tr>`;
+              row.forEach((seatId) => {
+                const student =
+                  seatId && v.seatStudentMap && v.seatStudentMap[seatId]
+                    ? v.seatStudentMap[seatId]
+                    : "";
+                html += `
+      <td class="border p-3 text-sm text-center bg-white hover:bg-blue-50 transition">
+        ${
+          seatId
+            ? `<span class='font-medium text-gray-800'>${seatId}</span><br/>
+             <span class='text-xs text-gray-500'>${student}</span>`
+            : `<span class='text-gray-400'>-</span>`
+        }
+      </td>
+    `;
               });
               html += `</tr>`;
             });
-            html += `</table>`;
+            html += `
+      </tbody>
+    </table>
+  </div>
+`;
+
             venueBlock.innerHTML = html;
             content.appendChild(venueBlock);
           });
-          
         } catch (err) {
           console.error(err);
           content.innerHTML = `<p class='text-red-500'>Error loading sitting plan.</p>`;
         }
       }
-      
+
       function closeSittingModal() {
         document.getElementById("sittingModal").classList.add("hidden");
       }
-</script>
-
-</body>
-  </html>
+    </script>
+  </body>
+</html>

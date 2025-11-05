@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Getter @Setter
+@Getter
+@Setter
 public class Assessment {
+
     @Id
     private String assessmentId;
 
     @ManyToOne
-    @JoinColumn(name="listing_id")
+    @JoinColumn(name = "listing_id")
     private JobListing jobListing;
 }

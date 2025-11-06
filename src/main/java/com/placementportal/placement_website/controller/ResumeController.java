@@ -76,6 +76,13 @@ public List<Resume> getResumesForStudent(@RequestParam("studentId") String stude
 
     return resumeRepository.findByStudentId(studentId);
 }
+@GetMapping("/verified")
+public List<Resume> getVerifiedResumes(HttpSession session) {
+    Student student = (Student) session.getAttribute("student");
+    if (student == null) return List.of();
+
+    return resumeRepository.findVerifiedByStudentId(student.getEnrollmentNumber());
+}
 
 
 }

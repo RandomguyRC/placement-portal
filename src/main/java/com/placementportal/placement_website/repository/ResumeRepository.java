@@ -59,5 +59,14 @@ public List<Resume> findAll() {
     String sql = "SELECT * FROM resume";
     return jdbcTemplate.query(sql, MAPPER);
 }
+public List<Resume> findVerifiedByStudentId(String studentId) {
+    String sql = "SELECT * FROM resume WHERE student_id = ? AND status = 'VERIFIED'";
+    return jdbcTemplate.query(sql, MAPPER, studentId);
+}
+public Resume findByResumeId(String resumeId) {
+    String sql = "SELECT * FROM resume WHERE resume_id = ?";
+    return jdbcTemplate.queryForObject(sql, MAPPER, resumeId);
+}
+
 
 }

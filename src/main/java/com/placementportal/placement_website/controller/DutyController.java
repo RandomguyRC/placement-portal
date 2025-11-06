@@ -9,6 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.security.Principal;
 import java.util.List;
@@ -24,6 +28,9 @@ public class DutyController {
 
     @Autowired
     private TprService tprService;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+
 
     /**
      * Show the logged-in TPR’s duties.
@@ -76,4 +83,29 @@ public class DutyController {
         dutyService.assignDuties(assessmentId);
         return "Duties assigned successfully for assessment: " + assessmentId;
     }
+    /**
+ * Fetches the assessment_id linked to a duty (used for attendance).
+ */
+@GetMapping("/{dutyId}/assessment")
+@ResponseBody
+public ResponseEntity<String> getAssessmentIdByDuty(@PathVariable String dutyId) {
+    String sql = """
+        SELECT a.assessment_id
+        FROM duties d
+        JOIN job_listings j ON d.related_listing_id = j.listing_id
+        JOIN assessment a ON a.listing_id = j.listing_id
+        WHERE d.duty_id = ?
+    """;
+
+    try {
+        String assessmentId = jdbcTemplate.queryForObject(sql, String.class, dutyId);
+        return ResponseEntity.ok(assessmentId);
+    } catch (EmptyResultDataAccessException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No assessment found for this duty.");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                             .body("Error fetching assessment: " + e.getMessage());
+    }
+}
+
 }

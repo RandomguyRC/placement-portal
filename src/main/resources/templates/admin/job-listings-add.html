@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Job Listing</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-4">
+  <h3>Add New Job Listing</h3>
+
+  <form th:action="@{/admin/job-listings/add}" th:object="${jobListing}" method="post" class="mt-3">
+
+    <div class="mb-3">
+      <label>Listing ID</label>
+      <input type="text" th:field="*{listingId}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Company</label>
+      <select th:field="*{company.companyId}" class="form-select" required>
+        <option value="">-- Select Company --</option>
+        <option th:each="company : ${companies}"
+                th:value="${company.companyId}"
+                th:text="${company.companyName}"></option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label>Job Role</label>
+      <input type="text" th:field="*{jobRole}" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Job Description</label>
+      <textarea th:field="*{jobDescription}" class="form-control" rows="3"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label>CTC (in LPA)</label>
+      <input type="number" step="0.01" th:field="*{ctc}" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Mode of Hiring</label>
+      <input type="text" th:field="*{modeOfHiring}" class="form-control" placeholder="e.g. Online, On-Campus">
+    </div>
+
+    <div class="mb-3">
+      <label>Deadline</label>
+      <input type="datetime-local" th:field="*{deadline}" class="form-control">
+    </div>
+
+    <!-- Eligibility Section -->
+    <div class="mb-3">
+      <label>Eligible Branches</label><br>
+      <div th:each="branch : ${branches}" class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox"
+               th:id="${'branch_' + branch}"
+               th:value="${branch}">
+        <label class="form-check-label" th:for="${'branch_' + branch}"
+               th:text="${branch}"></label>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label>Minimum CPI</label>
+      <input type="number" step="0.1" min="0" max="10" id="minCpi" class="form-control" placeholder="e.g. 8.0">
+    </div>
+
+    <!-- Hidden field for JSON -->
+    <input type="hidden" name="eligibilityCriteria" id="eligibilityCriteria">
+
+    <button type="submit" class="btn btn-success">Save</button>
+    <a href="/admin/job-listings" class="btn btn-secondary">Cancel</a>
+  </form>
+</div>
+
+<!-- JavaScript to handle eligibility JSON -->
+<script>
+document.querySelector("form").addEventListener("submit", function (event) {
+  const selectedBranches = Array.from(document.querySelectorAll(".form-check-input:checked"))
+                                .map(cb => cb.value);
+  const minCpi = document.getElementById("minCpi").value;
+
+  const eligibility = {
+    branch: selectedBranches,
+    cpi: parseFloat(minCpi)
+  };
+
+  document.getElementById("eligibilityCriteria").value = JSON.stringify(eligibility);
+});
+</script>
+
+</body>
+</html>

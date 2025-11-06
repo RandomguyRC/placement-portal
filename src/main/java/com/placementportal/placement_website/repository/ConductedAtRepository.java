@@ -12,7 +12,8 @@ public interface ConductedAtRepository extends JpaRepository<ConductedAt, Conduc
 
     // Fetch all venues for a given assessment
     List<ConductedAt> findByAssessment_AssessmentId(String assessmentId);
-
+    boolean existsByAssessment_AssessmentIdAndVenue_VenueId(String assessmentId, String venueId);
+    
     // Fetch all assessments happening in a given venue
     List<ConductedAt> findByVenue_VenueId(String venueId);
 }

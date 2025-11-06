@@ -46,6 +46,17 @@ public class Application {
         this.approved = approved != null ? approved : false;
         this.seatId = seatId;
     }
+    @Column(name = "resume_id", length = 255)
+private String resumeId;
+
+public String getResumeId() {
+    return resumeId;
+}
+
+public void setResumeId(String resumeId) {
+    this.resumeId = resumeId;
+}
+
 
     // 🔹 Getters & Setters
     public String getApplicationId() { return applicationId; }

@@ -144,5 +144,9 @@ public int updateProfileStatus(String enrollmentNumber, String profileStat) {
     return jdbcTemplate.update(sql, profileStat, enrollmentNumber);
 }
 
+    public List<String> findDistinctBranches() {
+    String sql = "SELECT DISTINCT branch FROM student_details WHERE branch IS NOT NULL AND branch != ''";
+    return jdbcTemplate.queryForList(sql, String.class);
+}
 
 }

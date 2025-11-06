@@ -1,12 +1,15 @@
+
 package com.placementportal.placement_website.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.placementportal.placement_website.model.JobListing;
+import com.placementportal.placement_website.model.Resume;
 import com.placementportal.placement_website.model.Application;
 import com.placementportal.placement_website.model.Student;
 import com.placementportal.placement_website.repository.ApplicationRepository;
 import com.placementportal.placement_website.repository.JobListingRepository;
+import com.placementportal.placement_website.repository.ResumeRepository;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +23,9 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/opportunities")
 public class OpportunitiesController {
+
+    @Autowired
+private ResumeRepository resumeRepository;
 
     @Autowired
     private JobListingRepository jobListingRepository;
@@ -112,33 +118,56 @@ model.addAttribute("eligibilityMap", eligibilityMap);
     }
 
     @PostMapping("/apply/{listingId}")
-    @ResponseBody
-    public String applyForJob(@PathVariable("listingId") String listingId, HttpSession session) {
-        Student student = (Student) session.getAttribute("student");
-        if (student == null) {
-            return "error:not_logged_in";
-        }
+@ResponseBody
+public String applyForJob(
+        @PathVariable("listingId") String listingId,
+        @RequestParam("resumeId") String resumeId,   // ✅ NEW
+        HttpSession session) {
 
-        String studentId = student.getEnrollmentNumber();
-
-        // Check if already applied
-        boolean already = applicationRepository.existsByStudentIdAndListingId(studentId, listingId);
-        if (already) {
-            return "error:already_applied";
-        }
-
-        // Save new application
-        Application app = new Application();
-        app.setApplicationId(UUID.randomUUID().toString());
-        app.setStudentId(studentId);
-        app.setListingId(listingId);
-        app.setWillingness(true);
-        app.setAppliedAt(LocalDateTime.now());
-        app.setApproved(false);
-
-        applicationRepository.save(app);
-        return "success";
+    Student student = (Student) session.getAttribute("student");
+    if (student == null) {
+        return "error:not_logged_in";
     }
+
+    String studentId = student.getEnrollmentNumber();
+
+    // ✅ Already applied?
+    if (applicationRepository.existsByStudentIdAndListingId(studentId, listingId)) {
+        return "error:already_applied";
+    }
+
+    // ✅ Fetch resume
+    Resume resume;
+    try {
+        resume = resumeRepository.findByResumeId(resumeId);  // ✅ Check resume exists
+    } catch (Exception e) {
+        return "error:resume_not_found";
+    }
+
+    // ✅ Resume belongs to student
+    if (!resume.getStudentId().equals(studentId)) {
+        return "error:invalid_resume";
+    }
+
+    // ✅ Must be VERIFIED
+    if (!"VERIFIED".equalsIgnoreCase(resume.getStatus())) {
+        return "error:resume_not_verified";
+    }
+
+    // ✅ Save new application including resume
+    Application app = new Application();
+    app.setApplicationId(UUID.randomUUID().toString());
+    app.setStudentId(studentId);
+    app.setListingId(listingId);
+    app.setWillingness(true);
+    app.setAppliedAt(LocalDateTime.now());
+    app.setApproved(false);
+    app.setResumeId(resumeId);  // ✅ Store resumeId
+
+    applicationRepository.save(app);
+
+    return "success";
+}
 
     // === Helper: check eligibility based on job JSON ===
     private boolean isStudentEligibleForJob(Student student, JobListing job) {

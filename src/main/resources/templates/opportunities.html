@@ -159,22 +159,35 @@
 
                     </div>
 
-                    <div class="flex flex-col justify-center">
-                        <button 
-                            th:if="${!appliedMap[job.listingId]}"
-                            th:attr="data-listing-id=${job.listingId}"
-                            onclick="applyForJob(this.getAttribute('data-listing-id'), this)"
-                            class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
-                            Apply
-                        </button>
+                    <div class="flex flex-col justify-center space-y-3">
 
-                        <button 
-                            th:if="${appliedMap[job.listingId]}"
-                            disabled
-                            class="w-full bg-gray-300 text-gray-600 py-3 px-6 rounded-lg font-semibold cursor-not-allowed">
-                            Application Submitted
-                        </button>
-                    </div>
+    <!-- ✅ Resume Selector -->
+    <select 
+        th:if="${!appliedMap[job.listingId]}"
+        class="resume-select w-full border border-gray-300 p-2 rounded-lg text-gray-700"
+        th:attr="data-listing-id=${job.listingId}">
+        <option value="">Select Resume (Verified Only)</option>
+    </select>
+
+    <!-- ✅ Apply Button -->
+    <button 
+        th:if="${!appliedMap[job.listingId]}"
+        th:attr="data-listing-id=${job.listingId}"
+        onclick="applyWithResume(this)"
+        class="apply-btn w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition">
+        Apply
+    </button>
+
+    <!-- Disabled Button -->
+    <button 
+        th:if="${appliedMap[job.listingId]}"
+        disabled
+        class="w-full bg-gray-300 text-gray-600 py-3 px-6 rounded-lg font-semibold cursor-not-allowed">
+        Application Submitted
+    </button>
+
+</div>
+
                 </div>
             </div>
         </div>
@@ -185,7 +198,7 @@
 <div id="messageBox" class="fixed bottom-6 right-6 hidden px-4 py-3 rounded shadow text-white"></div>
 
 
-<script>
+<!-- <script>
     function showMessage(text, isError=false) {
         const box = document.getElementById('messageBox');
         box.textContent = text;
@@ -214,6 +227,82 @@
             showMessage('Network error', true);
         }
     }
+</script> -->
+<script>
+function showMessage(text, isError=false) {
+    const box = document.getElementById('messageBox');
+    box.textContent = text;
+    box.classList.remove('hidden');
+    box.style.backgroundColor = isError ? '#dc2626' : '#16a34a';
+    setTimeout(() => box.classList.add('hidden'), 3000);
+}
+
+async function applyWithResume(button) {
+    const listingId = button.getAttribute("data-listing-id");
+    const select = document.querySelector(`.resume-select[data-listing-id="${listingId}"]`);
+    const resumeId = select.value;
+
+    if (!resumeId) {
+        showMessage("Please select a resume before applying.", true);
+        return;
+    }
+
+    try {
+        const res = await fetch(`/opportunities/apply/${listingId}?resumeId=${resumeId}`, {
+            method: 'POST',
+            credentials: 'include'
+        });
+
+        if (!res.ok) throw new Error("Failed to apply");
+
+        showMessage("Application submitted successfully!");
+
+        // ✅ Update button immediately
+        button.disabled = true;
+        button.textContent = "Application Submitted";
+        button.classList.remove("bg-blue-600", "hover:bg-blue-700");
+        button.classList.add("bg-gray-300", "text-gray-600", "cursor-not-allowed");
+
+        // ✅ Disable resume dropdown
+        select.disabled = true;
+
+        // ✅ Update the badge inside the same card
+        const card = button.closest(".card-hover");
+        if (card) {
+            const badge = card.querySelector("span.text-white");
+            if (badge) {
+                badge.textContent = "✅ Applied";
+                badge.classList.remove("status-open");
+                badge.classList.add("status-applied");
+            }
+        }
+
+    } catch (err) {
+        console.error(err);
+        showMessage("Error submitting application", true);
+    }
+}
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", async function () {
+
+    // ✅ Fetch verified resumes once
+    const res = await fetch("/api/resume/verified");
+    const resumes = await res.json();
+
+    // ✅ Fill all dropdowns
+    document.querySelectorAll(".resume-select").forEach(select => {
+        resumes.forEach(r => {
+            const opt = document.createElement("option");
+            opt.value = r.resumeId;
+            opt.textContent = `Resume ${r.resumeId}`;
+            select.appendChild(opt);
+        });
+    });
+
+});
 </script>
 
 </body>

@@ -220,7 +220,16 @@
         </span>
     </div>
 </div>
-
+<!-- ✅ My QR Code Section -->
+    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">My QR Code</h3>
+        <p class="text-gray-500 text-sm mb-3">Scan this code during attendance marking.</p>
+        <div class="flex justify-center">
+            <img src="/api/student/qr" alt="Student QR Code" 
+                 class="w-48 h-48 border rounded-lg shadow-md hover:scale-105 transition-transform duration-200" 
+                 onerror="this.src='https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=ErrorGeneratingQR';" />
+        </div>
+    </div>
 <!-- ==================== RESUME SECTION ==================== -->
 <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
     <h3 class="text-lg font-semibold text-gray-900 mb-4">My Resumes</h3>

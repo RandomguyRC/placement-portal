@@ -70,6 +70,31 @@
                 <a th:if="${tpr != null}" href="/tprtoken" class="text-gray-700 hover:text-blue-600 font-medium">Tokens</a>
 
             </div>
+            <!-- 🔔 Notification Bell -->
+<div class="relative" id="notification-container" th:if="${student != null}">
+    <button id="notification-btn" class="relative focus:outline-none">
+        <!-- Bell Icon -->
+        <svg class="w-6 h-6 text-gray-700 hover:text-blue-600 transition-colors" fill="none" stroke="currentColor"
+             viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14V11a6 6 0 10-12 0v3c0 .386-.146.758-.405 1.05L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+        </svg>
+        <!-- Unread count badge -->
+        <span id="notification-count"
+              class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full px-1.5 py-0.5 hidden">0</span>
+    </button>
+
+    <!-- Dropdown -->
+    <div id="notification-dropdown"
+         class="hidden absolute right-0 mt-3 w-80 bg-white shadow-xl rounded-lg border border-gray-100 z-50">
+        <div class="px-4 py-3 border-b border-gray-200 font-semibold text-gray-800">
+            Notifications
+        </div>
+        <ul id="notification-list" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+            <li class="p-3 text-sm text-gray-500 text-center">Loading...</li>
+        </ul>
+    </div>
+</div>
 
             <!-- Right Profile / Login buttons -->
             <div class="flex items-center space-x-3">
@@ -234,5 +259,110 @@
             });
         }
     </script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const bellButton = document.getElementById("notification-btn");
+    const dropdown = document.getElementById("notification-dropdown");
+    const list = document.getElementById("notification-list");
+    const countBadge = document.getElementById("notification-count");
+
+    // ✅ Load notifications from backend
+    function loadNotifications() {
+        fetch("/api/notifications")
+            .then(res => res.json())
+            .then(data => {
+                list.innerHTML = ""; // clear old items
+
+                if (data.length === 0) {
+                    list.innerHTML = `
+                        <li class="p-3 text-sm text-gray-400 text-center">No notifications</li>
+                    `;
+                    countBadge.classList.add("hidden");
+                    return;
+                }
+
+                // ✅ show count
+                countBadge.textContent = data.length;
+                countBadge.classList.remove("hidden");
+
+                // ✅ add notifications to dropdown
+                data.forEach(n => {
+    const item = document.createElement("li");
+    item.className = "p-3 hover:bg-gray-50 cursor-pointer";
+
+    // ✅ If it's read, make it faded
+    if (n.read) {
+        item.classList.add("bg-gray-100");
+    }
+
+    item.innerHTML = `
+        <div class="text-sm font-medium text-gray-800">${n.message}</div>
+        <div class="text-xs text-gray-500 mt-1">
+            ${n.createdAt.replace("T", " ")}
+        </div>
+    `;
+
+    // ✅ Mark as read on click
+    item.addEventListener("click", () => {
+
+        fetch("/api/notifications/mark-read?id=" + n.notificationId, {
+            method: "POST"
+        })
+        .then(r => r.text())
+        .then(res => {
+            if (res === "OK") {
+                item.classList.add("bg-gray-100"); // fade it
+                refreshBellCount(); // update red badge
+            }
+        });
+    });
+
+    list.appendChild(item);
+});
+
+            })
+            .catch(err => {
+                console.error("Error fetching notifications:", err);
+                list.innerHTML = `
+                    <li class="p-3 text-sm text-red-500 text-center">Error loading notifications</li>
+                `;
+            });
+    }
+function refreshBellCount() {
+    fetch("/api/notifications")
+        .then(r => r.json())
+        .then(data => {
+            const unread = data.filter(n => !n.read).length;
+            const badge = document.getElementById("notification-count");
+
+            if (unread > 0) {
+                badge.textContent = unread;
+                badge.classList.remove("hidden");
+            } else {
+                badge.classList.add("hidden");
+            }
+        });
+}
+
+    loadNotifications(); // load on page open
+refreshBellCount();
+
+    // ✅ Toggle dropdown on bell click
+    bellButton.addEventListener("click", () => {
+        dropdown.classList.toggle("hidden");
+    });
+
+    // ✅ Close dropdown if clicking outside
+    document.addEventListener("click", (e) => {
+        if (!document.getElementById("notification-container").contains(e.target)) {
+            dropdown.classList.add("hidden");
+        }
+    });
+
+});
+</script>
+
+
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9844b78947f78e80',t:'MTc1ODc0MjQ0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>

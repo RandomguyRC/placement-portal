@@ -18,6 +18,59 @@
     .dot-completed { background:#22c55e; }
     .table-head { background: #f8fafc; }
   </style>
+  <style>
+  #qrReader {
+    position: relative;
+    width: 100%;
+    height: 320px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+  }
+
+  #qrReader video {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block !important;
+    opacity: 1 !important;
+    z-index: 5;
+  }
+
+  #qrReader::after {
+    content: "";
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: rgba(0, 255, 0, 0.8);
+    animation: scanline 2s linear infinite;
+    z-index: 10;
+  }
+  #qrReader {
+  width: 100%;
+  height: 400px;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+#qrReader video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+
+  @keyframes scanline {
+    0% { top: 10%; }
+    100% { top: 90%; }
+  }
+</style>
+
+
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -53,7 +106,7 @@
                 
                 <a href="/notices" class="text-gray-700 hover:text-blue-600 font-medium">Notices</a>
 
-                <a href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
+                <a th:if="${student != null}" href="/student" class="text-gray-700 hover:text-blue-600 font-medium">Students</a>
 
                 <a href="/resources" class="text-gray-700 hover:text-blue-600 font-medium">Resources</a>
 
@@ -71,11 +124,14 @@
                 <!-- For logged-in Student -->
                 <a th:if="${student != null}" href="/profile"
                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
-                
+                <!-- <a th:if="${student != null}" href="/logout"
+                   class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700">Logout</a> -->
 
                 <!-- For logged-in TPR -->
                 <a th:if="${tpr != null}" href="/tpr-profile"
                    class="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors text-sm">Profile</a>
+                <!-- <a th:if="${tpr != null}" href="/logout"
+                   class="bg-red-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-red-700">Logout</a> -->
 
                 <!-- For guests -->
                 <a th:if="${tpr == null and student == null}" href="/login"
@@ -100,21 +156,28 @@
       <div class="overflow-x-auto">
         <table class="min-w-full whitespace-nowrap">
           <thead class="table-head">
-            <tr>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Duty ID</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Company</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Job Role</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Venue</th>
-              <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Timing</th>
-            </tr>
-          </thead>
-          <tbody>
+  <tr>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Duty ID</th>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Company</th>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Job Role</th>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Venue</th>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Timing</th>
+    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500">Actions</th>
+  </tr>
+</thead>
+          <tbody id="dutiesBody">
   <tr th:each="d : ${duties}">
-    <td class="px-6 py-4 font-semibold text-gray-900" th:text="${d['dutyId']}">D001</td>
-    <td class="px-6 py-4 text-sm" th:text="${d['companyName']}">Company</td>
-    <td class="px-6 py-4 text-sm" th:text="${d['jobRole']}">Role</td>
-    <td class="px-6 py-4 text-sm" th:text="${d['venueLocation']}">Venue</td>
-    <td class="px-6 py-4 text-sm" th:text="${d['timing']}">Timing</td>
+    <td class="px-6 py-4 font-semibold text-gray-900" th:text="${d['dutyId']}"></td>
+    <td class="px-6 py-4 text-sm" th:text="${d['companyName']}"></td>
+    <td class="px-6 py-4 text-sm" th:text="${d['jobRole']}"></td>
+    <td class="px-6 py-4 text-sm" th:text="${d['venueLocation']}"></td>
+    <td class="px-6 py-4 text-sm" th:text="${d['timing']}"></td>
+    <td class="px-6 py-4">
+      <button class="take-attendance-btn bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700"
+              th:attr="data-duty-id=${d['dutyId']}">
+        Take Attendance
+      </button>
+    </td>
   </tr>
 </tbody>
 
@@ -165,5 +228,185 @@
     }
 
   </script>
+ <!-- ✅ Attendance Modal -->
+<div id="qrModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg w-[90%] max-w-md relative">
+    <h2 class="text-lg font-semibold mb-3">Mark Attendance</h2>
+
+    <!-- Live Camera QR Scan -->
+    <div id="qrReader" class="w-full h-[250px] border rounded-lg bg-gray-50 mb-3 flex items-center justify-center">
+      <p class="text-sm text-gray-600">Camera preview will appear here...</p>
+    </div>
+
+    <!-- QR File Upload -->
+    <div class="mb-3">
+      <label class="block text-sm text-gray-600 mb-1">Upload QR Code Image</label>
+      <input type="file" id="qrFileInput" accept="image/*" class="border p-1 rounded w-full"/>
+    </div>
+
+    <p id="qrStatus" class="text-xs text-gray-500 mb-2"></p>
+
+    <div class="my-4 flex items-center justify-center">
+      <div class="border-t border-gray-300 w-1/4"></div>
+      <span class="mx-2 text-gray-500 text-sm">OR</span>
+      <div class="border-t border-gray-300 w-1/4"></div>
+    </div>
+
+    <!-- Manual Entry -->
+    <div>
+      <label for="manualStudentId" class="block text-sm font-medium text-gray-700 mb-1">Enter Student ID manually</label>
+      <input id="manualStudentId" type="text" placeholder="e.g. 23075036"
+             class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
+    </div>
+
+    <button id="submitManual" class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 text-sm w-full">
+      Submit Attendance
+    </button>
+
+    <button id="closeQR" class="mt-2 w-full bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800 text-sm">
+      Close
+    </button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/html5-qrcode"></script>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("qrModal");
+  const closeBtn = document.getElementById("closeQR");
+  const fileInput = document.getElementById("qrFileInput");
+  const manualInput = document.getElementById("manualStudentId");
+  const manualSubmit = document.getElementById("submitManual");
+  const qrStatus = document.getElementById("qrStatus");
+
+  let currentDutyId = null;
+  let loggedInTprId = null;
+  let html5QrScanner = null;
+
+  // Fetch logged-in TPR ID
+  fetch("/session/tpr", { credentials: "include" })
+    .then(res => res.json())
+    .then(data => { if (data && data.tpr_id) loggedInTprId = data.tpr_id; })
+    .catch(() => console.warn("Session fetch failed."));
+
+  // Open modal on "Take Attendance"
+  document.querySelectorAll(".take-attendance-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      currentDutyId = btn.getAttribute("data-duty-id");
+      modal.classList.remove("hidden");
+      qrStatus.textContent = "";
+      fileInput.value = "";
+      manualInput.value = "";
+
+      // Initialize live camera scan
+      if (!html5QrScanner) {
+        html5QrScanner = new Html5Qrcode("qrReader");
+      }
+
+      html5QrScanner.start(
+        { facingMode: "environment" },
+        { fps: 10, qrbox: 250 },
+        async (decodedText) => {
+          // Stop scanner once a QR is detected
+          await html5QrScanner.stop().catch(()=>{});
+          await processQRCode(decodedText);
+          modal.classList.add("hidden");
+        },
+        (errorMessage) => {
+          // optional: ignore scan errors
+        }
+      ).catch(err => {
+        console.warn("Camera start failed:", err);
+      });
+    });
+  });
+
+  // Close modal
+  closeBtn.addEventListener("click", async () => {
+    modal.classList.add("hidden");
+    if (html5QrScanner) await html5QrScanner.stop().catch(()=>{});
+  });
+
+  // File upload scan
+  fileInput.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    qrStatus.textContent = "Processing QR code...";
+    try {
+      // Use a temporary scanner instance for file upload
+      const tempScanner = new Html5Qrcode("qrReader");
+      const decodedText = await tempScanner.scanFile(file, true);
+      await processQRCode(decodedText);
+      await tempScanner.clear();
+      modal.classList.add("hidden");
+    } catch (err) {
+      console.error("QR scan error:", err);
+      qrStatus.textContent = "❌ Could not read QR code. Try again or enter manually.";
+    }
+  });
+
+  // Manual entry
+  manualSubmit.addEventListener("click", async () => {
+    const id = manualInput.value.trim();
+    if (!id) return alert("Please enter a Student ID.");
+    await markAttendance(id, currentDutyId);
+    modal.classList.add("hidden");
+  });
+
+  // Extract student ID from QR data (flexible for different formats)
+  function extractStudentId(decodedText) {
+    let studentId = decodedText.trim();
+    try {
+      const data = JSON.parse(decodedText);
+      studentId = data.student_id || data.studentId || data.id || studentId;
+    } catch {}
+    return studentId;
+  }
+
+  // Process scanned QR
+  async function processQRCode(decodedText) {
+    const studentId = extractStudentId(decodedText);
+    if (!studentId) throw new Error("Student ID missing in QR data.");
+    qrStatus.textContent = "✅ Scanned successfully: " + studentId;
+    await markAttendance(studentId, currentDutyId);
+  }
+
+  // Send attendance to backend
+  async function markAttendance(studentId, dutyId) {
+    if (!dutyId) return alert("Missing duty ID for attendance.");
+
+    const payload = { studentId, dutyId, recordedBy: loggedInTprId || null };
+
+    try {
+      const res = await fetch("/api/attendance/mark", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        credentials: "include"
+      });
+
+      const resultText = await res.text();
+      let result;
+      try { result = JSON.parse(resultText); } catch { result = resultText; }
+
+      if (res.ok && result.success) alert(`✅ Attendance marked for ${studentId}`);
+      else alert(`❌ Failed: ${result.message || result}`);
+    } catch (err) {
+      console.error(err);
+      alert("⚠️ Network/server error while marking attendance.");
+    }
+  }
+});
+</script>
+
+
+
+
+
+
+
+
+
 </body>
 </html>
